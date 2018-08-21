@@ -1,0 +1,71 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 21/08/2018 07:59
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-camera:before { content: "\f100"; }
+.flaticon-curriculum:before { content: "\f101"; }
+.flaticon-brochure:before { content: "\f102"; }
+.flaticon-analysis:before { content: "\f103"; }
+.flaticon-chart:before { content: "\f104"; }
+.flaticon-settings:before { content: "\f105"; }
+.flaticon-testing:before { content: "\f106"; }
+.flaticon-link:before { content: "\f107"; }
+.flaticon-video-camera:before { content: "\f108"; }
+.flaticon-github:before { content: "\f109"; }
+.flaticon-frame-landscape:before { content: "\f10a"; }
+.flaticon-facebook:before { content: "\f10b"; }
+.flaticon-contract:before { content: "\f10c"; }
+.flaticon-television:before { content: "\f10d"; }
+.flaticon-result:before { content: "\f10e"; }
+.flaticon-report:before { content: "\f10f"; }
+    
+    $font-Flaticon-camera: "\f100";
+    $font-Flaticon-curriculum: "\f101";
+    $font-Flaticon-brochure: "\f102";
+    $font-Flaticon-analysis: "\f103";
+    $font-Flaticon-chart: "\f104";
+    $font-Flaticon-settings: "\f105";
+    $font-Flaticon-testing: "\f106";
+    $font-Flaticon-link: "\f107";
+    $font-Flaticon-video-camera: "\f108";
+    $font-Flaticon-github: "\f109";
+    $font-Flaticon-frame-landscape: "\f10a";
+    $font-Flaticon-facebook: "\f10b";
+    $font-Flaticon-contract: "\f10c";
+    $font-Flaticon-television: "\f10d";
+    $font-Flaticon-result: "\f10e";
+    $font-Flaticon-report: "\f10f";

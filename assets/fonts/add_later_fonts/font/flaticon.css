@@ -1,0 +1,124 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 21/08/2018 07:59
+  	*/
+
+@font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+  font-family: Flaticon;
+        font-size: 20px;
+font-style: normal;
+margin-left: 20px;
+}
+
+.flaticon-camera:before { content: "\f100"; }
+.flaticon-curriculum:before { content: "\f101"; }
+.flaticon-brochure:before { content: "\f102"; }
+.flaticon-analysis:before { content: "\f103"; }
+.flaticon-chart:before { content: "\f104"; }
+.flaticon-settings:before { content: "\f105"; }
+.flaticon-testing:before { content: "\f106"; }
+.flaticon-link:before { content: "\f107"; }
+.flaticon-video-camera:before { content: "\f108"; }
+.flaticon-github:before { content: "\f109"; }
+.flaticon-frame-landscape:before { content: "\f10a"; }
+.flaticon-facebook:before { content: "\f10b"; }
+.flaticon-contract:before { content: "\f10c"; }
+.flaticon-television:before { content: "\f10d"; }
+.flaticon-result:before { content: "\f10e"; }
+.flaticon-report:before { content: "\f10f"; }
+.flaticon-facebook { 
+  color: black;
+}
+.flaticon-facebook:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+.flaticon-report { 
+  color: black;
+}
+.flaticon-report:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+ .flaticon-frame-landscape { 
+  color: black;
+}
+.flaticon-frame-landscape:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+ .flaticon-github { 
+  color: black;
+}
+.flaticon-github:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+ .flaticon-television { 
+  color: black;
+}
+.flaticon-television:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+ .flaticon-contract { 
+  color: black;
+}
+.flaticon-contract:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+.flaticon-video-camera { 
+  color: black;
+}
+.flaticon-video-camera:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+.flaticon-link { 
+  color: black;
+}
+.flaticon-link:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+.flaticon-chart {
+  color: black;
+}
+.flaticon-curriculum { 
+  color: black;
+}
+.flaticon-curriculum:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+.flaticon-analysis{ 
+  color: black;
+ }
+ .flaticon-chart:hover { 
+  color: blue;
+  cursor: pointer;
+ }
+ .flaticon-analysis:hover{ 
+  color: blue;
+  cursor: pointer;
+ }
