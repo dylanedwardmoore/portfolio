@@ -308,7 +308,7 @@
         name = $.trim(name);
         email = $.trim(email);
         msg = $.trim(msg);
-        Console.log("printing form" + name + msg + email);
+        
         if (name != '' && email != '' && msg != '') {
             var values = "name=" + name + "&email=" + email + " &msg=" + msg;
             $.ajax({
