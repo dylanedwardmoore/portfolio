@@ -1,9 +1,9 @@
 <?php
 
 //Taking all values
-$name 		= $_POST['name'];
-$email 		= $_POST['email'];
-$msg 		= $_POST['msg'];
+$name 		= $_POST['namex'];
+$email 		= $_POST['emailx'];
+$msg 		= $_POST['msgx'];
 $output 	= "Name: ".$name."\n\nEmail: ".$email."\n\nMessage: ".$msg;
 
 $to 		= 'dylan@cs.stanford.edu';

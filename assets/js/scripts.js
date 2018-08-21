@@ -295,9 +295,9 @@
     ==================================*/
     $('.screen-reader-response').hide();
     $('form#cf button#cnt_submit').on('click', function() {
-        var name = $('#name').val();
-        var email = $('#email').val();
-        var msg = $('#msg').val();
+        var name = $('#namex').val();
+        var email = $('#emailx').val();
+        var msg = $('#msgx').val();
         var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
         if (!regex.test(email)) {
@@ -308,7 +308,7 @@
         name = $.trim(name);
         email = $.trim(email);
         msg = $.trim(msg);
-
+        Console.log("printing form" + name + msg + email);
         if (name != '' && email != '' && msg != '') {
             var values = "name=" + name + "&email=" + email + " &msg=" + msg;
             $.ajax({
