@@ -371,7 +371,7 @@
     width: 255px;
 }
 .abt-content p{
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
     color: #333;
     letter-spacing: 0;
@@ -585,11 +585,12 @@
 .contact-area{
     position: relative;
 }
+
 .contact-area .section-title{
     margin-bottom: 60px;
 }
 .cnt-left ul li {
-    font-size: 14px;
+    font-size: 18px;
     color: #333;
     letter-spacing: 0;
     line-height: 23px;
