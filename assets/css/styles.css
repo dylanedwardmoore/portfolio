@@ -487,6 +487,10 @@
     line-height: 26px;
 }
 
+.fade_to_blue:hover p {
+    color: blue;
+}
+
 
 /*============================================
 * END Service Area
@@ -532,6 +536,12 @@
     opacity: 1;
 }
 .prt-item{
+    /*background-color: white;*/
+    color: black;
+    font-size: 16px;
+    border: 2px solid #222222;
+    border-radius: 10px;
+    padding: 5px; 
     margin-bottom: 30px;
 }
 .prt-item a{
@@ -567,12 +577,24 @@
     font-size: 50px;
     color: #fff;
 }
-.prt-item a.img-shadow:hover {
-    box-shadow: 0px 20px 27px rgba(0,0,0,0.1);
+.prt-item a:hover img {
+  filter: none;
+  -webkit-filter: grayscale(0);
+  /*-webkit-transform: scale(1.01);*/
+  box-shadow: 0px 20px 27px rgba(0,0,0,0.1);
 }
 .prt-item a img{
+    /* filter: url(filters.svg#grayscale); Firefox 3.5+ */
+      filter: gray; /* IE5+ */
+      -webkit-filter: grayscale(0.7); /* Webkit Nightlies & Chrome Canary */
+      -webkit-transition: all .8s ease-in-out;  
     max-width: 100%;
     display: inline-block;
+}
+
+
+h3 {
+    color: darkblue;
 }
 
 /*============================================
@@ -644,7 +666,7 @@
     font-size: 12px;
     padding: 9px 25px;
     font-weight: 400;
-    cursor: pointer;
+    /*cursor: pointer;*/
     outline: none;
 }
 .contact-form form button i{
@@ -659,6 +681,7 @@
     -o-transform: translateX(5px);
     transform: translateX(5px);
 }
+
 
 /*============================================
 * END Contact Area

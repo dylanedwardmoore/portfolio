@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 21/08/2018 07:59
+  	Creation date: 22/08/2018 23:54
   	*/
 
 @font-face {
@@ -45,6 +45,8 @@ margin-left: 20px;
 .flaticon-television:before { content: "\f10d"; }
 .flaticon-result:before { content: "\f10e"; }
 .flaticon-report:before { content: "\f10f"; }
+.flaticon-portfolio:before { content: "\f110"; }
+
 .flaticon-facebook { 
   color: black;
 }
