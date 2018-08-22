@@ -46,7 +46,9 @@ margin-left: 20px;
 .flaticon-result:before { content: "\f10e"; }
 .flaticon-report:before { content: "\f10f"; }
 .flaticon-portfolio:before { content: "\f110"; }
-
+.flaticon-portfolio {
+  color: black;
+}
 .flaticon-facebook { 
   color: black;
 }
