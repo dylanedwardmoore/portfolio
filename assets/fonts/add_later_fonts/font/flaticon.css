@@ -106,6 +106,9 @@ margin-left: 20px;
 }
 .flaticon-curriculum { 
   color: black;
+  font-size: 46px;
+  font-weight: 400;
+  height: 30px;
 }
 .flaticon-curriculum:hover { 
   color: blue;
