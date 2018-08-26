@@ -404,6 +404,9 @@
     /*color: #000;*/
 }
 
+.blue-text {
+    color: darkblue;
+}
 /*============================================
 * END About Area
 *=============================================*/
@@ -536,13 +539,15 @@
     opacity: 1;
 }
 .prt-item{
-    /*background-color: white;*/
+    /*background-color: beige;*/
     color: black;
     font-size: 16px;
-    border: 2px solid #222222;
-    border-radius: 10px;
-    padding: 5px; 
+    /*border: 1px solid beige;/*#222222;*/
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    padding: 15px; 
     margin-bottom: 30px;
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.03);
 }
 .prt-item a{
     display: block;
@@ -579,12 +584,14 @@
 }
 .prt-item a:hover img {
   filter: none;
+  border-radius: 1px;
   -webkit-filter: grayscale(0);
-  /*-webkit-transform: scale(1.01);*/
-  box-shadow: 0px 20px 27px rgba(0,0,0,0.1);
+  /*-webkit-transform: scale(1.005);*/
+  /*box-shadow: 0px 20px 27px rgba(0,0,0,0.05);*/
 }
 .prt-item a img{
     /* filter: url(filters.svg#grayscale); Firefox 3.5+ */
+    border-radius: 6px;
       filter: gray; /* IE5+ */
       -webkit-filter: grayscale(0.7); /* Webkit Nightlies & Chrome Canary */
       -webkit-transition: all .8s ease-in-out;  
