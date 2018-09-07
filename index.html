@@ -191,7 +191,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </a>
                 </div>
                 <div class="col-md-4">
-                    <a href="https://flic.kr/s/aHsmmxkKwN" onclick="ga('send', 'event', 'Google Link', 'Action label', 'Action Value');" target="_blank">
+                    <a href="https://flic.kr/s/aHsmmxkKwN" class="tracked" target="_blank">
                         <div class="single-service fade_to_blue txt2_is_show">
                             <div class="icon"><span class="flaticon-camera"></span></div>
                             <div class="srvc-content">
@@ -797,6 +797,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script src="assets/js/isotope.pkgd.min.js"></script>
     <script src="assets/js/plugins.js"></script>
     <script src="assets/js/scripts.js"></script>
+
+    <script type="text/javascript">
+/**
+* Track clicks to a link. If new_window is true the google analytics request
+* will be made synchronously, because browsers block new windows from opening unless
+* it is done DURING an on click event. If new_window is false, the request will
+* be made asynchronously, and the current window url will be changed.
+*/
+var trackOutboundLink = function(url, new_window) {
+  ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
+    function () {
+      if (!new_window) {
+        document.location = url;
+      }
+    }
+  });
+  if (new_window){
+    window.open(url);
+  }
+}
+
+/** 
+* Add an onclick event to all links with class name "track", which will trigger
+* the above defined trackOutboundLink function
+*/
+$(document).ready(function(){
+  // set google analytics onclick link event on each link with class track
+  $('a.track').each(function(index, element){
+    element = $(element);
+    var link = element.attr('href');
+    var new_window = element.attr('target') == '_blank' ? true : false;
+    element.click(function(){
+      trackOutboundLink(link, new_window);
+      return false;
+    });
+  });
+});
+</script>
 </body>
 
 </html>
