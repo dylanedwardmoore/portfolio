@@ -32,20 +32,20 @@
       gtag('config', 'UA-125440044-1');
     </script>
 
-    <!-- Google Tag Manager -->
+    <!-- Google Tag Manager 
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-TDSPM7K');</script>
-
+-->
 </head>
 
 <body id="top">
-<!-- Google Tag Manager (noscript) -->
+<!-- Google Tag Manager (noscript) 
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TDSPM7K"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+End Google Tag Manager (noscript) -->
     <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -191,7 +191,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </a>
                 </div>
                 <div class="col-md-4">
-                    <a href="https://flic.kr/s/aHsmmxkKwN" class="track" target="_blank">
+                    <a href="https://flic.kr/s/aHsmmxkKwN" target="_blank">
                         <div class="single-service fade_to_blue txt2_is_show">
                             <div class="icon"><span class="flaticon-camera"></span></div>
                             <div class="srvc-content">
@@ -804,7 +804,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 * will be made synchronously, because browsers block new windows from opening unless
 * it is done DURING an on click event. If new_window is false, the request will
 * be made asynchronously, and the current window url will be changed.
-*/
+*
 var trackOutboundLink = function(url, new_window) {
     console.log('event' + url);
   ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
@@ -822,7 +822,7 @@ var trackOutboundLink = function(url, new_window) {
 /** 
 * Add an onclick event to all links with class name "track", which will trigger
 * the above defined trackOutboundLink function
-*/
+*
 $(document).ready(function(){
   // set google analytics onclick link event on each link with class track
   $('a.track').each(function(index, element){
@@ -834,7 +834,7 @@ $(document).ready(function(){
       return false;
     });
   });
-});
+});*/
 </script>
 </body>
 
