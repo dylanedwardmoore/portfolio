@@ -31,34 +31,21 @@
 
       gtag('config', 'UA-125440044-1');
     </script>
-<script>
-/**
-* Function that tracks a click on an outbound link in Analytics.
-* This function takes a valid URL string as an argument, and uses that URL string
-* as the event label. Setting the transport method to 'beacon' lets the hit be sent
-* using 'navigator.sendBeacon' in browser that support it.
-*/
-var trackOutboundLink = function(url) {
-   ga('send', 'event', 'outbound', 'click', url, {
-     'transport': 'beacon',
-     'hitCallback': function(){document.location = url;}
-   });
-}
-</script>
+
     <!-- Google Tag Manager -->
-<!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-TDSPM7K');</script>
--->
+
 </head>
 
 <body id="top">
-<!-- Google Tag Manager (noscript) 
+<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TDSPM7K"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-End Google Tag Manager (noscript) -->
+<!-- End Google Tag Manager (noscript) -->
     <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -204,7 +191,7 @@ End Google Tag Manager (noscript) -->
                     </a>
                 </div>
                 <div class="col-md-4">
-                    <a href="https://flic.kr/s/aHsmmxkKwN" onclick="trackOutboundLink('https://flic.kr/s/aHsmmxkKwN'); return false;" target="_blank">
+                    <a href="https://flic.kr/s/aHsmmxkKwN" target="_blank">
                         <div class="single-service fade_to_blue txt2_is_show">
                             <div class="icon"><span class="flaticon-camera"></span></div>
                             <div class="srvc-content">
