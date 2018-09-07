@@ -806,6 +806,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 * be made asynchronously, and the current window url will be changed.
 */
 var trackOutboundLink = function(url, new_window) {
+    console.log('event' + url);
   ga('send', 'event', 'outbound', 'click', url, {'hitCallback':
     function () {
       if (!new_window) {
