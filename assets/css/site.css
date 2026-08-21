@@ -267,8 +267,10 @@ img {
     margin-top: calc(var(--u) * 0.4);
 }
 
-/* Only the phone layout wraps the figure; elsewhere the spacer is inert. */
-.bio-spacer {
+/* Two copies of the figure exist so each layout can put it where it needs to
+   be: the desktop one in its own column, the phone one inside the scroller so
+   it travels with the text. Only one is ever displayed. */
+.portrait--inline {
     display: none;
 }
 
@@ -418,7 +420,11 @@ img {
        Height fills that row and is capped so the figure stays wider than it
        is tall; when the cap binds, `object-fit: cover` trims it rather than
        scaling it down, which is what keeps it wide on a short window. */
-    .portrait {
+    .portrait--inline {
+        display: none;
+    }
+
+    .portrait--column {
         float: none;
         position: static;
         grid-column: 2;
@@ -528,32 +534,24 @@ img {
         max-width: none;
     }
 
-    /* Absolutely positioned but still assigned a grid area, so the blurb's
-       row is its containing block: same rule as the desktop layout, the top
-       lands on the first line of body text. */
-    .portrait {
-        float: none;
-        position: absolute;
-        grid-row: 2;
-        grid-column: 1;
-        top: 0;
-        right: 0;
+    .portrait--column {
+        display: none;
+    }
+
+    /* Inside the scroller and floated, so the text wraps it and the two move
+       together. As the first thing in the flow its top lands on the first
+       line of body text, the same rule the desktop column follows. */
+    .portrait--inline {
+        display: block;
+        float: right;
+        position: static;
         width: 38%;
-        height: auto;
         aspect-ratio: 1;
-        max-height: 42%;
-        margin: 0;
+        margin: 0.1em 0 calc(var(--u) * 0.4) calc(var(--u) * 0.6);
     }
 
     .bio {
         grid-row: 2;
-    }
-
-    /* Sized by the script from the figure's own box, so it cannot drift out
-       of step with it. */
-    .bio-spacer {
-        display: block;
-        float: right;
     }
 
     .doclinks {

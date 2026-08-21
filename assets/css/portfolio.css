@@ -61,18 +61,27 @@
 
 .masthead .backlink {
     display: inline-block;
-    font-size: var(--t-meta);
-    color: var(--muted);
+    font-size: var(--t-body);
+    line-height: 1.3;
+    color: var(--ink);
     text-decoration: none;
     margin-bottom: calc(var(--u) * 0.5);
+    padding: 2px 5px;
+    margin-left: -5px;
+    /* Double the rule the prose links carry, so it reads as a control rather
+       than as a reference. */
+    box-shadow: inset 0 -4px 0 var(--sea);
 }
 
 .masthead .backlink::before {
     content: "\2190\00a0";
 }
 
+/* The rule grows into the whole block: the same gesture as the buttons on the
+   landing page, which fill rather than invert. */
 .masthead .backlink:hover {
-    color: var(--ink);
+    background: var(--sea);
+    box-shadow: none;
 }
 
 .masthead h1 {
@@ -150,8 +159,12 @@
 }
 
 /* The wash is the section's own colour at low alpha, so hovering tells you
-   both that the row is live and which part of the register it belongs to. */
-.entry:hover {
+   both that the row is live and which part of the register it belongs to.
+
+   It is keyed to a link being hovered, not the row: several links in a row go
+   to different places, but the row is the unit of attention, so all of them
+   light the same block. Rows with nothing to click stay inert. */
+.entry:has(a:hover) {
     background: color-mix(in srgb, var(--tone) 16%, #fff);
 }
 
@@ -282,6 +295,23 @@
 ---------------------------------------------------------------------------*/
 
 @media (max-width: 859px) {
+
+    /* The label sticks here as well. It needs its own ground and a rule under
+       it, since at this width the entries pass directly beneath it rather
+       than beside it. */
+    .section-label {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: var(--paper);
+        padding-bottom: calc(var(--u) * 0.3);
+        border-bottom: 1px solid var(--rule);
+        margin-bottom: calc(var(--u) * 0.4);
+    }
+
+    .section-label p {
+        margin-bottom: calc(var(--u) * 0.2);
+    }
 
     .entry {
         grid-template-columns: minmax(0, 1fr);
