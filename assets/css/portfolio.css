@@ -90,18 +90,21 @@
 ---------------------------------------------------------------------------*/
 
 .masthead {
-    padding: calc(var(--u) * 0.6) var(--m-min) calc(var(--u) * 1.2);
+    /* One unit down, the same distance the landing page's grid puts its
+       title, so the two headers sit on the same line in both directions. */
+    padding: var(--u) var(--m-min) calc(var(--u) * 0.5);
     max-width: 34rem;
 }
 
-/* Its own bar, stuck to the top edge, so it is reachable from anywhere in a
-   long register without a nav. Opaque, or the rows would show through. */
+/* Sits under the title, then pins to the top edge once the title scrolls
+   past, so it is reachable from anywhere in a long register without a nav.
+   Opaque, or the rows would show through it. */
 .topbar {
     position: sticky;
     top: 0;
     z-index: 20;
     background: var(--paper);
-    padding: calc(var(--u) * 0.5) var(--m-min) calc(var(--u) * 0.35);
+    padding: 0 var(--m-min) calc(var(--u) * 0.5);
 }
 
 .backlink {
@@ -202,25 +205,12 @@
     border-top: 0;
 }
 
-/* Hovering a link fills two things and nothing else: the date cell, which
-   marks the row it belongs to at full height, and the link itself. Keyed to a
-   link rather than the row, so rows with nothing to click stay inert. */
-.entry:has(a:hover) .entry-year {
-    background: var(--tone);
-    color: var(--tone-ink);
-}
-
 .entry-year {
     font-size: var(--t-meta);
     line-height: 1.9;
     color: var(--muted);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
-    /* Stretches to the row's full height so the fill reads as a block rather
-       than as a highlighted word. */
-    align-self: stretch;
-    padding: 0 calc(var(--u) * 0.25);
-    margin-left: calc(var(--u) * -0.25);
 }
 
 .entry-title {
@@ -273,8 +263,78 @@
     color: var(--muted);
 }
 
+/*---------------------------------------------------------------------------
+    Figures.
+
+    Out of focus, a figure is washed: desaturated, and tinted with its own
+    section's colour through a `color` blend, which keeps the picture's
+    luminance and replaces only its hue. The result reads as a wash laid over
+    a drawing rather than as a dimmed photograph -- the images recede into the
+    section's palette instead of competing with the text.
+
+    Three steps, not two, so nothing snaps: far away it is fully washed, near
+    the viewport it lifts halfway, and in the reading band it is the picture
+    itself. Hovering the row does the same, since that is a stronger signal of
+    attention than position on the page.
+---------------------------------------------------------------------------*/
+
 .entry-figure {
     display: none;
+    position: relative;
+    /* Contains the blend, or it would reach the page behind. */
+    isolation: isolate;
+}
+
+.entry-figure::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--tone);
+    mix-blend-mode: color;
+    opacity: 0.66;
+    pointer-events: none;
+    transition: opacity 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.entry-figure img {
+    filter: saturate(0.25) contrast(0.94) brightness(1.03);
+    transition: filter 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.entry-figure.is-near::after {
+    opacity: 0.32;
+}
+
+.entry-figure.is-near img {
+    filter: saturate(0.62) contrast(0.97) brightness(1.01);
+}
+
+.entry-figure.is-in::after,
+.entry:hover .entry-figure::after {
+    opacity: 0;
+}
+
+.entry-figure.is-in img,
+.entry:hover .entry-figure img {
+    filter: none;
+}
+
+/* Without the script every figure is simply itself; the wash is an
+   enhancement, not a prerequisite for seeing the work. */
+.no-js .entry-figure::after {
+    opacity: 0;
+}
+
+.no-js .entry-figure img {
+    filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .entry-figure::after,
+    .entry-figure img {
+        transition: none;
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -292,12 +352,13 @@
            and sits above it in the stack, so full-width padding would paint
            over the green. */
         margin-left: var(--bar);
-        padding: calc(var(--u) * 0.6) calc(var(--u) * 1.4) calc(var(--u) * 0.4)
-            calc(var(--u) * 1.4);
+        padding: 0 calc(var(--u) * 1.4) calc(var(--u) * 0.55) calc(var(--u) * 1.4);
     }
 
+    /* Left inset identical to the landing page's type area, so the two titles
+       sit on the same line and moving between the pages does not shift them. */
     .masthead {
-        padding: calc(var(--u) * 0.7) calc(var(--u) * 1.4) calc(var(--u) * 1.4)
+        padding: var(--u) calc(var(--u) * 1.4) calc(var(--u) * 0.5)
             calc(var(--bar) + var(--u) * 1.4);
     }
 
@@ -438,7 +499,6 @@
         display: block;
         width: fit-content;
         line-height: 1.4;
-        align-self: auto;
         margin-bottom: 1px;
     }
 

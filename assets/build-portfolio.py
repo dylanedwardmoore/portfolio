@@ -88,7 +88,7 @@ SECTIONS = [
         ("", "Teaching Assistant, Stanford and Dartmouth",
          "CS221 (AI), CS147 (HCI), CS181 (Ethics), CS109, CS106A/B, and ENGM 191, Product "
          "Design and Development.",
-         None, [
+         "stanford_icon.jpg", [
              ("https://stanfordcs181.github.io/", "CS181: Computers, Ethics, and Public Policy"),
              ("http://hci.stanford.edu/courses/cs147/2017/au/", "CS147: Introduction to HCI Design"),
              ("http://web.stanford.edu/class/cs221/", "CS221: Artificial Intelligence"),
@@ -105,24 +105,24 @@ SECTIONS = [
          ]),
         ("", "Curriculum advisor, TUMO Self-Learning Initiative",
          "Curriculum planning for TUMO\u2019s self-learning programme.",
-         None, [
+         "TUMO_self_learning.jpg", [
              ("https://drive.google.com/file/d/1_KH2EF2khd-DpXSC7J_QXCuShonzYoPi/view?usp=sharing",
               "About the Initiative"),
          ]),
         ("2021", "Mentor, UC Berkeley Fung Fellowship",
          "Mentored student teams on health and technology projects.",
-         None, [("https://fungfellows.berkeley.edu/", "About the Fung Fellowship")]),
+         "fung_fellowship.jpg", [("https://fungfellows.berkeley.edu/", "About the Fung Fellowship")]),
         ("2020", "Mentor, Stanford CS + Social Good",
          "Set and mentored a student challenge, and brought Ability Hacks in as a non-profit "
          "partner.",
-         None, [
+         "cs_plus_social_good.jpg", [
              ("https://cs4good.com/", "cs4good.com"),
              ("https://docs.google.com/document/d/1Sho3fEUPPFG2NbKfBUgJ3uH0ujKJiraKH_wfB_t1vOw/edit?usp=sharing",
               "My challenge statement"),
          ]),
         ("2020", "Section leader, Code in Place",
          "Taught an introductory programming section in Stanford\u2019s pandemic-era course.",
-         None, [
+         "code_in_place.jpg", [
              ("https://www.stanforddaily.com/2020/03/31/stanford-to-offer-free-online-cs-class-during-pandemic/",
               "About the course"),
          ]),
@@ -149,25 +149,25 @@ SECTIONS = [
              ("https://www.loom.com/share/0384b3cc46e44df1b9ec43597344bc3b?fbclid=IwZXh0bgNhZW0CMTEAAR7qr_NHFGTN8-G8X0mTv2MydZGL8QpBrReZ-Tl9ZaE5o-aQI__uKZ7RnySn2A_aem_d1gABC_XAQOppTyQNZAL7A", "Our presentation"),
              ("https://www.linkedin.com/feed/update/urn:li:activity:7341167981479010306/", "Rilla announcement"),
          ]),
-        ("2023", "Dartmouth Digital Health Summit, third place", "", None, [
+        ("2023", "Dartmouth Digital Health Summit, third place", "", "dartmouth.jpg", [
             ("https://drive.google.com/file/d/1UxroTa7q3ECYXxjUGsLFnHApo3x0Yz7d/view?usp=sharing", "The entry"),
         ]),
-        ("2022", "Dartmouth Guarini Alumni Research Award", "", None, [
+        ("2022", "Dartmouth Guarini Alumni Research Award", "", "dartmouth.jpg", [
             ("https://graduate.dartmouth.edu/admissions-financial-aid/awards-grants/alumni-research-award",
              "About the award"),
         ]),
-        ("2022", "Millett G. Morgan Fund Fellow", "", None, []),
-        ("2021", "Dartmouth Innovation Fellowship", "", None, []),
-        ("2021", "Dartmouth CompX Faculty Grant", "", None, [
+        ("2022", "Millett G. Morgan Fund Fellow", "", "dartmouth.jpg", []),
+        ("2021", "Dartmouth Innovation Fellowship", "", "dartmouth.jpg", []),
+        ("2021", "Dartmouth CompX Faculty Grant", "", "dartmouth.jpg", [
             ("https://neukom.dartmouth.edu/funding/faculty/compx-faculty-grants", "About the grant"),
             ("https://docs.google.com/document/d/1Yvx1Sue6kzviB6CeQbl7xRb53pOHmTE_CSreMIMzaUA/edit?usp=sharing",
              "Our proposal"),
         ]),
-        ("2021", "Armenian Professional Society Scholarship", "", None, [
+        ("2021", "Armenian Professional Society Scholarship", "", "aps.jpg", [
             ("http://www.armenianprofessionalsociety.org/aps-scholarships-recipients.html", "Recipients"),
         ]),
-        ("2017", "Stanford Teaching Honors", "", None, []),
-        ("2012", "Eagle Scout", "", None, []),
+        ("2017", "Stanford Teaching Honors", "", "stanford_icon.jpg", []),
+        ("2012", "Eagle Scout", "", "eagle_scout.jpg", []),
         ("2011", "Intel ISEF, third place, Physics and Astronomy",
          "For a predictive model of standing wave patterns in plasma, built from my own "
          "high-speed photography of neon signs. Also won an American Vacuum Society Award and a "
@@ -283,7 +283,7 @@ SECTIONS = [
         ("", "Call center audio transcription and analytics",
          "Built the audio transcription and conversation analytics prototype for an early-stage "
          "political polling analytics startup.",
-         None, [("https://www.cbinsights.com/company/permanent-majority-corp", "Company info")]),
+         "phone_icon.jpg", [("https://www.cbinsights.com/company/permanent-majority-corp", "Company info")]),
     ]),
 ]
 
@@ -335,7 +335,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260821j"
+V = "v=20260821k"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -361,15 +361,13 @@ HEAD = """<!doctype html>
     </script>
 </head>
 
-<body class="portfolio">
+<body class="portfolio no-js">
+    <script>document.body.classList.remove('no-js');</script>
+
     <div class="frame-left" aria-hidden="true"></div>
     <div class="frame-bottom" aria-hidden="true"></div>
     <div class="scrollrail" data-scroll="window" aria-hidden="true" hidden>
         <div class="scrollrail-thumb"></div>
-    </div>
-
-    <div class="topbar">
-        <a class="backlink" href="../">Back</a>
     </div>
 
     <header class="masthead">
@@ -377,12 +375,17 @@ HEAD = """<!doctype html>
         <p class="masthead-note">Ventures, research, industry work, teaching, and awards.</p>
     </header>
 
+    <div class="topbar">
+        <a class="backlink" href="../">Back</a>
+    </div>
+
     <main class="register">
 """.replace("{V}", V)
 
 TAIL = """    </main>
 
     <script src="../assets/js/scrollrail.js?{V}"></script>
+    <script src="../assets/js/figures.js?{V}"></script>
 </body>
 
 </html>
