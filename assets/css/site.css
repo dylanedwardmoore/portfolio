@@ -259,6 +259,12 @@ img {
     margin-top: calc(var(--u) * 0.4);
 }
 
+/* The blurb is written as a note, so it ends with a signature. Set apart by
+   space rather than by a rule or a weight change -- there is only one weight. */
+.signoff {
+    margin-top: calc(var(--u) * 0.5) !important;
+}
+
 /* Three flat blocks. The accent colour does the work the icons used to. */
 .doclinks {
     clear: both;
