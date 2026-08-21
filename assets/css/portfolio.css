@@ -262,13 +262,18 @@
         column-gap: calc(var(--u) * 0.6);
     }
 
-    /* Featured rows carry a thumbnail in a third column; the rest do not, so
-       the eye is drawn to the top of the register rather than down it. */
-    .entry--featured {
+    /* Any row with a figure gets a third column for it. The lead sections
+       carry a larger one, so weight still sits at the top of the register
+       even though the later projects now show their own work. */
+    .entry:has(.entry-figure) {
+        grid-template-columns: 5.5rem minmax(0, 1fr) 6.5rem;
+    }
+
+    .entry--featured:has(.entry-figure) {
         grid-template-columns: 5.5rem minmax(0, 1fr) 8.5rem;
     }
 
-    .entry--featured .entry-figure {
+    .entry-figure {
         display: block;
     }
 
@@ -284,7 +289,11 @@
         grid-template-columns: 17rem minmax(0, 1fr);
     }
 
-    .entry--featured {
+    .entry:has(.entry-figure) {
+        grid-template-columns: 5.5rem minmax(0, 1fr) 7.5rem;
+    }
+
+    .entry--featured:has(.entry-figure) {
         grid-template-columns: 5.5rem minmax(0, 1fr) 10rem;
     }
 }
@@ -295,6 +304,12 @@
 ---------------------------------------------------------------------------*/
 
 @media (max-width: 859px) {
+
+    .entry-figure {
+        display: block;
+        max-width: 8rem;
+        margin-bottom: calc(var(--u) * 0.25);
+    }
 
     /* The label sticks here as well. It needs its own ground and a rule under
        it, since at this width the entries pass directly beneath it rather

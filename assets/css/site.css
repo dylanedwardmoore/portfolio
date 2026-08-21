@@ -263,6 +263,14 @@ img {
     margin: 0;
 }
 
+/* Wada's "Blackish Olive" -- the darkest low-chroma green in the book, and
+   the only one in that range that clears 4.5:1 as body text (it reads 9.3:1).
+   Used to set the lead-in apart without a second weight, which fff does not
+   have. */
+.lead-in {
+    color: #324e2a;
+}
+
 .bio p + p {
     margin-top: calc(var(--u) * 0.4);
 }

@@ -35,9 +35,7 @@ SECTIONS = [
          "dementia care. Our first product was an AI-powered dashboard giving long-term care "
          "staff insight into the needs and experiences of residents with dementia, piloted at "
          "facilities across the country. Raised $1M in seed funding.",
-         "companion_iq.png", [
-             ("https://companioniq.org/", "companioniq.org"),
-         ]),
+         "companion_iq.png", [("https://companioniq.org/", "companioniq.org")]),
     ]),
 
     ("Research", "dusky", "Peer-reviewed work in human-AI interaction.", [
@@ -64,16 +62,16 @@ SECTIONS = [
 
     ("Industry", "red", "Software engineering before my PhD.", [
         ("2021", "Software Engineer, YouTube",
-         "Paid Digital Goods team. Implemented the “Super Thanks” fan funding feature. "
+         "Paid Digital Goods team. Implemented the \u201cSuper Thanks\u201d fan funding feature. "
          "TypeScript, C++.",
          "youtube.jpg", [
              ("https://support.google.com/youtube/answer/10879035?hl=en/", "About Super Thanks"),
          ]),
-        ("2018–21", "Software Engineer, Lark Health",
+        ("2018\u201321", "Software Engineer, Lark Health",
          "Full stack and UX research. React Native migration and microservices. "
          "TypeScript, Python, React Native, Node.js.",
          "lark.jpg", [("https://www.lark.com/", "lark.com")]),
-        ("2015–16", "Software Engineering Intern, Google",
+        ("2015\u201316", "Software Engineering Intern, Google",
          "Two internships, on the AdWords (Dart/Angular) and Knowledge Graph (Java/C++) teams.",
          "google_big_g.jpg", []),
         ("2014", "Software Engineering Intern, PayPal",
@@ -81,11 +79,12 @@ SECTIONS = [
          "paypal.jpg", [("https://www.paypal.com/", "paypal.com")]),
         ("2011", "Mechanical Engineering Intern, Makani Power (now Google X)",
          "Helped manufacture self-guided kites for high-altitude wind turbines. Solidworks, CNC.",
-         "makani.jpg", [("https://x.company/makani/", "x.company/makani")]),
+         "makani.jpg", []),
     ]),
 
-    ("Teaching", "yellow",
-     "Eleven quarters as a TA at Stanford and Dartmouth, plus workshops and mentoring.", [
+    ("Leadership and Teaching", "yellow",
+     "Eleven quarters as a TA at Stanford and Dartmouth, plus workshops, mentoring, and "
+     "student leadership.", [
         ("", "Teaching Assistant, Stanford and Dartmouth",
          "CS221 (AI), CS147 (HCI), CS181 (Ethics), CS109, CS106A/B, and ENGM 191, Product "
          "Design and Development.",
@@ -95,36 +94,52 @@ SECTIONS = [
              ("http://web.stanford.edu/class/cs221/", "CS221: Artificial Intelligence"),
              ("https://engineering.dartmouth.edu/courses#engm-191", "ENGM 191: Product Design and Development"),
          ]),
-        ("2019–22", "Workshop leader, TUMO",
+        ("2019\u201322", "Workshop leader, TUMO",
          "Designed and taught high school courses on AI and interactive storytelling in Berlin, "
-         "Beirut, and Yerevan, including a month-long AI workshop and a storytelling series run "
-         "with my sister Sophia.",
+         "Beirut, and Yerevan, covering minimax search, neural networks, and style transfer. The "
+         "storytelling series was run with my sister Sophia.",
          "tumo.jpg", [
              ("https://www.youtube.com/watch?v=eNy72ObvKXU", "Yerevan course overview"),
              ("https://github.com/dylanedwardmoore/storyteller", "Storyteller engine on GitHub"),
              ("https://tumo.org/en/", "About TUMO"),
          ]),
         ("", "Curriculum advisor, TUMO Self-Learning Initiative",
-         "Curriculum planning for TUMO's self-learning programme.",
+         "Curriculum planning for TUMO\u2019s self-learning programme.",
          None, [
-             ("https://drive.google.com/file/d/1_KH2EF2khd-DpXSC7J_QXCuShonzYoPi/view?usp=sharing", "About the Initiative"),
+             ("https://drive.google.com/file/d/1_KH2EF2khd-DpXSC7J_QXCuShonzYoPi/view?usp=sharing",
+              "About the Initiative"),
          ]),
         ("2021", "Mentor, UC Berkeley Fung Fellowship",
          "Mentored student teams on health and technology projects.",
          None, [("https://fungfellows.berkeley.edu/", "About the Fung Fellowship")]),
         ("2020", "Mentor, Stanford CS + Social Good",
-         "Set and mentored a student challenge.",
+         "Set and mentored a student challenge, and brought Ability Hacks in as a non-profit "
+         "partner.",
          None, [
              ("https://cs4good.com/", "cs4good.com"),
              ("https://docs.google.com/document/d/1Sho3fEUPPFG2NbKfBUgJ3uH0ujKJiraKH_wfB_t1vOw/edit?usp=sharing",
               "My challenge statement"),
          ]),
         ("2020", "Section leader, Code in Place",
-         "Taught an introductory programming section in Stanford's pandemic-era course.",
+         "Taught an introductory programming section in Stanford\u2019s pandemic-era course.",
          None, [
              ("https://www.stanforddaily.com/2020/03/31/stanford-to-offer-free-online-cs-class-during-pandemic/",
               "About the course"),
          ]),
+        ("2014", "E-Challenge Coordinator, BASES",
+         "Planned a $150k startup competition for the Business Association of Stanford "
+         "Entrepreneurial Students.",
+         "bases-2.jpg", [("http://bases.stanford.edu/", "bases.stanford.edu")]),
+        ("", "Junior Class President, Stanford",
+         "Elected class president. Attended administrative meetings and planned campus-wide "
+         "events, including the class formal and Full Moon on the Quad.",
+         "class_president-2.jpg", [
+             ("https://assu.stanford.edu/leadership/class-presidents", "About the role"),
+         ]),
+        ("2012\u201316", "Founding member, Stanford Competitive Running Club",
+         "Founding member and club leader. Competed in national club championships (NIRCA), an "
+         "Ironman triathlon, and hundred-mile relays.",
+         "running_club.jpg", [("https://running.stanford.edu/index.html", "The club")]),
     ]),
 
     ("Recognition", "grey", "Awards, grants, and fellowships.", [
@@ -138,7 +153,8 @@ SECTIONS = [
             ("https://drive.google.com/file/d/1UxroTa7q3ECYXxjUGsLFnHApo3x0Yz7d/view?usp=sharing", "The entry"),
         ]),
         ("2022", "Dartmouth Guarini Alumni Research Award", "", None, [
-            ("https://graduate.dartmouth.edu/admissions-financial-aid/awards-grants/alumni-research-award", "About the award"),
+            ("https://graduate.dartmouth.edu/admissions-financial-aid/awards-grants/alumni-research-award",
+             "About the award"),
         ]),
         ("2022", "Millett G. Morgan Fund Fellow", "", None, []),
         ("2021", "Dartmouth Innovation Fellowship", "", None, []),
@@ -151,74 +167,123 @@ SECTIONS = [
             ("http://www.armenianprofessionalsociety.org/aps-scholarships-recipients.html", "Recipients"),
         ]),
         ("2017", "Stanford Teaching Honors", "", None, []),
-        ("2012", "Eagle Scout", "", None, [
-            ("https://troop89alameda.webs.com/", "Troop 89, Alameda"),
-        ]),
+        ("2012", "Eagle Scout", "", None, []),
         ("2011", "Intel ISEF, third place, Physics and Astronomy",
-         "For work on finding harmonics in plasma.", None, []),
+         "For a predictive model of standing wave patterns in plasma, built from my own "
+         "high-speed photography of neon signs. Also won an American Vacuum Society Award and a "
+         "full-tuition scholarship to Drexel University.",
+         "isef.jpg", []),
     ]),
 
     ("Earlier work", None,
      "Research and course projects from Stanford, kept for the record.", [
-        ("", "Facet", "An emotionally sensitive, accessible corporate meeting assistant.", None, [
-            ("https://drive.google.com/file/d/1su1K2T0b-cf14VqOXKPN30UUAsgtWcWm/view?usp=sharing", "Screenshots"),
-        ]),
+        ("", "Facet",
+         "An emotionally sensitive, accessible corporate meeting assistant, built as my CS210 "
+         "(Software Project Experience with Corporate Partners) senior project with VMware as "
+         "sponsor. Facet ran meetings through an Alexa app, aggregated video and audio, and gave "
+         "management analytics on team dynamics and patterns of bias. Winner of the Class Project "
+         "Award and the Pejman and Mar (Pear VC) Award.",
+         "facet_circle.jpg", []),
         ("", "NavCog and Ability Hacks",
-         "Indoor navigation for blind users, with CMU and Microsoft.", None, [
-            ("https://www.cs.cmu.edu/~NavCog/navcog.html", "NavCog documentation"),
-            ("https://abilityhacks.org/about/", "About Ability Hacks"),
+         "HCI research and engineering on disability-related challenges. I led the continuation "
+         "of NavCog, an indoor navigation app for people with visual impairments, which began in "
+         "CMU\u2019s Cognitive Assistance Laboratory and passed to Ability Hacks in 2020.",
+         "navcog.jpg", [("https://www.cs.cmu.edu/~NavCog/navcog.html", "CMU NavCog documentation")]),
+        ("", "Smart Primer",
+         "Early work under Dr James Landay on a tablet-based intelligent tutoring system for "
+         "children, built around narrative, tutoring chatbots, and real-world activities.",
+         "smart_primer_circle.jpg", [("https://hci.stanford.edu/research/smartprimer/", "Project page")]),
+        ("", "Creativity boosting environments in cars",
+         "Research with the Volkswagen Automotive Innovation Lab at Stanford, with Dr Elizabeth "
+         "Murnane and Dr James Landay, on how in-car agents can guide creative activity during a "
+         "commute safely and enjoyably.",
+         "creative_drive.jpg", [
+             ("https://drive.google.com/open?id=1QAo-l2LvOR3CTVji52s4gCmRvb-r_Ri0", "Documentation"),
          ]),
-        ("", "Smart Primer", "Using AI to reimagine education.", None, [
-            ("https://hci.stanford.edu/research/smartprimer/", "Project homepage"),
-        ]),
-        ("", "Adversarial Examples for NLP Contexts", "", None, [
-            ("https://drive.google.com/file/d/1U_g5SAsvcWB3Md4bHveYfyaY2sj2H28H/view?usp=sharing", "Paper"),
-        ]),
-        ("", "Visuomotor Learning: Object Classification", "", None, [
-            ("https://drive.google.com/open?id=1yI4C4Y-0tSd0WSVDIi_A6twL08Q5agwt", "Paper"),
-        ]),
-        ("", "Video tagging using frame captions", "", None, [
-            ("https://drive.google.com/file/d/17dVfAEMQJUmjsYnHHc8fcsAJB3EPpyLk/view?usp=sharing", "Paper"),
-        ]),
-        ("", "Finding protests in social media", "", None, [
-            ("https://drive.google.com/open?id=1UksP447kuM7VpuhreQ4rV8aNMBrJx99P", "Paper"),
-        ]),
-        ("", "“Can you take my photo?”",
-         "Assistive photography for people with visual impairments.", None, [
-            ("https://drive.google.com/file/d/1RbJq-J1Jt_SOWTMI-tYPapQ-e4rMpNCZ/view?usp=sharing", "Paper"),
-        ]),
-        ("", "Pensieve", "", None, [
-            ("https://drive.google.com/open?id=1b868SNDfESTWQaKP7j5MFI38Np8WMzNB", "Documentation"),
-        ]),
-        ("", "Creativity boosting environments in cars", "", None, [
-            ("https://drive.google.com/open?id=1QAo-l2LvOR3CTVji52s4gCmRvb-r_Ri0", "Documentation"),
-        ]),
-        ("", "A general game playing agent", "", None, [
-            ("https://drive.google.com/open?id=1hXBl_rZFLuCw9mlUidw-T7yNCffwIruM", "Documentation"),
-        ]),
-        ("", "Connect Four with an AI opponent", "", None, [
-            ("https://github.com/dmoore2/ConnectFour", "GitHub"),
-        ]),
-        ("", "Platform for visualising multidimensional shapes", "", None, [
-            ("https://github.com/dmoore2/Platform-for-Displaying-Multidimensional-Shapes", "GitHub"),
-        ]),
-        ("", "Call center audio transcription and analytics", "", None, [
-            ("https://www.cbinsights.com/company/permanent-majority-corp", "Company info"),
-        ]),
-        ("", "Rally", "A social network for staying active.", None, [
-            ("https://www.facebook.com/gorallyme/", "Facebook page"),
-            ("https://www.youtube.com/watch?v=yIQWqWPzu5Q", "Promo video"),
-        ]),
-        ("", "Stanford Change Labs: water catchment for rural India", "", None, [
-            ("https://changelabs.stanford.edu/systemsinitiatives/100l-water", "About the project"),
-        ]),
-        ("", "Archaeology research at Chavín de Huántar", "", None, [
-            ("https://flic.kr/s/aHsmoRkNyK", "Photographs"),
-        ]),
-        ("", "Sustainable Amazon ecotourism", "", None, [
-            ("https://flic.kr/s/aHsmhuokSW", "Photographs"),
-            ("https://drive.google.com/open?id=18Yaw3LSDo2pG5H3smf8U4JckkxPxOeIb", "Research recommendations"),
-        ]),
+        ("", "Adversarial Examples for NLP Contexts",
+         "Two methods for generating adversarial examples for an NLP task, including a new loss "
+         "function for training word vectors in a CBOW model. Final project for CS221 (Artificial "
+         "Intelligence: Principles and Techniques) and CS224N (Natural Language Processing with "
+         "Deep Learning).",
+         "adversarial2.jpg", [
+             ("https://drive.google.com/file/d/1U_g5SAsvcWB3Md4bHveYfyaY2sj2H28H/view?usp=sharing", "Paper"),
+         ]),
+        ("", "Visuomotor Learning: Object Classification",
+         "A CNN for Amazon\u2019s robotic arm pick-and-place task, trained on generated data across "
+         "many camera angles and scenes to boost existing models by transfer learning. Final "
+         "project for CS230 (Deep Learning).",
+         "robot_arm3.jpg", [
+             ("https://drive.google.com/open?id=1yI4C4Y-0tSd0WSVDIi_A6twL08Q5agwt", "Paper"),
+         ]),
+        ("", "Video tagging using frame captions",
+         "Extended state-of-the-art CNN image captioning to a video tagging task. Final project "
+         "for CS229 (Machine Learning).",
+         "video_tagging.jpg", [
+             ("https://drive.google.com/file/d/17dVfAEMQJUmjsYnHHc8fcsAJB3EPpyLk/view?usp=sharing", "Paper"),
+         ]),
+        ("", "Finding protests in social media",
+         "CNNs to identify protest images on Chinese social media likely to be censored. Final "
+         "project for CS224N (Natural Language Processing with Deep Learning).",
+         "eye_green.jpg", [
+             ("https://drive.google.com/open?id=1UksP447kuM7VpuhreQ4rV8aNMBrJx99P", "Paper"),
+         ]),
+        ("", "\u201cCan you take my photo?\u201d",
+         "A lightweight guidance system that helps a stranger capture the shot you wanted. Final "
+         "project for CS376 (Research Topics in Human-Computer Interaction).",
+         "photo_assist_circle.jpg", [
+             ("https://drive.google.com/file/d/1RbJq-J1Jt_SOWTMI-tYPapQ-e4rMpNCZ/view?usp=sharing", "Paper"),
+         ]),
+        ("", "Pensieve",
+         "An app for sharing memories with loved ones at particular moments. Final project for "
+         "CS247 (Human-Computer Interaction Design Studio).",
+         "pensieve4.jpg", [
+             ("https://drive.google.com/open?id=1b868SNDfESTWQaKP7j5MFI38Np8WMzNB", "Documentation"),
+         ]),
+        ("", "Rally",
+         "A mobile web app for connecting with friends and planning activities. Final project for "
+         "CS147 (Introduction to Human-Computer Interaction Design).",
+         "rally.jpg", [
+             ("https://www.facebook.com/gorallyme/", "Facebook page"),
+             ("https://www.youtube.com/watch?v=yIQWqWPzu5Q", "Promo video"),
+         ]),
+        ("", "A general game playing agent",
+         "A Java propositional-network player with performance gains from factoring and latches, "
+         "which reached the semifinals of the end-of-year competition. Final project for CS227B "
+         "(General Game Playing).",
+         "chess_piece2.jpg", [
+             ("https://drive.google.com/open?id=1hXBl_rZFLuCw9mlUidw-T7yNCffwIruM", "Documentation"),
+         ]),
+        ("", "CS106B Recursion Competition, Grand Prize",
+         "Connect Four with an AI opponent \u2014 my freshman-year entry to the 2013 competition in "
+         "CS106B (Programming Abstractions).",
+         "connect_four3.jpg", [("https://github.com/dmoore2/ConnectFour", "Source on GitHub")]),
+        ("", "CS106A Graphics Competition, Grand Prize",
+         "A platform for creating, manipulating, and visualising multidimensional shapes \u2014 my "
+         "freshman-year entry to the 2012 competition in CS106A (Programming Methodology).",
+         "shape3.jpg", [
+             ("https://github.com/dmoore2/Platform-for-Displaying-Multidimensional-Shapes", "Source on GitHub"),
+         ]),
+        ("", "Stanford Change Labs: water catchment for rural India",
+         "Mechanical engineering and design research with the 100 Litre Water Project. My focus "
+         "was a sun-tracking solar panel power supply.",
+         "water_catchment.jpg", []),
+        ("", "Archaeology research at Chav\u00edn de Hu\u00e1ntar",
+         "Stanford researcher on a small team that located a buried ceremonial chamber over 2,500 "
+         "years old at a UNESCO World Heritage site in the Peruvian Andes. 700+ hours of field and "
+         "lab work.",
+         "peru2.jpg", [("https://flic.kr/s/aHsmoRkNyK", "Photographs")]),
+        ("", "Sustainable Amazon ecotourism",
+         "60+ hours of interviews with experts and members of Quechua and Waorani communities in "
+         "the Amazon basin and cloud forests of Ecuador, supported by Stanford BOSP and Dr "
+         "Margaret Fuller.",
+         "sani_circle.jpg", [
+             ("https://flic.kr/s/aHsmhuokSW", "Photographs"),
+             ("https://drive.google.com/open?id=18Yaw3LSDo2pG5H3smf8U4JckkxPxOeIb", "Research recommendations"),
+         ]),
+        ("", "Call center audio transcription and analytics",
+         "Built the audio transcription and conversation analytics prototype for an early-stage "
+         "political polling analytics startup.",
+         None, [("https://www.cbinsights.com/company/permanent-majority-corp", "Company info")]),
     ]),
 ]
 
@@ -270,7 +335,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260821g"
+V = "v=20260821h"
 HEAD = """<!doctype html>
 <html lang="en">
 
