@@ -78,8 +78,29 @@
 
     /* Reference type area, and the unit everything vertical derives from
        (a twenty-fourth of it). */
-    --type-area: 960px;
+    /* The type area follows the width of the window, within bounds: below
+       840px there is no room for two columns, and past ~1140 the line would
+       outrun the eye however the columns are split.
+
+       Two units, not one. --u is the vertical rhythm and answers to the
+       height of the page; --uh is the horizontal one and answers to its
+       width. They were a single variable until the vertical rhythm was made
+       responsive, at which point the left margin began shrinking on a short
+       window even though nothing horizontal had changed. */
     --u: 40px;
+    --uh: clamp(26px, 2.6vw, 46px);
+
+    /* The margins are declared first and the type area is what is left over,
+       capped. Sizing the area against the viewport instead (76vw with an
+       840px floor) meant that between roughly 860 and 1100 the floor exceeded
+       the space available and the area ate the right margin entirely, putting
+       the figure hard against the window edge. Deriving it from the margins
+       cannot do that: the right margin exists by construction.
+
+       Outer margin wider than inner, as the page canons have it. */
+    --gutter-l: calc(var(--bar) + var(--uh) * 1.5);
+    --gutter-r: calc(var(--uh) * 2);
+    --type-area: clamp(600px, calc(100vw - var(--gutter-l) - var(--gutter-r)), 1140px);
 
     /* Modular scale, root 2 in half steps. */
     --t-meta: 13.4px;
@@ -94,9 +115,9 @@
     --bar: 13px;
     --scrollbar: 26px;
 
-    /* How far the title travels as it swipes. About half its height: enough
-       to read as a move, short enough to stay unhurried. */
-    --title-shift: 26px;
+    /* How far the title travels. Small on purpose: enough to read as a move
+       and to say which way it went, not enough to draw attention to itself. */
+    --title-shift: 11px;
 
     /* Floor margins, used once the viewport is too small for the canon. */
     --m-min: 24px;
@@ -229,36 +250,65 @@ img {
     view-transition-name: frame-bottom;
 }
 
-/* The titles swipe.
+/* The titles swipe, and the direction carries meaning.
 
-   Both carry the same view-transition-name, so the browser treats them as one
-   object and runs the pair together: the outgoing line lifts and fades out
-   while the incoming one rises into its place. The two overlap by design --
-   the new title starts before the old has finished leaving, which is what
-   makes it read as one continuous move rather than two separate ones.
+   Portfolio is a subpage -- the control that leaves it says "Back" -- so
+   going in and coming out should not look the same. Going in, the pair moves
+   up: the old title lifts away and the new one rises into its place, the way
+   the view moves when you descend into something. Coming back reverses it.
+   The navigation supplies the direction as a view-transition type, so both
+   documents animate the same way round without either having to know which
+   link was clicked.
 
-   Unhurried on purpose: the curves are ease-out, so most of the distance is
-   covered early and the line settles rather than arriving abruptly. */
-@keyframes title-swipe-out {
+   Deliberately small. Eleven pixels and a fade over about a third of a
+   second: enough to register as a move and to say which way, not enough to
+   perform. An untyped fallback keeps the plain swipe where the browser does
+   not support transition types.
+---------------------------------------------------------------------------*/
+
+@keyframes title-out-up {
     to {
         transform: translateY(calc(-1 * var(--title-shift)));
         opacity: 0;
     }
 }
 
-@keyframes title-swipe-in {
+@keyframes title-in-up {
     from {
         transform: translateY(var(--title-shift));
         opacity: 0;
     }
 }
 
+@keyframes title-out-down {
+    to {
+        transform: translateY(var(--title-shift));
+        opacity: 0;
+    }
+}
+
+@keyframes title-in-down {
+    from {
+        transform: translateY(calc(-1 * var(--title-shift)));
+        opacity: 0;
+    }
+}
+
 ::view-transition-old(page-title) {
-    animation: title-swipe-out 460ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: title-out-up 300ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
 ::view-transition-new(page-title) {
-    animation: title-swipe-in 620ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+    animation: title-in-up 380ms cubic-bezier(0.16, 1, 0.3, 1) 70ms both;
+}
+
+/* Coming back out of the subpage: the same move, mirrored. */
+html:active-view-transition-type(go-out)::view-transition-old(page-title) {
+    animation-name: title-out-down;
+}
+
+html:active-view-transition-type(go-out)::view-transition-new(page-title) {
+    animation-name: title-in-down;
 }
 
 ::view-transition-old(root),
@@ -450,7 +500,7 @@ img {
 .page {
     display: grid;
     grid-template-columns:
-        calc(var(--bar) + var(--u) * 1.4)
+        var(--gutter-l)
         minmax(0, var(--type-area))
         1fr;
     grid-template-rows:
@@ -698,13 +748,19 @@ img {
     }
 }
 
-@media (min-width: 768px) and (min-height: 440px) {
+@media (min-width: 1080px) and (min-height: 440px) {
 
     .sheet {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 46%;
+        /* The measure is the first constraint, not the leftover: the text
+           column takes the free space and the figure is capped, so widening
+           the window lengthens the line rather than the picture. At 46% of a
+           960px area the line had fallen to 45 characters, the floor of the
+           readable band; this holds it either side of sixty, nearer the 66
+           that Bringhurst calls ideal. */
+        grid-template-columns: minmax(0, 1fr) min(40%, 430px);
         grid-template-rows: auto minmax(0, 1fr) auto;
-        column-gap: calc(var(--u) * 1.6);
+        column-gap: calc(var(--uh) * 1.5);
         /* Carried on the grid rather than on .bio, so the figure and the
            first line of body text share a top edge. */
         row-gap: calc(var(--u) * 0.6);
@@ -751,8 +807,8 @@ img {
 
         /* Reach back past the type-area margin so the rail lane starts at the
            frame; the padding puts the text back on the line it was on. */
-        margin-left: calc(-1 * var(--u) * 1.4);
-        padding-left: calc(var(--u) * 1.4);
+        margin-left: calc(-1 * var(--uh) * 1.5);
+        padding-left: calc(var(--uh) * 1.5);
         padding-right: calc(var(--u) * 0.6);
         margin-right: calc(var(--u) * -0.6);
     }
@@ -788,7 +844,7 @@ img {
     narrows to the rule's own width.
 ---------------------------------------------------------------------------*/
 
-@media (max-width: 767px) {
+@media (max-width: 1079px) {
 
     :root {
         --u: 30px;
@@ -799,7 +855,7 @@ img {
         --t-body: 17px;
         --t-lead: 20.2px;
         --t-name: 38px;
-        --title-shift: 19px;
+        --title-shift: 8px;
     }
 
     .page {
@@ -828,7 +884,7 @@ img {
     }
 }
 
-@media (max-width: 767px) and (min-height: 440px) {
+@media (max-width: 1079px) and (min-height: 440px) {
 
     .sheet {
         position: relative;
@@ -872,6 +928,19 @@ img {
 
     .scrollrail {
         left: 0;
+    }
+}
+
+/* The frame is drawn from 768 up, but the two-column layout does not begin
+   until 1080 -- below that the split leaves the line too short to read
+   comfortably, and the wrapped arrangement gives a better one. In between,
+   the wrapped layout still has to leave room for the rule. */
+@media (min-width: 768px) and (max-width: 1079px) {
+    .page {
+        grid-template-columns:
+            calc(var(--bar) + var(--m-min))
+            minmax(0, 1fr)
+            var(--m-min);
     }
 }
 

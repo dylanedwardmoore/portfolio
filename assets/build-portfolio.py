@@ -369,7 +369,7 @@ def build():
 
     for idx, (name, tone, standfirst, entries) in enumerate(SECTIONS, 1):
         cls = ' data-tone="%s"' % tone if tone else ""
-        parts.append('    <section class="section"%s>' % cls)
+        parts.append('    <section class="section" id="s%d"%s>' % (idx, cls))
         parts.append('        <div class="section-label" style="--d:%d">' % nxt())
         parts.append('            <span class="section-index">%02d</span>' % idx)
         parts.append('            <h2>%s</h2>' % esc(name))
@@ -384,7 +384,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260821s"
+V = "v=20260821t"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -403,8 +403,26 @@ HEAD = """<!doctype html>
         // title's colour settle runs only then and not on a cold load.
         // In <head> deliberately: `pagereveal` fires before end-of-body
         // scripts, and the class has to be present for the first frame.
+        // Direction of travel, supplied to both documents as a view-transition
+        // type so they animate the same way round. Depth of the path decides
+        // it: "/" is the top, "/portfolio/" is one below.
+        function depth(u) {
+            try { return new URL(u, location.href).pathname.split('/').filter(Boolean).length; }
+            catch (err) { return 0; }
+        }
+        window.addEventListener('pageswap', function (e) {
+            if (!e.viewTransition || !e.activation || !e.activation.entry) return;
+            e.viewTransition.types.add(
+                depth(e.activation.entry.url) > depth(location.href) ? 'go-in' : 'go-out');
+        });
         window.addEventListener('pagereveal', function (e) {
-            if (e.viewTransition) document.documentElement.classList.add('vt-in');
+            if (!e.viewTransition) return;
+            document.documentElement.classList.add('vt-in');
+            var nav = window.navigation && navigation.activation && navigation.activation.from;
+            if (nav) {
+                e.viewTransition.types.add(
+                    depth(location.href) > depth(nav.url) ? 'go-in' : 'go-out');
+            }
         });
         // Arms the entry cascade. Set from script so that with none, nothing
         // is ever left invisible.

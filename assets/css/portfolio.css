@@ -85,6 +85,29 @@
     --tone-ink: var(--ink);
 }
 
+/* The frame is drawn from 768 up, but the register's own layout does not
+   begin until 860. In that band the bar and the head were still using the
+   base insets, so the bar's opaque ground painted straight over the frame's
+   rule -- the white notch through the green at the top left. Everything that
+   carries a ground has to clear the rule wherever the rule exists. */
+@media (min-width: 768px) {
+    .topbar {
+        margin-left: var(--bar);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 859px) {
+
+    .masthead,
+    .register {
+        padding-left: calc(var(--bar) + var(--m-min));
+    }
+
+    .topbar {
+        padding-left: var(--m-min);
+    }
+}
+
 /*---------------------------------------------------------------------------
     Masthead
 ---------------------------------------------------------------------------*/
