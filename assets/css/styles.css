@@ -25,17 +25,34 @@
 /*============================================
 * 1. Header Area
 *=============================================*/
-.header-area{
-    position: fixed;
-    left: 0;
+/* The page opens straight on the bio now that the splash section is gone, so
+   the header sticks instead of floating fixed over it. Sticky keeps the bar
+   pinned while still reserving its own height in the flow, which means every
+   breakpoint's first-section padding keeps working without magic offsets. */
+header{
+    position: -webkit-sticky;
+    position: sticky;
     top: 0;
     z-index: 999;
+}
+.header-area{
     width: 100%;
     background: #202020;
 }
 .logo{}
 .logo a{
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+}
+.logo-name{
+    font-family: 'Russo One', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: 1.5px;
+    color: #fff;
+    white-space: nowrap;
+    margin-left: 14px;
 }
 .logo a img{
     max-width: 43px;
@@ -416,6 +433,7 @@
 *=============================================*/
 .service-area{
     position: relative;
+    padding-bottom: 110px;
 }
 .single-service{
     z-index: 1;

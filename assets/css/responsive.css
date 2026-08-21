@@ -20,6 +20,13 @@
 	.slider-area {
 	    height: 480px;
 	}
+	/* The logo column is narrowest here, so trim the name to keep it on one
+	   line beside the mark. */
+	.logo-name {
+	    font-size: 13px;
+	    letter-spacing: 1px;
+	    margin-left: 10px;
+	}
 	.about-area {
 	    padding: 90px 0px 80px;
 	}

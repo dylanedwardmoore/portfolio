@@ -36,12 +36,16 @@
     1. Load Function
     ==================================*/
     $(window).on('load', function() {
-        prealoaderSetup();
         slider_loaded();
         smoothScrolling($(".nav-menu ul li a[href^='#']"), headerHeight);
         smoothScrolling($(".service-area a[href^='#']"), headerHeight);
         smoothScrolling($(".next-section a[href^='#']"), headerHeight);
         smoothScrolling($(".go-to-top a[href^='#']"), 0);
+        // The bio is the landing content now, so reveal whatever is already on
+        // screen at load instead of waiting for the first scroll event.
+        translateUpIsScrollView();
+        addClassIsScrollView();
+        activeMenuItem($(".nav-menu"));
     });
 
     /*================================
@@ -58,26 +62,8 @@
     3. Variable Initialize
     ==================================*/
     var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false;
-    var preloader = $('#preloader');
     var headerHeight = $('.header-area').innerHeight();
 
-
-    /*================================
-    4. Preloader
-    ==================================*/
-    function prealoaderSetup() {
-        if (!isMobile) {
-            setTimeout(function() {
-                preloader.addClass('preloaded');
-            }, 800);
-            setTimeout(function() {
-                preloader.remove();
-            }, 2000);
-
-        } else {
-            preloader.remove();
-        }
-    }
 
     /*================================
     5. Add Class On Slider Content
