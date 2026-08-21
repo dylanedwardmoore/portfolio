@@ -10,8 +10,8 @@
     <meta name="description"
         content="Dylan Moore is a human-AI interaction researcher, startup founder, and ex-Google software engineer.">
     <link rel="shortcut icon" type="image/png" href="assets/img/icon/DEM_logo.ico">
-    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260821b" crossorigin>
-    <link rel="stylesheet" href="assets/css/site.css?v=20260821b">
+    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260821d" crossorigin>
+    <link rel="stylesheet" href="assets/css/site.css?v=20260821d">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125440044-1"></script>
@@ -38,9 +38,12 @@
             <img class="portrait" src="assets/img/about/abt-left-thumb-2026.jpg" alt="Dylan Moore">
 
             <div class="bio">
-                <p>Hi there, you&rsquo;ve found my website! A bit about myself: I am a human-AI interaction
-                    researcher, startup founder, and ex-Google software engineer. I recently finished my PhD in
-                    Engineering and Masters of Engineering Management (MEM) at Dartmouth.</p>
+                <div class="bio-spacer" aria-hidden="true"></div>
+                <p>Hi there, you&rsquo;ve found my website!</p>
+
+                <p>A bit about myself: I am a human-AI interaction researcher, startup founder, and ex-Google
+                    software engineer. I recently finished my PhD in Engineering and Masters of Engineering
+                    Management (MEM) at Dartmouth.</p>
 
                 <p>I defended my dissertation, <em>Designing Narrative-Based AI Assistance for Sensemaking in
                         Collaborative Environments: Case Studies in Education and Dementia Care</em> in 2026.</p>
@@ -72,21 +75,50 @@
         </main>
     </div>
     <script>
-        // Draws the scroll indicator for the blurb. Native scrollbars are
-        // hidden because whether they occupy layout width is not guaranteed
-        // (overlay scrollbars take none), and the text must not shift. With
-        // no script the blurb still scrolls -- it just scrolls unmarked.
+        // Two jobs, both of which have to be measured rather than declared.
+        //
+        // 1. The scroll indicator. Native scrollbars are hidden because
+        //    whether they occupy layout width is not guaranteed (overlay
+        //    scrollbars take none) and the text must not shift.
+        // 2. On phones the figure is lifted out of the flow so it stays put,
+        //    and a floated spacer reserves its footprint inside the scroller.
+        //    Growing that spacer by exactly the distance scrolled holds its
+        //    bottom edge still on screen while the text runs under it, which
+        //    is what pins the wrap to the figure instead of letting it scroll
+        //    away with the first paragraph.
+        //
+        // With no script the blurb still scrolls; it just scrolls unmarked
+        // and without the wrap.
         (function () {
             var bio = document.querySelector('.bio');
             var rail = document.querySelector('.scrollrail');
+            var photo = document.querySelector('.portrait');
+            var spacer = document.querySelector('.bio-spacer');
             if (!bio || !rail) return;
             var thumb = rail.querySelector('.scrollrail-thumb');
+            var ticking = false;
 
             function draw() {
+                ticking = false;
+                var scrolls = getComputedStyle(bio).overflowY === 'auto';
+
+                if (spacer && photo) {
+                    if (scrolls && getComputedStyle(spacer).display !== 'none') {
+                        var pb = photo.getBoundingClientRect();
+                        var bb = bio.getBoundingClientRect();
+                        // Reserve only the part of the figure that overlaps the
+                        // scroller, plus a gutter, and re-add what has scrolled.
+                        var overlap = Math.max(0, pb.bottom - bb.top);
+                        spacer.style.width = (pb.width + 14) + 'px';
+                        spacer.style.height = (overlap + bio.scrollTop) + 'px';
+                    } else {
+                        spacer.style.width = '';
+                        spacer.style.height = '';
+                    }
+                }
+
                 var over = bio.scrollHeight - bio.clientHeight;
-                // The rail only exists in the desktop layout; below that the
-                // page scrolls normally and .bio is not a scroll container.
-                if (over <= 1 || getComputedStyle(bio).overflowY !== 'auto') {
+                if (!scrolls || over <= 1) {
                     rail.hidden = true;
                     return;
                 }
@@ -95,15 +127,26 @@
                 rail.style.top = box.top + 'px';
                 rail.style.height = box.height + 'px';
 
-                var ratio = bio.clientHeight / bio.scrollHeight;
-                var h = Math.max(28, box.height * ratio);
+                var h = Math.max(24, box.height * (bio.clientHeight / bio.scrollHeight));
                 thumb.style.height = h + 'px';
                 thumb.style.top = (bio.scrollTop / over) * (box.height - h) + 'px';
             }
 
+            function schedule() {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(draw);
+            }
+
+            // Scroll updates run synchronously. The spacer has to be resized in
+            // the same frame the content moves, or the wrap visibly lags the
+            // figure by a frame; the work is a couple of rect reads.
             bio.addEventListener('scroll', draw, { passive: true });
-            window.addEventListener('resize', draw);
+            window.addEventListener('resize', schedule);
+            window.addEventListener('orientationchange', schedule);
+            if (window.ResizeObserver) new ResizeObserver(schedule).observe(bio);
             if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+            if (photo && !photo.complete) photo.addEventListener('load', draw);
             draw();
         })();
     </script>

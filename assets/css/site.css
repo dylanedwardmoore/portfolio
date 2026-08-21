@@ -261,6 +261,11 @@ img {
     margin-top: calc(var(--u) * 0.4);
 }
 
+/* Only the phone layout wraps the figure; elsewhere the spacer is inert. */
+.bio-spacer {
+    display: none;
+}
+
 /* The blurb is written as a note, so it ends with a signature. Set apart by
    space rather than by a rule or a weight change -- there is only one weight. */
 .signoff {
@@ -309,27 +314,20 @@ img {
 }
 
 /*---------------------------------------------------------------------------
-    Desktop: the page itself does not scroll.
+    Scrolling.
 
-    The name, the figure, and the three blocks are always on screen; only the
-    blurb scrolls, and only when it does not fit. Two consequences worth
-    recording:
+    Above a usable height the page itself stops scrolling: the name, the
+    figure, and the three blocks stay on screen and only the blurb moves. The
+    native scrollbar is hidden and redrawn, because whether a native bar
+    occupies layout width is not guaranteed -- overlay scrollbars take none --
+    and the text must not shift depending on it. Without JavaScript the blurb
+    still scrolls, just unmarked.
 
-    * A scroll container establishes a block formatting context, and a BFC
-      will not overlap a float. So the wrap has to give way to a column here:
-      the figure moves into its own grid track and the blurb sits beside it.
-      The wrap survives below the breakpoint, where the page scrolls normally
-      and no container is needed.
-    * The bar is pulled out to sit against the frame using `direction: rtl`,
-      which puts the scrollbar on the inline-start edge. `scrollbar-gutter:
-      stable` reserves that space whether or not the bar is showing, so the
-      text does not jump when the blurb happens to fit.
-
-    Gated on height as well as width: on a short window there is nothing left
-    for the blurb after the fixed parts, so the page reverts to scrolling.
+    Gated on height: on a short window there is nothing left for the blurb
+    once the fixed parts are placed, so the page reverts to scrolling.
 ---------------------------------------------------------------------------*/
 
-@media (min-width: 768px) and (min-height: 560px) {
+@media (min-height: 520px) {
 
     .page {
         height: 100vh;
@@ -344,46 +342,12 @@ img {
     .sheet {
         min-height: 0;
         max-height: 100%;
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 46%;
-        grid-template-rows: auto minmax(0, 1fr) auto;
-        column-gap: calc(var(--u) * 1.6);
-    }
-
-    .name {
-        grid-column: 1;
-        grid-row: 1;
-        max-width: none;
-    }
-
-    .portrait {
-        float: none;
-        margin: 0.14em 0 0 0;
-        grid-column: 2;
-        grid-row: 1 / span 2;
-        align-self: start;
-        width: 100%;
     }
 
     .bio {
-        grid-column: 1;
-        grid-row: 2;
         min-height: 0;
         overflow-y: auto;
         overscroll-behavior: contain;
-
-        /* Reach back past the type-area margin so the scroll lane starts at
-           the frame; the padding puts the text back on the line it was
-           already on, and the bar is drawn inside that padding. */
-        margin-left: calc(-1 * var(--u) * 1.4);
-        padding-left: calc(var(--u) * 1.4);
-        padding-right: calc(var(--u) * 0.6);
-        margin-right: calc(var(--u) * -0.6);
-
-        /* The native bar is hidden and replaced, because whether it reserves
-           layout width is not something a browser guarantees -- overlay
-           scrollbars take none -- and the text position must not depend on
-           it. The replacement is positioned outright. */
         scrollbar-width: none;
     }
 
@@ -391,11 +355,8 @@ img {
         display: none;
     }
 
-    /* Twice the rule, hard against it. Only shown when the blurb overflows;
-       the script sets [hidden] otherwise. */
     .scrollrail {
         position: fixed;
-        left: var(--bar);
         width: var(--scrollbar);
         z-index: 12;
     }
@@ -410,28 +371,91 @@ img {
         width: 100%;
         background: var(--sea);
     }
+}
+
+/*---------------------------------------------------------------------------
+    Desktop.
+
+    Two columns. A scroll container is a block formatting context and a BFC
+    will not overlap a float, so the figure cannot be wrapped here -- it takes
+    its own track instead and the blurb scrolls beside it.
+
+    The figure is capped against viewport height as well as width. On a wide,
+    short window a 46% square is taller than the space left after the name and
+    the blocks, which is what used to push the whole page into scrolling; the
+    vh term shrinks the figure instead so the blocks always fit.
+---------------------------------------------------------------------------*/
+
+@media (min-width: 768px) and (min-height: 520px) {
+
+    .sheet {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) min(46%, 42vh);
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        column-gap: calc(var(--u) * 1.6);
+    }
+
+    .name {
+        grid-column: 1;
+        grid-row: 1;
+        max-width: none;
+    }
+
+    .portrait {
+        float: none;
+        position: static;
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: start;
+        width: 100%;
+        margin: 0.14em 0 0 0;
+    }
+
+    .bio {
+        grid-column: 1;
+        grid-row: 2;
+
+        /* Reach back past the type-area margin so the rail lane starts at the
+           frame; the padding puts the text back on the line it was on. */
+        margin-left: calc(-1 * var(--u) * 1.4);
+        padding-left: calc(var(--u) * 1.4);
+        padding-right: calc(var(--u) * 0.6);
+        margin-right: calc(var(--u) * -0.6);
+    }
 
     .doclinks {
         grid-column: 1 / -1;
         grid-row: 3;
+    }
+
+    /* Twice the rule, hard against it. */
+    .scrollrail {
+        left: var(--bar);
     }
 }
 
 /*---------------------------------------------------------------------------
     Narrow screens.
 
-    Below the fold-point the canon has nothing to work with: there is no
-    surplus width to apportion 1:2. The figure keeps floating -- a wrap is
-    the one arrangement that still works at this width -- but narrows to a
-    third of the column so the text beside it keeps a readable run, and the
-    vertical proportion is kept by hand at u over 2u, the same 1:2 the canon
-    was expressing.
+    Below the fold-point the canon has nothing to apportion, so the vertical
+    proportion is kept by hand at u over 2u -- the same 1:2 relationship.
+
+    Here the figure IS wrapped, and stays put while the text runs past it. It
+    is lifted out of the flow to the top corner, and a floated spacer inside
+    the scroller reserves its footprint. The script grows that spacer by
+    exactly the distance scrolled, which holds its bottom edge still on screen
+    while the content moves under it -- so the exclusion is pinned to the
+    figure rather than scrolling away with the first paragraph.
+
+    There is no frame at this width, so the rail sits on the edge itself and
+    narrows to the rule's own width.
 ---------------------------------------------------------------------------*/
 
 @media (max-width: 767px) {
 
     :root {
         --u: 30px;
+        --scrollbar: var(--bar);
         /* Same root-2 scale, restepped off a 17px body: 17/1.189 = 14.3,
            17*1.189 = 20.2, 17*1.189^5 = 38. */
         --t-meta: 12.8px;
@@ -442,14 +466,7 @@ img {
 
     .page {
         grid-template-columns: var(--m-min) minmax(0, 1fr) var(--m-min);
-        grid-template-rows: var(--u) auto calc(var(--u) * 2);
-        min-height: 0;
-    }
-
-    .portrait {
-        width: 34%;
-        margin-left: calc(var(--u) * 0.7);
-        margin-bottom: calc(var(--u) * 0.4);
+        grid-template-rows: var(--u) minmax(0, auto) calc(var(--u) * 2);
     }
 
     .doclinks {
@@ -473,6 +490,49 @@ img {
     }
 }
 
+@media (max-width: 767px) and (min-height: 520px) {
+
+    .sheet {
+        position: relative;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    .name {
+        grid-row: 1;
+        max-width: none;
+        padding-right: calc(34% + var(--u) * 0.7);
+    }
+
+    .portrait {
+        float: none;
+        position: absolute;
+        top: 0.14em;
+        right: 0;
+        width: 34%;
+        margin: 0;
+    }
+
+    .bio {
+        grid-row: 2;
+    }
+
+    /* Sized by the script from the figure's own box, so it cannot drift out
+       of step with it. */
+    .bio-spacer {
+        display: block;
+        float: right;
+    }
+
+    .doclinks {
+        grid-row: 3;
+    }
+
+    .scrollrail {
+        left: 0;
+    }
+}
+
 @media (max-width: 420px) {
 
     .doclink {
@@ -484,6 +544,7 @@ img {
         text-align: left;
     }
 }
+
 
 /*---------------------------------------------------------------------------
     Interior page chrome (portfolio)
