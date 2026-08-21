@@ -23,31 +23,46 @@
     root-2 scale, the same measure cap.
 -----------------------------------------------------------------------------*/
 
+/* Each tone carries the text colour that is legible ON it, since a hovered
+   link fills with the tone. Measured against ink #0E1F17 and paper #fff:
+   Sea 12.8, Apricot Yellow 13.5, Neutral Gray 10.6 and Peach Red 4.7 all take
+   ink; Dusky Green is too dark for that and takes paper at 8.5.
+
+   Industry moved from Eugenia Red to Peach Red because Eugenia Red reached
+   only 4.45:1 against ink, just under the threshold, and no tint of it clears
+   4.5. Peach Red does, and it is a Wada partner of Sea Green in its own right
+   (combinations 250 and 340, the latter alongside Neutral Gray). */
 .portfolio {
     --tone: var(--grey);
-    --red: #ed3d66;
+    --tone-ink: var(--ink);
+    --red: #ff3319;
     --yellow: #ffe600;
     --rule: #e4e4e2;
 }
 
 [data-tone="sea"] {
     --tone: var(--sea);
+    --tone-ink: var(--ink);
 }
 
 [data-tone="dusky"] {
     --tone: #00592e;
+    --tone-ink: var(--paper);
 }
 
 [data-tone="red"] {
     --tone: var(--red);
+    --tone-ink: var(--ink);
 }
 
 [data-tone="yellow"] {
     --tone: var(--yellow);
+    --tone-ink: var(--ink);
 }
 
 [data-tone="grey"] {
     --tone: var(--grey);
+    --tone-ink: var(--ink);
 }
 
 /*---------------------------------------------------------------------------
@@ -55,17 +70,26 @@
 ---------------------------------------------------------------------------*/
 
 .masthead {
-    padding: calc(var(--u) * 1.2) var(--m-min) calc(var(--u) * 1.2);
+    padding: calc(var(--u) * 0.6) var(--m-min) calc(var(--u) * 1.2);
     max-width: 34rem;
 }
 
-.masthead .backlink {
+/* Its own bar, stuck to the top edge, so it is reachable from anywhere in a
+   long register without a nav. Opaque, or the rows would show through. */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--paper);
+    padding: calc(var(--u) * 0.5) var(--m-min) calc(var(--u) * 0.35);
+}
+
+.backlink {
     display: inline-block;
     font-size: var(--t-body);
     line-height: 1.3;
     color: var(--ink);
     text-decoration: none;
-    margin-bottom: calc(var(--u) * 0.5);
     padding: 2px 5px;
     margin-left: -5px;
     /* Double the rule the prose links carry, so it reads as a control rather
@@ -73,13 +97,13 @@
     box-shadow: inset 0 -4px 0 var(--sea);
 }
 
-.masthead .backlink::before {
+.backlink::before {
     content: "\2190\00a0";
 }
 
 /* The rule grows into the whole block: the same gesture as the buttons on the
    landing page, which fill rather than invert. */
-.masthead .backlink:hover {
+.backlink:hover {
     background: var(--sea);
     box-shadow: none;
 }
@@ -208,11 +232,17 @@
 .entry-links a {
     color: var(--link);
     text-decoration: none;
+    padding: 1px 5px;
+    margin: 0 -5px;
     box-shadow: inset 0 -1px 0 var(--tone);
 }
 
+/* The row washes, and the link you are actually on fills solid, so the
+   destination is never ambiguous when a row carries several. */
 .entry-links a:hover {
-    box-shadow: inset 0 -2px 0 var(--tone);
+    background: var(--tone);
+    color: var(--tone-ink);
+    box-shadow: none;
 }
 
 /* An entry with nothing to link to reads as plain text. */
@@ -231,8 +261,20 @@
 
 @media (min-width: 860px) {
 
+    /* Left inset identical to the landing page's type area, so the two
+       titles sit on the same line and moving between the pages does not
+       shift them. */
+    .topbar {
+        /* Starts after the frame rather than on top of it -- the bar is opaque
+           and sits above it in the stack, so full-width padding would paint
+           over the green. */
+        margin-left: var(--bar);
+        padding: calc(var(--u) * 0.6) calc(var(--u) * 1.4) calc(var(--u) * 0.4)
+            calc(var(--u) * 1.4);
+    }
+
     .masthead {
-        padding: calc(var(--u) * 1.6) calc(var(--u) * 1.4) calc(var(--u) * 1.4)
+        padding: calc(var(--u) * 0.7) calc(var(--u) * 1.4) calc(var(--u) * 1.4)
             calc(var(--bar) + var(--u) * 1.4);
     }
 
@@ -250,7 +292,8 @@
 
     .section-label {
         position: sticky;
-        top: calc(var(--u) * 0.9);
+        /* Clears the sticky back bar rather than sliding under it. */
+        top: calc(var(--u) * 2.2);
     }
 
     .section-label p {
@@ -316,7 +359,7 @@
        than beside it. */
     .section-label {
         position: sticky;
-        top: 0;
+        top: calc(var(--u) * 1.9);
         z-index: 5;
         background: var(--paper);
         padding-bottom: calc(var(--u) * 0.3);

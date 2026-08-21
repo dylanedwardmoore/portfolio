@@ -335,7 +335,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260821h"
+V = "v=20260821i"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -365,8 +365,11 @@ HEAD = """<!doctype html>
     <div class="frame-left" aria-hidden="true"></div>
     <div class="frame-bottom" aria-hidden="true"></div>
 
+    <div class="topbar">
+        <a class="backlink" href="../">Back</a>
+    </div>
+
     <header class="masthead">
-        <a class="backlink" href="../">Dylan Moore</a>
         <h1>Portfolio</h1>
         <p class="masthead-note">Ventures, research, industry work, teaching, and awards.</p>
     </header>

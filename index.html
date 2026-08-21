@@ -10,8 +10,8 @@
     <meta name="description"
         content="Dylan Moore is a human-AI interaction researcher, startup founder, and ex-Google software engineer.">
     <link rel="shortcut icon" type="image/png" href="assets/img/icon/DEM_logo.ico">
-    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260821h" crossorigin>
-    <link rel="stylesheet" href="assets/css/site.css?v=20260821h">
+    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260821i" crossorigin>
+    <link rel="stylesheet" href="assets/css/site.css?v=20260821i">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125440044-1"></script>
@@ -29,6 +29,12 @@
     <div class="frame-bottom" aria-hidden="true"></div>
     <div class="scrollrail" aria-hidden="true" hidden>
         <div class="scrollrail-thumb"></div>
+    </div>
+    <div class="scrollcue" aria-hidden="true" hidden>
+        <svg viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="2.4"
+            stroke-linecap="square">
+            <path d="M6 4.5 13 11l7-6.5" />
+        </svg>
     </div>
 
     <div class="page">
@@ -85,7 +91,9 @@
             var rail = document.querySelector('.scrollrail');
             if (!bio || !rail) return;
             var thumb = rail.querySelector('.scrollrail-thumb');
+            var cue = document.querySelector('.scrollcue');
             var ticking = false;
+            var everScrolled = false;
 
             function draw() {
                 ticking = false;
@@ -94,8 +102,10 @@
                 var over = bio.scrollHeight - bio.clientHeight;
                 if (!scrolls || over <= 1) {
                     rail.hidden = true;
+                    if (cue) cue.hidden = true;
                     return;
                 }
+                if (bio.scrollTop > 4) everScrolled = true;
                 var box = bio.getBoundingClientRect();
                 rail.hidden = false;
                 rail.style.top = box.top + 'px';
@@ -104,6 +114,19 @@
                 var h = Math.max(24, box.height * (bio.clientHeight / bio.scrollHeight));
                 thumb.style.height = h + 'px';
                 thumb.style.top = (bio.scrollTop / over) * (box.height - h) + 'px';
+
+                // The cue answers one question -- is this thing scrollable --
+                // and only while that question is open. It goes as soon as the
+                // reader has scrolled, and never returns.
+                if (cue) {
+                    if (everScrolled) {
+                        cue.hidden = true;
+                    } else {
+                        cue.hidden = false;
+                        cue.style.left = getComputedStyle(rail).left;
+                        cue.style.top = (box.bottom + 7) + 'px';
+                    }
+                }
             }
 
             function schedule() {
