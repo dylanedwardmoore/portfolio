@@ -558,12 +558,6 @@
 .prt-item a{
     display: block;
 }
-/* A portfolio reference with no link behind it (e.g. a paper under submission):
-   match the anchors above it so the list reads as one block. */
-.prt-item .no-link{
-    display: block;
-    font-size: 12px;
-}
 .prt-item a.expand-video{
     position: relative;
     z-index: 1;
