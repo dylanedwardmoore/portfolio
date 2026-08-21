@@ -32,6 +32,26 @@
    only 4.45:1 against ink, just under the threshold, and no tint of it clears
    4.5. Peach Red does, and it is a Wada partner of Sea Green in its own right
    (combinations 250 and 340, the latter alongside Neutral Gray). */
+/* The page is scrolled by the drawn rail, so the native bar comes off. Only
+   above the phone breakpoint -- a phone's own bar is the right affordance
+   there, and there is no frame for the rail to sit against. */
+@media (min-width: 768px) {
+
+    .portfolio {
+        scrollbar-width: none;
+    }
+
+    .portfolio::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .portfolio .scrollrail {
+        display: none;
+    }
+}
+
 .portfolio {
     --tone: var(--grey);
     --tone-ink: var(--ink);
@@ -182,14 +202,12 @@
     border-top: 0;
 }
 
-/* The wash is the section's own colour at low alpha, so hovering tells you
-   both that the row is live and which part of the register it belongs to.
-
-   It is keyed to a link being hovered, not the row: several links in a row go
-   to different places, but the row is the unit of attention, so all of them
-   light the same block. Rows with nothing to click stay inert. */
-.entry:has(a:hover) {
-    background: color-mix(in srgb, var(--tone) 16%, #fff);
+/* Hovering a link fills two things and nothing else: the date cell, which
+   marks the row it belongs to at full height, and the link itself. Keyed to a
+   link rather than the row, so rows with nothing to click stay inert. */
+.entry:has(a:hover) .entry-year {
+    background: var(--tone);
+    color: var(--tone-ink);
 }
 
 .entry-year {
@@ -198,6 +216,11 @@
     color: var(--muted);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+    /* Stretches to the row's full height so the fill reads as a block rather
+       than as a highlighted word. */
+    align-self: stretch;
+    padding: 0 calc(var(--u) * 0.25);
+    margin-left: calc(var(--u) * -0.25);
 }
 
 .entry-title {
@@ -305,6 +328,27 @@
         column-gap: calc(var(--u) * 0.6);
     }
 
+    /* Placed by column rather than by source order: the narrow layout needs
+       the figure to sit in the flow just before the title, and grid lets that
+       order mean nothing here. */
+    .entry-year {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .entry-body {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .entry-figure {
+        grid-column: 3;
+        grid-row: 1;
+        float: none;
+        width: auto;
+        margin: 0;
+    }
+
     /* Any row with a figure gets a third column for it. The lead sections
        carry a larger one, so weight still sits at the top of the register
        even though the later projects now show their own work. */
@@ -348,10 +392,20 @@
 
 @media (max-width: 859px) {
 
+    /* Coming after the date and before the body, the float begins on the
+       title's line, which is where it should sit -- level with the heading,
+       not with the date above it. */
     .entry-figure {
         display: block;
-        max-width: 8rem;
-        margin-bottom: calc(var(--u) * 0.25);
+        float: right;
+        width: 6.5rem;
+        margin: 0 0 calc(var(--u) * 0.3) calc(var(--u) * 0.5);
+    }
+
+    .entry::after {
+        content: "";
+        display: block;
+        clear: both;
     }
 
     /* The label sticks here as well. It needs its own ground and a rule under
@@ -371,13 +425,21 @@
         margin-bottom: calc(var(--u) * 0.2);
     }
 
+    /* Block flow, not grid: the figure is floated here and a grid item cannot
+       be floated. */
     .entry {
-        grid-template-columns: minmax(0, 1fr);
-        row-gap: 2px;
+        display: block;
     }
 
+    /* A block, so the float that follows starts on the next line -- the
+       title's line -- rather than joining the date's. fit-content keeps the
+       hover fill hugging the date instead of running the full width. */
     .entry-year {
+        display: block;
+        width: fit-content;
         line-height: 1.4;
+        align-self: auto;
+        margin-bottom: 1px;
     }
 
     .entry-year:empty {

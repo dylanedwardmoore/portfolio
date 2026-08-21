@@ -295,6 +295,9 @@ def esc(t):
 def render_entry(year, title, blurb, img, links, featured):
     out = ['        <article class="entry%s">' % (" entry--featured" if featured else "")]
     out.append('            <div class="entry-year">%s</div>' % esc(year))
+    if img:
+        out.append('            <div class="entry-figure"><img src="%s%s" alt="" loading="lazy"></div>'
+                   % (IMG, img))
     out.append('            <div class="entry-body">')
     out.append('                <h3 class="entry-title">%s</h3>' % esc(title))
     if blurb:
@@ -309,9 +312,6 @@ def render_entry(year, title, blurb, img, links, featured):
                 out.append('                    <li><span>%s</span></li>' % esc(label))
         out.append('                </ul>')
     out.append('            </div>')
-    if img:
-        out.append('            <div class="entry-figure"><img src="%s%s" alt="" loading="lazy"></div>'
-                   % (IMG, img))
     out.append('        </article>')
     return "\n".join(out)
 
@@ -335,7 +335,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260821i"
+V = "v=20260821j"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -364,6 +364,9 @@ HEAD = """<!doctype html>
 <body class="portfolio">
     <div class="frame-left" aria-hidden="true"></div>
     <div class="frame-bottom" aria-hidden="true"></div>
+    <div class="scrollrail" data-scroll="window" aria-hidden="true" hidden>
+        <div class="scrollrail-thumb"></div>
+    </div>
 
     <div class="topbar">
         <a class="backlink" href="../">Back</a>
@@ -378,10 +381,12 @@ HEAD = """<!doctype html>
 """.replace("{V}", V)
 
 TAIL = """    </main>
+
+    <script src="../assets/js/scrollrail.js?{V}"></script>
 </body>
 
 </html>
-"""
+""".replace("{V}", V)
 
 io.open("/Users/dylanmoore/Documents/portfolio/portfolio/index.html", "w",
         encoding="utf-8", newline="\n").write(HEAD + build() + "\n" + TAIL)
