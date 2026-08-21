@@ -67,6 +67,10 @@
        keeps the page a single family rather than green-on-black. */
     --sea: #33ff7d;
     --sea-deep: #2be671;
+    /* Wada's "Neutral Gray" -- the lowest-chroma colour in the book, and it
+       shares combination 340 with Sea Green, so the resting and hover fills
+       are a pairing the source already makes. Ink reads 10.6:1 on it. */
+    --grey: #b5d1cc;
     --link: #00592e;
     --ink: #0e1f17;
     --muted: #5c6b63;
@@ -211,35 +215,37 @@ img {
 .sheet {
     grid-column: 2;
     grid-row: 2;
+}
 
-    /* Twelfth grid: text 8 / gutter 1 / portrait 3. */
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 25%;
-    column-gap: 8.3333%;
-    align-items: start;
+/* The portrait is set as a printed figure: floated to the outer edge with the
+   text running around it. Its right edge stays on the type-area edge where it
+   was; the growth is all leftward, from 3/12 of the measure to 46% of it.
+   Text beside it therefore runs ~48 characters. */
+.portrait {
+    float: right;
+    width: 46%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    margin: 0.14em 0 calc(var(--u) * 0.6) calc(var(--u) * 1.6);
+}
+
+/* Capping the lines rather than the block is what makes the wrap behave:
+   beside the figure a line takes the width the float leaves it, and once it
+   clears the figure it stops at the measure instead of running the full
+   width of the type area. */
+.name,
+.bio p {
+    max-width: 34rem;
 }
 
 .name {
-    grid-column: 1;
-    grid-row: 1;
     margin: 0;
     font-size: clamp(2rem, 5.2vw, var(--t-name));
     line-height: 1.0;
     letter-spacing: -0.028em;
 }
 
-.portrait {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    align-self: start;
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-}
-
 .bio {
-    grid-column: 1;
-    grid-row: 2;
     /* 0.6u: the name is the largest step on the scale, so it needs the least
        help separating from what follows. */
     margin-top: calc(var(--u) * 0.6);
@@ -255,8 +261,7 @@ img {
 
 /* Three flat blocks. The accent colour does the work the icons used to. */
 .doclinks {
-    grid-column: 1 / -1;
-    grid-row: 3;
+    clear: both;
     margin-top: calc(var(--u) * 1.2);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -265,18 +270,18 @@ img {
 
 .doclink {
     display: block;
-    background: var(--sea);
+    background: var(--grey);
     color: var(--ink);
     box-shadow: none;
     padding: calc(var(--u) * 0.4) calc(var(--u) * 0.4) calc(var(--u) * 0.45);
     text-decoration: none;
 }
 
-/* Hover deepens the fill a step within the same hue rather than inverting.
-   The two fills sit 1.24:1 apart -- enough to register, not enough to flash. */
+/* The blocks rest in grey and take the accent only on hover, so the green
+   on the page is the frame until you reach for something. */
 .doclink:hover,
 .doclink:focus-visible {
-    background: var(--sea-deep);
+    background: var(--sea);
     outline: none;
 }
 
@@ -299,11 +304,11 @@ img {
     Narrow screens.
 
     Below the fold-point the canon has nothing to work with: there is no
-    surplus width to apportion 1:2, and a 3/12 portrait would be a postage
-    stamp. So the grid collapses to a single column, the portrait moves up
-    beside the name, and the vertical proportion is kept by hand -- top
-    margin u, bottom margin 2u -- which is the same 1:2 relationship the
-    canon was expressing.
+    surplus width to apportion 1:2. The figure keeps floating -- a wrap is
+    the one arrangement that still works at this width -- but narrows to a
+    third of the column so the text beside it keeps a readable run, and the
+    vertical proportion is kept by hand at u over 2u, the same 1:2 the canon
+    was expressing.
 ---------------------------------------------------------------------------*/
 
 @media (max-width: 767px) {
@@ -324,17 +329,10 @@ img {
         min-height: 0;
     }
 
-    .sheet {
-        grid-template-columns: minmax(0, 1fr) 22%;
-        column-gap: 6%;
-    }
-
     .portrait {
-        grid-row: 1;
-    }
-
-    .bio {
-        grid-column: 1 / -1;
+        width: 34%;
+        margin-left: calc(var(--u) * 0.7);
+        margin-bottom: calc(var(--u) * 0.4);
     }
 
     .doclinks {

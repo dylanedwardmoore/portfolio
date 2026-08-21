@@ -1,0 +1,4997 @@
+{
+ "source": "https://sanzo-wada.dmbk.io/",
+ "work": "Sanzo Wada, A Dictionary of Color Combinations (published by Seigensha)",
+ "note": "The book records colours as CMYK only. Hex values here are produced the same way that site produces them: chroma-js's naive CMYK->RGB, i.e. channel = round(255 * (1 - ink) * (1 - k)). They are screen approximations of printed inks, not colorimetric conversions.",
+ "contrast_note": "WCAG ratios against white and black, for picking text vs surface roles. Body text needs 4.5:1, large text 3:1. Many of these colours are vivid and only work as surfaces.",
+ "count": 159,
+ "colors": [
+  {
+   "name": "Aconite Violet",
+   "hex": "#9C52F2",
+   "cmyk": [
+    39,
+    68,
+    5,
+    0
+   ],
+   "contrast_on_white": 4.28,
+   "contrast_on_black": 4.9,
+   "combinations": [
+    43,
+    64,
+    90,
+    187,
+    220,
+    257,
+    269,
+    301,
+    307,
+    324,
+    344
+   ]
+  },
+  {
+   "name": "Andover Green",
+   "hex": "#5C8A73",
+   "cmyk": [
+    60,
+    40,
+    50,
+    10
+   ],
+   "contrast_on_white": 3.93,
+   "contrast_on_black": 5.34,
+   "combinations": [
+    244,
+    346
+   ]
+  },
+  {
+   "name": "Antwarp Blue",
+   "hex": "#008AA1",
+   "cmyk": [
+    100,
+    40,
+    30,
+    10
+   ],
+   "contrast_on_white": 4.08,
+   "contrast_on_black": 5.15,
+   "combinations": [
+    85,
+    106,
+    114,
+    140,
+    163,
+    172,
+    208,
+    244,
+    258,
+    281,
+    299,
+    302,
+    334
+   ]
+  },
+  {
+   "name": "Apricot Orange",
+   "hex": "#FF7340",
+   "cmyk": [
+    0,
+    55,
+    75,
+    0
+   ],
+   "contrast_on_white": 2.7,
+   "contrast_on_black": 7.78,
+   "combinations": [
+    211,
+    253,
+    309,
+    328
+   ]
+  },
+  {
+   "name": "Apricot Yellow",
+   "hex": "#FFE600",
+   "cmyk": [
+    0,
+    10,
+    100,
+    0
+   ],
+   "contrast_on_white": 1.27,
+   "contrast_on_black": 16.57,
+   "combinations": [
+    107,
+    129,
+    163,
+    198,
+    213,
+    247,
+    265,
+    284,
+    305,
+    319
+   ]
+  },
+  {
+   "name": "Artemesia Green",
+   "hex": "#65A98F",
+   "cmyk": [
+    57,
+    28,
+    39,
+    8
+   ],
+   "contrast_on_white": 2.75,
+   "contrast_on_black": 7.63,
+   "combinations": [
+    293,
+    312
+   ]
+  },
+  {
+   "name": "Benzol Green",
+   "hex": "#00D973",
+   "cmyk": [
+    100,
+    15,
+    55,
+    0
+   ],
+   "contrast_on_white": 1.88,
+   "contrast_on_black": 11.17,
+   "combinations": [
+    15,
+    54,
+    92,
+    122,
+    155,
+    247,
+    266,
+    267,
+    281,
+    304,
+    306
+   ]
+  },
+  {
+   "name": "Black",
+   "hex": "#000000",
+   "cmyk": [
+    20,
+    10,
+    15,
+    100
+   ],
+   "contrast_on_white": 21.0,
+   "contrast_on_black": 1.0,
+   "combinations": [
+    46,
+    52,
+    62,
+    69,
+    112,
+    117,
+    144,
+    190,
+    207,
+    216,
+    221,
+    242,
+    255,
+    256,
+    269,
+    276,
+    288,
+    298,
+    313,
+    323,
+    337,
+    340,
+    344
+   ]
+  },
+  {
+   "name": "Blackish Olive",
+   "hex": "#324E2A",
+   "cmyk": [
+    56,
+    32,
+    63,
+    55
+   ],
+   "contrast_on_white": 9.3,
+   "contrast_on_black": 2.26,
+   "combinations": [
+    109,
+    318,
+    336
+   ]
+  },
+  {
+   "name": "Blue",
+   "hex": "#0D75FF",
+   "cmyk": [
+    95,
+    54,
+    0,
+    0
+   ],
+   "contrast_on_white": 4.2,
+   "contrast_on_black": 5.01,
+   "combinations": [
+    49,
+    51,
+    88,
+    143,
+    154,
+    186,
+    191,
+    215,
+    257,
+    267,
+    295,
+    333
+   ]
+  },
+  {
+   "name": "Blue Violet",
+   "hex": "#4733FF",
+   "cmyk": [
+    72,
+    80,
+    0,
+    0
+   ],
+   "contrast_on_white": 6.59,
+   "contrast_on_black": 3.19,
+   "combinations": [
+    116,
+    175,
+    196,
+    322,
+    345
+   ]
+  },
+  {
+   "name": "Brick Red",
+   "hex": "#A32100",
+   "cmyk": [
+    22,
+    84,
+    100,
+    18
+   ],
+   "contrast_on_white": 7.57,
+   "contrast_on_black": 2.77,
+   "combinations": [
+    37,
+    108,
+    246,
+    322,
+    328
+   ]
+  },
+  {
+   "name": "Brown",
+   "hex": "#6C2B11",
+   "cmyk": [
+    35,
+    74,
+    90,
+    35
+   ],
+   "contrast_on_white": 10.55,
+   "contrast_on_black": 1.99,
+   "combinations": [
+    110,
+    121,
+    145,
+    161
+   ]
+  },
+  {
+   "name": "Buffy Citrine",
+   "hex": "#888D2A",
+   "cmyk": [
+    42,
+    40,
+    82,
+    8
+   ],
+   "contrast_on_white": 3.57,
+   "contrast_on_black": 5.89,
+   "combinations": [
+    100,
+    177,
+    233
+   ]
+  },
+  {
+   "name": "Burnt Sienna",
+   "hex": "#A93400",
+   "cmyk": [
+    22,
+    76,
+    100,
+    15
+   ],
+   "contrast_on_white": 6.61,
+   "contrast_on_black": 3.18,
+   "combinations": [
+    198,
+    242,
+    263,
+    285,
+    286,
+    297,
+    312,
+    333,
+    343
+   ]
+  },
+  {
+   "name": "Calamine BLue",
+   "hex": "#80FFCC",
+   "cmyk": [
+    50,
+    0,
+    20,
+    0
+   ],
+   "contrast_on_white": 1.23,
+   "contrast_on_black": 17.09,
+   "combinations": [
+    20,
+    41,
+    65,
+    159,
+    176,
+    255,
+    261,
+    287,
+    291,
+    300
+   ]
+  },
+  {
+   "name": "Cameo Pink",
+   "hex": "#E6ADCF",
+   "cmyk": [
+    10,
+    32,
+    19,
+    0
+   ],
+   "contrast_on_white": 1.87,
+   "contrast_on_black": 11.24,
+   "combinations": [
+    101,
+    105,
+    116,
+    120,
+    165,
+    231
+   ]
+  },
+  {
+   "name": "Carmine",
+   "hex": "#D60036",
+   "cmyk": [
+    0,
+    100,
+    75,
+    16
+   ],
+   "contrast_on_white": 5.37,
+   "contrast_on_black": 3.91,
+   "combinations": [
+    39,
+    117,
+    122,
+    154,
+    225,
+    232,
+    307,
+    313
+   ]
+  },
+  {
+   "name": "Carmine Red",
+   "hex": "#A10B2B",
+   "cmyk": [
+    25,
+    95,
+    80,
+    16
+   ],
+   "contrast_on_white": 8.08,
+   "contrast_on_black": 2.6,
+   "combinations": [
+    35,
+    51,
+    104,
+    130,
+    181,
+    200,
+    221,
+    228,
+    233,
+    237,
+    245,
+    338
+   ]
+  },
+  {
+   "name": "Cerulian Blue",
+   "hex": "#29BDAD",
+   "cmyk": [
+    84,
+    26,
+    32,
+    0
+   ],
+   "contrast_on_white": 2.34,
+   "contrast_on_black": 8.98,
+   "combinations": [
+    1,
+    63,
+    99,
+    125,
+    148,
+    227,
+    240,
+    264
+   ]
+  },
+  {
+   "name": "Chromium Green",
+   "hex": "#66AB56",
+   "cmyk": [
+    50,
+    16,
+    58,
+    20
+   ],
+   "contrast_on_white": 2.79,
+   "contrast_on_black": 7.52,
+   "combinations": [
+    105,
+    200,
+    219,
+    283
+   ]
+  },
+  {
+   "name": "Cinnamon Buff",
+   "hex": "#FFBF6E",
+   "cmyk": [
+    0,
+    25,
+    57,
+    0
+   ],
+   "contrast_on_white": 1.62,
+   "contrast_on_black": 12.93,
+   "combinations": [
+    23,
+    127,
+    137,
+    180,
+    210,
+    234,
+    246,
+    323,
+    344
+   ]
+  },
+  {
+   "name": "Cinnamon Rufous",
+   "hex": "#C2612C",
+   "cmyk": [
+    20,
+    60,
+    82,
+    5
+   ],
+   "contrast_on_white": 4.17,
+   "contrast_on_black": 5.04,
+   "combinations": [
+    8,
+    10,
+    103,
+    158,
+    172,
+    204,
+    206
+   ]
+  },
+  {
+   "name": "Citrine",
+   "hex": "#A3AD00",
+   "cmyk": [
+    36,
+    32,
+    100,
+    0
+   ],
+   "contrast_on_white": 2.46,
+   "contrast_on_black": 8.53,
+   "combinations": [
+    59,
+    93,
+    132,
+    133,
+    262
+   ]
+  },
+  {
+   "name": "Citron Yellow",
+   "hex": "#A6D40D",
+   "cmyk": [
+    35,
+    17,
+    95,
+    0
+   ],
+   "contrast_on_white": 1.74,
+   "contrast_on_black": 12.04,
+   "combinations": [
+    40,
+    87,
+    145,
+    150,
+    153,
+    196,
+    305,
+    323
+   ]
+  },
+  {
+   "name": "Cobalt Green",
+   "hex": "#94FF94",
+   "cmyk": [
+    42,
+    0,
+    42,
+    0
+   ],
+   "contrast_on_white": 1.24,
+   "contrast_on_black": 16.99,
+   "combinations": [
+    156,
+    188,
+    201,
+    202,
+    230,
+    271,
+    281,
+    282,
+    290,
+    291,
+    308,
+    333
+   ]
+  },
+  {
+   "name": "Coral Red",
+   "hex": "#FF7399",
+   "cmyk": [
+    0,
+    55,
+    40,
+    0
+   ],
+   "contrast_on_white": 2.57,
+   "contrast_on_black": 8.16,
+   "combinations": [
+    92,
+    123,
+    320,
+    332
+   ]
+  },
+  {
+   "name": "Corinthian Pink",
+   "hex": "#FFA6D9",
+   "cmyk": [
+    0,
+    35,
+    15,
+    0
+   ],
+   "contrast_on_white": 1.79,
+   "contrast_on_black": 11.71,
+   "combinations": [
+    27,
+    43,
+    87,
+    97,
+    128,
+    169,
+    174,
+    206,
+    246,
+    254,
+    264,
+    342
+   ]
+  },
+  {
+   "name": "Cossack Green",
+   "hex": "#328E13",
+   "cmyk": [
+    76,
+    32,
+    91,
+    18
+   ],
+   "contrast_on_white": 4.19,
+   "contrast_on_black": 5.01,
+   "combinations": [
+    5,
+    135,
+    262,
+    270,
+    278,
+    294,
+    319,
+    341,
+    348
+   ]
+  },
+  {
+   "name": "Cotinga Purple",
+   "hex": "#340059",
+   "cmyk": [
+    66,
+    100,
+    42,
+    40
+   ],
+   "contrast_on_white": 16.28,
+   "contrast_on_black": 1.29,
+   "combinations": [
+    61,
+    181,
+    238,
+    253,
+    307,
+    329,
+    348
+   ]
+  },
+  {
+   "name": "Cream Yellow",
+   "hex": "#FFB852",
+   "cmyk": [
+    0,
+    28,
+    68,
+    0
+   ],
+   "contrast_on_white": 1.72,
+   "contrast_on_black": 12.23,
+   "combinations": [
+    122,
+    192,
+    215,
+    226,
+    267,
+    278,
+    294,
+    295,
+    300,
+    302,
+    304,
+    311,
+    329,
+    342
+   ]
+  },
+  {
+   "name": "Dark Citrine",
+   "hex": "#7E8743",
+   "cmyk": [
+    38,
+    34,
+    67,
+    20
+   ],
+   "contrast_on_white": 3.86,
+   "contrast_on_black": 5.43,
+   "combinations": [
+    10,
+    41,
+    274,
+    304
+   ]
+  },
+  {
+   "name": "Dark Greenish Glaucous",
+   "hex": "#B2D9A3",
+   "cmyk": [
+    30,
+    15,
+    36,
+    0
+   ],
+   "contrast_on_white": 1.57,
+   "contrast_on_black": 13.35,
+   "combinations": [
+    264,
+    311
+   ]
+  },
+  {
+   "name": "Dark Medici Blue",
+   "hex": "#417777",
+   "cmyk": [
+    70,
+    45,
+    45,
+    15
+   ],
+   "contrast_on_white": 5.08,
+   "contrast_on_black": 4.13,
+   "combinations": [
+    160,
+    224,
+    241,
+    249
+   ]
+  },
+  {
+   "name": "Dark Slate Purple",
+   "hex": "#53225C",
+   "cmyk": [
+    64,
+    85,
+    60,
+    10
+   ],
+   "contrast_on_white": 11.99,
+   "contrast_on_black": 1.75,
+   "combinations": [
+    225,
+    248
+   ]
+  },
+  {
+   "name": "Dark Soft Violet",
+   "hex": "#4D52DE",
+   "cmyk": [
+    70,
+    68,
+    13,
+    0
+   ],
+   "contrast_on_white": 5.87,
+   "contrast_on_black": 3.58,
+   "combinations": [
+    64,
+    127,
+    197
+   ]
+  },
+  {
+   "name": "Dark Tyrian Blue",
+   "hex": "#0D2B52",
+   "cmyk": [
+    90,
+    66,
+    36,
+    50
+   ],
+   "contrast_on_white": 14.15,
+   "contrast_on_black": 1.48,
+   "combinations": [
+    2,
+    60,
+    67,
+    119,
+    141,
+    245,
+    279
+   ]
+  },
+  {
+   "name": "Deep Grayish Olive",
+   "hex": "#505423",
+   "cmyk": [
+    50,
+    48,
+    78,
+    37
+   ],
+   "contrast_on_white": 7.97,
+   "contrast_on_black": 2.63,
+   "combinations": [
+    146,
+    343
+   ]
+  },
+  {
+   "name": "Deep Indigo",
+   "hex": "#000831",
+   "cmyk": [
+    100,
+    92,
+    52,
+    60
+   ],
+   "contrast_on_white": 19.46,
+   "contrast_on_black": 1.08,
+   "combinations": [
+    6,
+    28,
+    139,
+    155,
+    182,
+    211,
+    232
+   ]
+  },
+  {
+   "name": "Deep Lyons Blue",
+   "hex": "#0024CC",
+   "cmyk": [
+    100,
+    85,
+    15,
+    6
+   ],
+   "contrast_on_white": 9.89,
+   "contrast_on_black": 2.12,
+   "combinations": [
+    22,
+    38,
+    101,
+    126,
+    179,
+    199,
+    236,
+    247,
+    314,
+    344
+   ]
+  },
+  {
+   "name": "Deep Slate Green",
+   "hex": "#0F261F",
+   "cmyk": [
+    80,
+    50,
+    60,
+    70
+   ],
+   "contrast_on_white": 15.94,
+   "contrast_on_black": 1.32,
+   "combinations": [
+    84,
+    149,
+    166,
+    271,
+    318,
+    325
+   ]
+  },
+  {
+   "name": "Deep Slate Olive",
+   "hex": "#172713",
+   "cmyk": [
+    76,
+    60,
+    80,
+    62
+   ],
+   "contrast_on_white": 15.72,
+   "contrast_on_black": 1.34,
+   "combinations": [
+    189,
+    229,
+    268,
+    303,
+    310,
+    321,
+    332,
+    341,
+    342,
+    348
+   ]
+  },
+  {
+   "name": "Deep Violet / Plumbeous",
+   "hex": "#5C7287",
+   "cmyk": [
+    61,
+    52,
+    43,
+    7
+   ],
+   "contrast_on_white": 4.99,
+   "contrast_on_black": 4.21,
+   "combinations": [
+    183,
+    192,
+    218
+   ]
+  },
+  {
+   "name": "Diamine Green",
+   "hex": "#1B8E13",
+   "cmyk": [
+    87,
+    32,
+    91,
+    18
+   ],
+   "contrast_on_white": 4.26,
+   "contrast_on_black": 4.93,
+   "combinations": [
+    38,
+    146,
+    217,
+    242,
+    251,
+    313
+   ]
+  },
+  {
+   "name": "Dull Blue Violet",
+   "hex": "#6E66D4",
+   "cmyk": [
+    57,
+    60,
+    17,
+    0
+   ],
+   "contrast_on_white": 4.65,
+   "contrast_on_black": 4.51,
+   "combinations": [
+    9,
+    100
+   ]
+  },
+  {
+   "name": "Dull Violet Black",
+   "hex": "#06-84F",
+   "cmyk": [
+    95,
+    106,
+    38,
+    50
+   ],
+   "contrast_on_white": 19.34,
+   "contrast_on_black": 1.09,
+   "combinations": [
+    95,
+    106,
+    145,
+    265,
+    277,
+    289,
+    295,
+    331
+   ]
+  },
+  {
+   "name": "Dull Viridian Green",
+   "hex": "#19CC33",
+   "cmyk": [
+    90,
+    20,
+    80,
+    0
+   ],
+   "contrast_on_white": 2.16,
+   "contrast_on_black": 9.73,
+   "combinations": [
+    136,
+    256,
+    306,
+    316
+   ]
+  },
+  {
+   "name": "Dusky Green",
+   "hex": "#00592E",
+   "cmyk": [
+    100,
+    30,
+    64,
+    50
+   ],
+   "contrast_on_white": 8.51,
+   "contrast_on_black": 2.47,
+   "combinations": [
+    94,
+    219,
+    225,
+    278,
+    284,
+    318,
+    332,
+    338
+   ]
+  },
+  {
+   "name": "Dusky Madder Violet",
+   "hex": "#2D0060",
+   "cmyk": [
+    75,
+    100,
+    46,
+    30
+   ],
+   "contrast_on_white": 16.4,
+   "contrast_on_black": 1.28,
+   "combinations": [
+    18,
+    50,
+    53,
+    82,
+    103,
+    314
+   ]
+  },
+  {
+   "name": "Ecru",
+   "hex": "#C0B490",
+   "cmyk": [
+    20,
+    25,
+    40,
+    6
+   ],
+   "contrast_on_white": 2.06,
+   "contrast_on_black": 10.17,
+   "combinations": [
+    167,
+    249,
+    275,
+    279,
+    292,
+    302,
+    317,
+    327
+   ]
+  },
+  {
+   "name": "English Red",
+   "hex": "#DE4500",
+   "cmyk": [
+    13,
+    73,
+    100,
+    0
+   ],
+   "contrast_on_white": 4.24,
+   "contrast_on_black": 4.96,
+   "combinations": [
+    1,
+    131,
+    190,
+    308,
+    339
+   ]
+  },
+  {
+   "name": "Eosine Pink",
+   "hex": "#FF5EC4",
+   "cmyk": [
+    0,
+    63,
+    23,
+    0
+   ],
+   "contrast_on_white": 2.75,
+   "contrast_on_black": 7.65,
+   "combinations": [
+    34,
+    59,
+    90,
+    108,
+    134,
+    153,
+    197,
+    242,
+    248,
+    276,
+    287,
+    314,
+    327,
+    336
+   ]
+  },
+  {
+   "name": "Etruscan Red",
+   "hex": "#C9303E",
+   "cmyk": [
+    16,
+    80,
+    74,
+    6
+   ],
+   "contrast_on_white": 5.28,
+   "contrast_on_black": 3.98,
+   "combinations": [
+    25,
+    47,
+    97,
+    137,
+    152,
+    185,
+    275
+   ]
+  },
+  {
+   "name": "Eugenia Red | A",
+   "hex": "#ED3D66",
+   "cmyk": [
+    7,
+    76,
+    60,
+    0
+   ],
+   "contrast_on_white": 3.85,
+   "contrast_on_black": 5.46,
+   "combinations": [
+    284
+   ]
+  },
+  {
+   "name": "Eugenia Red | B",
+   "hex": "#E62E73",
+   "cmyk": [
+    0,
+    80,
+    50,
+    10
+   ],
+   "contrast_on_white": 4.2,
+   "contrast_on_black": 5.0,
+   "combinations": [
+    17,
+    77,
+    252,
+    262,
+    270,
+    280,
+    282,
+    325
+   ]
+  },
+  {
+   "name": "Eupatorium Purple",
+   "hex": "#BF36E0",
+   "cmyk": [
+    25,
+    79,
+    12,
+    0
+   ],
+   "contrast_on_white": 4.36,
+   "contrast_on_black": 4.82,
+   "combinations": [
+    215,
+    315,
+    322
+   ]
+  },
+  {
+   "name": "Fawn",
+   "hex": "#D1B0B2",
+   "cmyk": [
+    18,
+    31,
+    30,
+    0
+   ],
+   "contrast_on_white": 1.99,
+   "contrast_on_black": 10.56,
+   "combinations": [
+    18,
+    125,
+    308
+   ]
+  },
+  {
+   "name": "Fresh Color",
+   "hex": "#FF788C",
+   "cmyk": [
+    0,
+    53,
+    45,
+    0
+   ],
+   "contrast_on_white": 2.52,
+   "contrast_on_black": 8.32,
+   "combinations": [
+    240
+   ]
+  },
+  {
+   "name": "Glaucous Green",
+   "hex": "#B2E8C2",
+   "cmyk": [
+    30,
+    9,
+    24,
+    0
+   ],
+   "contrast_on_white": 1.38,
+   "contrast_on_black": 15.21,
+   "combinations": [
+    7,
+    150,
+    171,
+    207,
+    239,
+    260
+   ]
+  },
+  {
+   "name": "Golden Yellow",
+   "hex": "#FA9442",
+   "cmyk": [
+    2,
+    42,
+    74,
+    0
+   ],
+   "contrast_on_white": 2.24,
+   "contrast_on_black": 9.38,
+   "combinations": [
+    26,
+    81,
+    132,
+    138,
+    140,
+    179,
+    206,
+    229,
+    309,
+    315
+   ]
+  },
+  {
+   "name": "Grayish Lavender - A",
+   "hex": "#B8B8FF",
+   "cmyk": [
+    28,
+    28,
+    0,
+    0
+   ],
+   "contrast_on_white": 1.85,
+   "contrast_on_black": 11.34,
+   "combinations": [
+    8,
+    15,
+    159,
+    177,
+    218,
+    248,
+    307
+   ]
+  },
+  {
+   "name": "Grayish Lavender - B",
+   "hex": "#BFABCC",
+   "cmyk": [
+    25,
+    33,
+    20,
+    0
+   ],
+   "contrast_on_white": 2.12,
+   "contrast_on_black": 9.91,
+   "combinations": [
+    47,
+    56,
+    174,
+    187,
+    235,
+    327,
+    329,
+    338
+   ]
+  },
+  {
+   "name": "Green",
+   "hex": "#40C945",
+   "cmyk": [
+    75,
+    21,
+    73,
+    0
+   ],
+   "contrast_on_white": 2.17,
+   "contrast_on_black": 9.66,
+   "combinations": [
+    198,
+    216,
+    293
+   ]
+  },
+  {
+   "name": "Green Blue",
+   "hex": "#2DBC94",
+   "cmyk": [
+    82,
+    24,
+    40,
+    3
+   ],
+   "contrast_on_white": 2.4,
+   "contrast_on_black": 8.73,
+   "combinations": [
+    12,
+    74,
+    79,
+    178,
+    208,
+    252,
+    259,
+    271,
+    330
+   ]
+  },
+  {
+   "name": "Grenadine Pink",
+   "hex": "#FF616B",
+   "cmyk": [
+    0,
+    62,
+    58,
+    0
+   ],
+   "contrast_on_white": 2.93,
+   "contrast_on_black": 7.17,
+   "combinations": [
+    6,
+    21,
+    112,
+    166,
+    193,
+    201,
+    230,
+    300,
+    315,
+    341
+   ]
+  },
+  {
+   "name": "Hay\\'s Russet",
+   "hex": "#681916",
+   "cmyk": [
+    37,
+    85,
+    87,
+    35
+   ],
+   "contrast_on_white": 12.07,
+   "contrast_on_black": 1.74,
+   "combinations": [
+    58,
+    82,
+    95,
+    152,
+    186,
+    231,
+    249,
+    304,
+    314,
+    336,
+    345
+   ]
+  },
+  {
+   "name": "Helvetia Blue",
+   "hex": "#0057BA",
+   "cmyk": [
+    100,
+    62,
+    19,
+    10
+   ],
+   "contrast_on_white": 6.84,
+   "contrast_on_black": 3.07,
+   "combinations": [
+    39,
+    48,
+    161,
+    187,
+    218,
+    259,
+    312,
+    347
+   ]
+  },
+  {
+   "name": "Hermosa Pink",
+   "hex": "#FFB2F0",
+   "cmyk": [
+    0,
+    30,
+    6,
+    0
+   ],
+   "contrast_on_white": 1.63,
+   "contrast_on_black": 12.88,
+   "combinations": [
+    176,
+    227,
+    273
+   ]
+  },
+  {
+   "name": "Hydrangea Red",
+   "hex": "#9E194D",
+   "cmyk": [
+    38,
+    90,
+    70,
+    0
+   ],
+   "contrast_on_white": 7.78,
+   "contrast_on_black": 2.7,
+   "combinations": [
+    142
+   ]
+  },
+  {
+   "name": "Indian Lake",
+   "hex": "#CC1A97",
+   "cmyk": [
+    12,
+    89,
+    35,
+    9
+   ],
+   "contrast_on_white": 5.05,
+   "contrast_on_black": 4.16,
+   "combinations": [
+    299,
+    331
+   ]
+  },
+  {
+   "name": "Isabella Color",
+   "hex": "#C3A55C",
+   "cmyk": [
+    15,
+    28,
+    60,
+    10
+   ],
+   "contrast_on_white": 2.37,
+   "contrast_on_black": 8.86,
+   "combinations": [
+    4,
+    12,
+    241,
+    292
+   ]
+  },
+  {
+   "name": "Ivory Buff",
+   "hex": "#EBD999",
+   "cmyk": [
+    8,
+    15,
+    40,
+    0
+   ],
+   "contrast_on_white": 1.41,
+   "contrast_on_black": 14.92,
+   "combinations": [
+    11,
+    50,
+    94,
+    102,
+    126,
+    178,
+    184,
+    190,
+    209,
+    214,
+    235,
+    243,
+    262,
+    266,
+    301,
+    343
+   ]
+  },
+  {
+   "name": "Jasper Red",
+   "hex": "#FA2B00",
+   "cmyk": [
+    2,
+    83,
+    100,
+    0
+   ],
+   "contrast_on_white": 3.88,
+   "contrast_on_black": 5.41,
+   "combinations": [
+    155,
+    194,
+    216,
+    219
+   ]
+  },
+  {
+   "name": "Khaki",
+   "hex": "#B68400",
+   "cmyk": [
+    24,
+    45,
+    100,
+    6
+   ],
+   "contrast_on_white": 3.34,
+   "contrast_on_black": 6.29,
+   "combinations": [
+    129,
+    146,
+    159,
+    236,
+    248
+   ]
+  },
+  {
+   "name": "Krongbergs Green",
+   "hex": "#759243",
+   "cmyk": [
+    48,
+    35,
+    70,
+    12
+   ],
+   "contrast_on_white": 3.53,
+   "contrast_on_black": 5.95,
+   "combinations": [
+    29
+   ]
+  },
+  {
+   "name": "Laelia Pink",
+   "hex": "#CC85D1",
+   "cmyk": [
+    20,
+    48,
+    18,
+    0
+   ],
+   "contrast_on_white": 2.68,
+   "contrast_on_black": 7.84,
+   "combinations": [
+    20,
+    254,
+    280,
+    337
+   ]
+  },
+  {
+   "name": "Lemon Yellow",
+   "hex": "#F2FF26",
+   "cmyk": [
+    5,
+    0,
+    85,
+    0
+   ],
+   "contrast_on_white": 1.1,
+   "contrast_on_black": 19.11,
+   "combinations": [
+    45,
+    123,
+    138,
+    158,
+    168,
+    173,
+    189,
+    210,
+    253,
+    259,
+    289,
+    298,
+    306,
+    317,
+    333
+   ]
+  },
+  {
+   "name": "Light Brown Drab",
+   "hex": "#B08699",
+   "cmyk": [
+    8,
+    30,
+    20,
+    25
+   ],
+   "contrast_on_white": 3.13,
+   "contrast_on_black": 6.72,
+   "combinations": [
+    35,
+    68,
+    185,
+    191,
+    223,
+    239,
+    244,
+    268,
+    285,
+    321
+   ]
+  },
+  {
+   "name": "Light Brownish Olive",
+   "hex": "#706934",
+   "cmyk": [
+    42,
+    46,
+    73,
+    24
+   ],
+   "contrast_on_white": 5.59,
+   "contrast_on_black": 3.76,
+   "combinations": [
+    199,
+    318
+   ]
+  },
+  {
+   "name": "Light Glaucous Blue",
+   "hex": "#A6E6DB",
+   "cmyk": [
+    35,
+    10,
+    14,
+    0
+   ],
+   "contrast_on_white": 1.4,
+   "contrast_on_black": 14.96,
+   "combinations": [
+    54,
+    93,
+    119,
+    152,
+    178,
+    204,
+    227,
+    320,
+    339,
+    341
+   ]
+  },
+  {
+   "name": "Light Grayish Olive",
+   "hex": "#76844E",
+   "cmyk": [
+    43,
+    36,
+    62,
+    19
+   ],
+   "contrast_on_white": 4.05,
+   "contrast_on_black": 5.18,
+   "combinations": [
+    107,
+    184
+   ]
+  },
+  {
+   "name": "Light Green Yellow",
+   "hex": "#BDF226",
+   "cmyk": [
+    26,
+    5,
+    85,
+    0
+   ],
+   "contrast_on_white": 1.32,
+   "contrast_on_black": 15.89,
+   "combinations": [
+    61,
+    289,
+    291,
+    311,
+    346
+   ]
+  },
+  {
+   "name": "Light Mauve",
+   "hex": "#9161F2",
+   "cmyk": [
+    43,
+    62,
+    5,
+    0
+   ],
+   "contrast_on_white": 4.04,
+   "contrast_on_black": 5.2,
+   "combinations": [
+    23,
+    80,
+    128,
+    134,
+    180,
+    274,
+    331
+   ]
+  },
+  {
+   "name": "Light Pinkish Cinnamon",
+   "hex": "#FFBF99",
+   "cmyk": [
+    0,
+    25,
+    40,
+    0
+   ],
+   "contrast_on_white": 1.6,
+   "contrast_on_black": 13.16,
+   "combinations": [
+    317
+   ]
+  },
+  {
+   "name": "Light Porcelain Green",
+   "hex": "#23C17C",
+   "cmyk": [
+    86,
+    22,
+    50,
+    3
+   ],
+   "contrast_on_white": 2.34,
+   "contrast_on_black": 8.99,
+   "combinations": [
+    44,
+    193,
+    328
+   ]
+  },
+  {
+   "name": "Lilac",
+   "hex": "#B875EB",
+   "cmyk": [
+    28,
+    54,
+    8,
+    0
+   ],
+   "contrast_on_white": 3.1,
+   "contrast_on_black": 6.78,
+   "combinations": [
+    143,
+    162,
+    282,
+    347
+   ]
+  },
+  {
+   "name": "Lincoln Green",
+   "hex": "#405416",
+   "cmyk": [
+    60,
+    48,
+    86,
+    37
+   ],
+   "contrast_on_white": 8.41,
+   "contrast_on_black": 2.5,
+   "combinations": [
+    70,
+    121,
+    203,
+    210,
+    280,
+    290
+   ]
+  },
+  {
+   "name": "Madder Brown",
+   "hex": "#651300",
+   "cmyk": [
+    36,
+    88,
+    100,
+    38
+   ],
+   "contrast_on_white": 12.75,
+   "contrast_on_black": 1.65,
+   "combinations": [
+    28,
+    79,
+    98,
+    173,
+    237,
+    275,
+    323
+   ]
+  },
+  {
+   "name": "Maple",
+   "hex": "#C2975A",
+   "cmyk": [
+    5,
+    26,
+    56,
+    20
+   ],
+   "contrast_on_white": 2.67,
+   "contrast_on_black": 7.87,
+   "combinations": [
+    282
+   ]
+  },
+  {
+   "name": "Mars Brown Tobacco",
+   "hex": "#522000",
+   "cmyk": [
+    39,
+    76,
+    100,
+    47
+   ],
+   "contrast_on_white": 13.42,
+   "contrast_on_black": 1.57,
+   "combinations": [
+    19
+   ]
+  },
+  {
+   "name": "Mineral Gray",
+   "hex": "#9FC2B2",
+   "cmyk": [
+    33,
+    18,
+    25,
+    7
+   ],
+   "contrast_on_white": 1.94,
+   "contrast_on_black": 10.83,
+   "combinations": [
+    11,
+    30
+   ]
+  },
+  {
+   "name": "Naples Yellow",
+   "hex": "#FAED8F",
+   "cmyk": [
+    2,
+    7,
+    44,
+    0
+   ],
+   "contrast_on_white": 1.19,
+   "contrast_on_black": 17.58,
+   "combinations": [
+    14,
+    115,
+    166,
+    193,
+    303,
+    325
+   ]
+  },
+  {
+   "name": "Neutral Gray",
+   "hex": "#B5D1CC",
+   "cmyk": [
+    29,
+    18,
+    20,
+    0
+   ],
+   "contrast_on_white": 1.62,
+   "contrast_on_black": 12.96,
+   "combinations": [
+    34,
+    139,
+    180,
+    195,
+    197,
+    221,
+    228,
+    229,
+    273,
+    303,
+    324,
+    340
+   ]
+  },
+  {
+   "name": "Night Green",
+   "hex": "#7AFF00",
+   "cmyk": [
+    52,
+    0,
+    100,
+    0
+   ],
+   "contrast_on_white": 1.3,
+   "contrast_on_black": 16.13,
+   "combinations": [
+    19,
+    32,
+    158,
+    326
+   ]
+  },
+  {
+   "name": "Nile Blue",
+   "hex": "#BFFFE6",
+   "cmyk": [
+    25,
+    0,
+    10,
+    0
+   ],
+   "contrast_on_white": 1.13,
+   "contrast_on_black": 18.66,
+   "combinations": [
+    25,
+    250,
+    268,
+    302,
+    306,
+    330,
+    345
+   ]
+  },
+  {
+   "name": "Ochraceous Salmon",
+   "hex": "#D99E73",
+   "cmyk": [
+    15,
+    38,
+    55,
+    0
+   ],
+   "contrast_on_white": 2.31,
+   "contrast_on_black": 9.09,
+   "combinations": [
+    32,
+    71,
+    121,
+    186,
+    217,
+    220,
+    223,
+    238,
+    296,
+    339
+   ]
+  },
+  {
+   "name": "Ochre Red",
+   "hex": "#A7374B",
+   "cmyk": [
+    18,
+    73,
+    63,
+    20
+   ],
+   "contrast_on_white": 6.38,
+   "contrast_on_black": 3.29,
+   "combinations": [
+    199,
+    283
+   ]
+  },
+  {
+   "name": "Oil Green",
+   "hex": "#6EA900",
+   "cmyk": [
+    53,
+    28,
+    100,
+    8
+   ],
+   "contrast_on_white": 2.86,
+   "contrast_on_black": 7.34,
+   "combinations": [
+    245,
+    299,
+    320
+   ]
+  },
+  {
+   "name": "Old Rose",
+   "hex": "#D94D99",
+   "cmyk": [
+    15,
+    70,
+    40,
+    0
+   ],
+   "contrast_on_white": 3.84,
+   "contrast_on_black": 5.47,
+   "combinations": [
+    55,
+    162,
+    260,
+    265
+   ]
+  },
+  {
+   "name": "Olive",
+   "hex": "#718600",
+   "cmyk": [
+    48,
+    38,
+    100,
+    15
+   ],
+   "contrast_on_white": 4.11,
+   "contrast_on_black": 5.11,
+   "combinations": [
+    96,
+    201,
+    254,
+    258,
+    277,
+    310,
+    334
+   ]
+  },
+  {
+   "name": "Olive Buff",
+   "hex": "#BCD382",
+   "cmyk": [
+    16,
+    6,
+    42,
+    12
+   ],
+   "contrast_on_white": 1.64,
+   "contrast_on_black": 12.78,
+   "combinations": [
+    83,
+    175,
+    200,
+    330,
+    348
+   ]
+  },
+  {
+   "name": "Olive Green",
+   "hex": "#58771E",
+   "cmyk": [
+    56,
+    40,
+    85,
+    22
+   ],
+   "contrast_on_white": 5.16,
+   "contrast_on_black": 4.07,
+   "combinations": [
+    66,
+    243,
+    270,
+    297
+   ]
+  },
+  {
+   "name": "Olive Ocher",
+   "hex": "#D1BD19",
+   "cmyk": [
+    18,
+    26,
+    90,
+    0
+   ],
+   "contrast_on_white": 1.91,
+   "contrast_on_black": 11.0,
+   "combinations": [
+    66,
+    148,
+    149,
+    156,
+    157,
+    249,
+    278
+   ]
+  },
+  {
+   "name": "Olive Yellow",
+   "hex": "#99B233",
+   "cmyk": [
+    40,
+    30,
+    80,
+    0
+   ],
+   "contrast_on_white": 2.39,
+   "contrast_on_black": 8.77,
+   "combinations": [
+    124,
+    211,
+    265,
+    347
+   ]
+  },
+  {
+   "name": "Olympic Blue",
+   "hex": "#4F8FE6",
+   "cmyk": [
+    69,
+    44,
+    10,
+    0
+   ],
+   "contrast_on_white": 3.28,
+   "contrast_on_black": 6.4,
+   "combinations": [
+    44,
+    67,
+    157,
+    194,
+    231,
+    274,
+    324
+   ]
+  },
+  {
+   "name": "Orange",
+   "hex": "#FF5200",
+   "cmyk": [
+    0,
+    68,
+    100,
+    0
+   ],
+   "contrast_on_white": 3.25,
+   "contrast_on_black": 6.46,
+   "combinations": [
+    7,
+    46,
+    141,
+    144,
+    149,
+    256,
+    272
+   ]
+  },
+  {
+   "name": "Orange Citrine",
+   "hex": "#8C6510",
+   "cmyk": [
+    28,
+    48,
+    92,
+    24
+   ],
+   "contrast_on_white": 5.27,
+   "contrast_on_black": 3.98,
+   "combinations": [
+    212,
+    342
+   ]
+  },
+  {
+   "name": "Orange Rufous",
+   "hex": "#C05200",
+   "cmyk": [
+    18,
+    65,
+    100,
+    8
+   ],
+   "contrast_on_white": 4.72,
+   "contrast_on_black": 4.45,
+   "combinations": [
+    91,
+    102,
+    222
+   ]
+  },
+  {
+   "name": "Orange Yellow",
+   "hex": "#FFAB00",
+   "cmyk": [
+    0,
+    33,
+    100,
+    0
+   ],
+   "contrast_on_white": 1.9,
+   "contrast_on_black": 11.08,
+   "combinations": [
+    114,
+    148,
+    153,
+    164,
+    170,
+    257,
+    286,
+    338
+   ]
+  },
+  {
+   "name": "Pale Burnt Lake",
+   "hex": "#730F1F",
+   "cmyk": [
+    25,
+    90,
+    80,
+    40
+   ],
+   "contrast_on_white": 11.56,
+   "contrast_on_black": 1.82,
+   "combinations": [
+    124,
+    171,
+    177,
+    205,
+    217,
+    258,
+    269,
+    283
+   ]
+  },
+  {
+   "name": "Pale King\\'s Blue",
+   "hex": "#ABF5ED",
+   "cmyk": [
+    33,
+    4,
+    7,
+    0
+   ],
+   "contrast_on_white": 1.23,
+   "contrast_on_black": 17.02,
+   "combinations": [
+    16,
+    49,
+    72,
+    75,
+    167,
+    196,
+    213,
+    234,
+    287
+   ]
+  },
+  {
+   "name": "Pale Lemon Yellow",
+   "hex": "#FFF59E",
+   "cmyk": [
+    0,
+    4,
+    38,
+    0
+   ],
+   "contrast_on_white": 1.12,
+   "contrast_on_black": 18.81,
+   "combinations": [
+    3,
+    31,
+    60,
+    76,
+    99,
+    109,
+    111,
+    169,
+    185,
+    195,
+    203,
+    228,
+    241,
+    261,
+    272,
+    281,
+    290,
+    292,
+    336
+   ]
+  },
+  {
+   "name": "Pale Raw Umber",
+   "hex": "#5E4017",
+   "cmyk": [
+    46,
+    63,
+    87,
+    32
+   ],
+   "contrast_on_white": 9.45,
+   "contrast_on_black": 2.22,
+   "combinations": [
+    26,
+    73,
+    160,
+    234,
+    296
+   ]
+  },
+  {
+   "name": "Pansy Purple",
+   "hex": "#6F0043",
+   "cmyk": [
+    34,
+    100,
+    60,
+    34
+   ],
+   "contrast_on_white": 11.95,
+   "contrast_on_black": 1.76,
+   "combinations": [
+    157,
+    273
+   ]
+  },
+  {
+   "name": "Peach Red",
+   "hex": "#FF3319",
+   "cmyk": [
+    0,
+    80,
+    90,
+    0
+   ],
+   "contrast_on_white": 3.66,
+   "contrast_on_black": 5.74,
+   "combinations": [
+    115,
+    250,
+    274,
+    285,
+    298,
+    303,
+    326,
+    340
+   ]
+  },
+  {
+   "name": "Peacock Blue",
+   "hex": "#00CF91",
+   "cmyk": [
+    100,
+    19,
+    43,
+    0
+   ],
+   "contrast_on_white": 2.03,
+   "contrast_on_black": 10.33,
+   "combinations": [
+    131,
+    286
+   ]
+  },
+  {
+   "name": "Pinkish Cinnamon",
+   "hex": "#F2AD78",
+   "cmyk": [
+    5,
+    32,
+    53,
+    0
+   ],
+   "contrast_on_white": 1.9,
+   "contrast_on_black": 11.02,
+   "combinations": [
+    78,
+    161,
+    175,
+    232,
+    258,
+    263,
+    292,
+    305,
+    310
+   ]
+  },
+  {
+   "name": "Pistachio Green",
+   "hex": "#56AA69",
+   "cmyk": [
+    64,
+    29,
+    56,
+    6
+   ],
+   "contrast_on_white": 2.86,
+   "contrast_on_black": 7.35,
+   "combinations": [
+    127,
+    137
+   ]
+  },
+  {
+   "name": "Pomegranite Purple",
+   "hex": "#B90078",
+   "cmyk": [
+    23,
+    100,
+    50,
+    6
+   ],
+   "contrast_on_white": 6.3,
+   "contrast_on_black": 3.33,
+   "combinations": [
+    220,
+    271
+   ]
+  },
+  {
+   "name": "Pompeian Red",
+   "hex": "#A90636",
+   "cmyk": [
+    18,
+    97,
+    74,
+    19
+   ],
+   "contrast_on_white": 7.59,
+   "contrast_on_black": 2.77,
+   "combinations": [
+    30,
+    71,
+    120,
+    212,
+    311,
+    324
+   ]
+  },
+  {
+   "name": "Purple Drab",
+   "hex": "#754260",
+   "cmyk": [
+    38,
+    65,
+    49,
+    26
+   ],
+   "contrast_on_white": 7.76,
+   "contrast_on_black": 2.7,
+   "combinations": [
+    236
+   ]
+  },
+  {
+   "name": "Pyrite Yellow",
+   "hex": "#C4BF33",
+   "cmyk": [
+    23,
+    25,
+    80,
+    0
+   ],
+   "contrast_on_white": 1.94,
+   "contrast_on_black": 10.85,
+   "combinations": [
+    239,
+    250,
+    255,
+    287
+   ]
+  },
+  {
+   "name": "Rainette Green",
+   "hex": "#85B857",
+   "cmyk": [
+    42,
+    20,
+    62,
+    10
+   ],
+   "contrast_on_white": 2.34,
+   "contrast_on_black": 8.99,
+   "combinations": [
+    73,
+    162,
+    188,
+    266,
+    301
+   ]
+  },
+  {
+   "name": "Raw Sienna",
+   "hex": "#B85E00",
+   "cmyk": [
+    18,
+    58,
+    100,
+    12
+   ],
+   "contrast_on_white": 4.53,
+   "contrast_on_black": 4.64,
+   "combinations": [
+    3,
+    13,
+    33,
+    70,
+    86,
+    130,
+    131,
+    182,
+    243,
+    247,
+    252,
+    255,
+    268,
+    269,
+    279,
+    293,
+    298,
+    319,
+    327
+   ]
+  },
+  {
+   "name": "Red",
+   "hex": "#A10045",
+   "cmyk": [
+    30,
+    100,
+    70,
+    10
+   ],
+   "contrast_on_white": 8.07,
+   "contrast_on_black": 2.6,
+   "combinations": [
+    251,
+    261
+   ]
+  },
+  {
+   "name": "Red Orange",
+   "hex": "#E81900",
+   "cmyk": [
+    9,
+    90,
+    100,
+    0
+   ],
+   "contrast_on_white": 4.59,
+   "contrast_on_black": 4.57,
+   "combinations": [
+    31,
+    164,
+    179,
+    241,
+    264
+   ]
+  },
+  {
+   "name": "Red Violet",
+   "hex": "#3400A3",
+   "cmyk": [
+    76,
+    100,
+    25,
+    15
+   ],
+   "contrast_on_white": 12.54,
+   "contrast_on_black": 1.67,
+   "combinations": [
+    4,
+    37,
+    134,
+    136,
+    170,
+    172,
+    183,
+    316
+   ]
+  },
+  {
+   "name": "Rosolanc Purple",
+   "hex": "#B219AB",
+   "cmyk": [
+    30,
+    90,
+    33,
+    0
+   ],
+   "contrast_on_white": 5.8,
+   "contrast_on_black": 3.62,
+   "combinations": [
+    48,
+    144,
+    170,
+    204,
+    277,
+    346
+   ]
+  },
+  {
+   "name": "Salvia Blue",
+   "hex": "#96BFE6",
+   "cmyk": [
+    41,
+    25,
+    10,
+    0
+   ],
+   "contrast_on_white": 1.93,
+   "contrast_on_black": 10.89,
+   "combinations": [
+    29,
+    129,
+    135,
+    139,
+    142,
+    188,
+    209,
+    212,
+    237,
+    272,
+    294,
+    321,
+    330
+   ]
+  },
+  {
+   "name": "Scarlet",
+   "hex": "#D50C42",
+   "cmyk": [
+    10,
+    95,
+    72,
+    7
+   ],
+   "contrast_on_white": 5.3,
+   "contrast_on_black": 3.96,
+   "combinations": [
+    136,
+    308,
+    332
+   ]
+  },
+  {
+   "name": "Sea Green",
+   "hex": "#33FF7D",
+   "cmyk": [
+    80,
+    0,
+    51,
+    0
+   ],
+   "contrast_on_white": 1.33,
+   "contrast_on_black": 15.74,
+   "combinations": [
+    17,
+    21,
+    58,
+    86,
+    133,
+    250,
+    260,
+    284,
+    291,
+    340,
+    347
+   ]
+  },
+  {
+   "name": "Seashell Pink",
+   "hex": "#FFCFC4",
+   "cmyk": [
+    0,
+    19,
+    23,
+    0
+   ],
+   "contrast_on_white": 1.4,
+   "contrast_on_black": 14.97,
+   "combinations": [
+    45,
+    84,
+    88,
+    113,
+    150,
+    176,
+    194,
+    276,
+    334
+   ]
+  },
+  {
+   "name": "Sepia",
+   "hex": "#503D00",
+   "cmyk": [
+    48,
+    60,
+    100,
+    40
+   ],
+   "contrast_on_white": 10.46,
+   "contrast_on_black": 2.01,
+   "combinations": [
+    24,
+    288
+   ]
+  },
+  {
+   "name": "Slate Color",
+   "hex": "#1B3644",
+   "cmyk": [
+    85,
+    70,
+    62,
+    30
+   ],
+   "contrast_on_white": 12.67,
+   "contrast_on_black": 1.66,
+   "combinations": [
+    27,
+    33,
+    57,
+    140,
+    202,
+    243,
+    245,
+    251,
+    253,
+    263,
+    296,
+    329,
+    335
+   ]
+  },
+  {
+   "name": "Spectrum Red",
+   "hex": "#F20000",
+   "cmyk": [
+    5,
+    100,
+    100,
+    0
+   ],
+   "contrast_on_white": 4.4,
+   "contrast_on_black": 4.78,
+   "combinations": [
+    257,
+    266,
+    301,
+    322
+   ]
+  },
+  {
+   "name": "Spinel Red",
+   "hex": "#FF4DC9",
+   "cmyk": [
+    0,
+    70,
+    21,
+    0
+   ],
+   "contrast_on_white": 2.93,
+   "contrast_on_black": 7.16,
+   "combinations": [
+    14,
+    147,
+    165,
+    184,
+    195,
+    224,
+    277
+   ]
+  },
+  {
+   "name": "Sudan Brown",
+   "hex": "#9B5348",
+   "cmyk": [
+    25,
+    60,
+    65,
+    19
+   ],
+   "contrast_on_white": 5.64,
+   "contrast_on_black": 3.72,
+   "combinations": [
+    207,
+    214,
+    273
+   ]
+  },
+  {
+   "name": "Sulpher Yellow",
+   "hex": "#F5F5B8",
+   "cmyk": [
+    4,
+    4,
+    28,
+    0
+   ],
+   "contrast_on_white": 1.13,
+   "contrast_on_black": 18.64,
+   "combinations": [
+    52,
+    72,
+    80,
+    104,
+    132,
+    135,
+    151,
+    208,
+    246,
+    254,
+    270,
+    294,
+    296,
+    310,
+    315,
+    320,
+    321,
+    326
+   ]
+  },
+  {
+   "name": "Sulphine Yellow",
+   "hex": "#BAA600",
+   "cmyk": [
+    24,
+    32,
+    100,
+    4
+   ],
+   "contrast_on_white": 2.46,
+   "contrast_on_black": 8.54,
+   "combinations": [
+    36,
+    65,
+    142,
+    160,
+    252
+   ]
+  },
+  {
+   "name": "Taupe Brown",
+   "hex": "#6B2E63",
+   "cmyk": [
+    30,
+    70,
+    35,
+    40
+   ],
+   "contrast_on_white": 9.56,
+   "contrast_on_black": 2.2,
+   "combinations": [
+    57,
+    123,
+    174,
+    224,
+    275,
+    280,
+    288
+   ]
+  },
+  {
+   "name": "Turquoise Green",
+   "hex": "#B5FFC2",
+   "cmyk": [
+    29,
+    0,
+    24,
+    0
+   ],
+   "contrast_on_white": 1.16,
+   "contrast_on_black": 18.05,
+   "combinations": [
+    36,
+    74,
+    147,
+    163,
+    173,
+    202,
+    223,
+    230,
+    263,
+    272,
+    285,
+    293,
+    300,
+    305,
+    317,
+    346
+   ]
+  },
+  {
+   "name": "Vandar Poel\\'s Blue",
+   "hex": "#003E83",
+   "cmyk": [
+    100,
+    73,
+    43,
+    10
+   ],
+   "contrast_on_white": 10.41,
+   "contrast_on_black": 2.02,
+   "combinations": [
+    5,
+    77,
+    151,
+    167,
+    168,
+    309,
+    343
+   ]
+  },
+  {
+   "name": "Vandyke Brown",
+   "hex": "#362304",
+   "cmyk": [
+    56,
+    71,
+    97,
+    52
+   ],
+   "contrast_on_white": 15.01,
+   "contrast_on_black": 1.4,
+   "combinations": [
+    110,
+    113,
+    118,
+    182,
+    192,
+    328
+   ]
+  },
+  {
+   "name": "Vandyke Red",
+   "hex": "#740909",
+   "cmyk": [
+    32,
+    95,
+    95,
+    33
+   ],
+   "contrast_on_white": 11.76,
+   "contrast_on_black": 1.79,
+   "combinations": [
+    16,
+    133,
+    147,
+    316,
+    335
+   ]
+  },
+  {
+   "name": "Venice Green",
+   "hex": "#6BFFB2",
+   "cmyk": [
+    58,
+    0,
+    30,
+    0
+   ],
+   "contrast_on_white": 1.27,
+   "contrast_on_black": 16.57,
+   "combinations": [
+    78,
+    128,
+    138,
+    189,
+    283,
+    345
+   ]
+  },
+  {
+   "name": "Veronia Purple",
+   "hex": "#7E3075",
+   "cmyk": [
+    42,
+    78,
+    46,
+    15
+   ],
+   "contrast_on_white": 8.18,
+   "contrast_on_black": 2.57,
+   "combinations": [
+    13,
+    24,
+    168,
+    183
+   ]
+  },
+  {
+   "name": "Vinaceous Cinnamon",
+   "hex": "#F59994",
+   "cmyk": [
+    4,
+    40,
+    42,
+    0
+   ],
+   "contrast_on_white": 2.13,
+   "contrast_on_black": 9.87,
+   "combinations": [
+    203,
+    205,
+    213,
+    256,
+    260,
+    279,
+    299
+   ]
+  },
+  {
+   "name": "Vinaceous Tawny",
+   "hex": "#C74300",
+   "cmyk": [
+    17,
+    72,
+    100,
+    6
+   ],
+   "contrast_on_white": 4.96,
+   "contrast_on_black": 4.23,
+   "combinations": [
+    40,
+    85,
+    244
+   ]
+  },
+  {
+   "name": "Violet",
+   "hex": "#2619D1",
+   "cmyk": [
+    85,
+    90,
+    18,
+    0
+   ],
+   "contrast_on_white": 9.8,
+   "contrast_on_black": 2.14,
+   "combinations": [
+    42,
+    56,
+    130,
+    156,
+    164,
+    181,
+    205,
+    214,
+    226,
+    316,
+    331,
+    335
+   ]
+  },
+  {
+   "name": "Violet Blue",
+   "hex": "#202D85",
+   "cmyk": [
+    85,
+    79,
+    38,
+    16
+   ],
+   "contrast_on_white": 11.83,
+   "contrast_on_black": 1.78,
+   "combinations": [
+    75,
+    83,
+    89,
+    98,
+    125,
+    233,
+    286,
+    289,
+    297,
+    309,
+    339
+   ]
+  },
+  {
+   "name": "Violet Carmine",
+   "hex": "#531745",
+   "cmyk": [
+    64,
+    90,
+    70,
+    10
+   ],
+   "contrast_on_white": 13.32,
+   "contrast_on_black": 1.58,
+   "combinations": [
+    337
+   ]
+  },
+  {
+   "name": "Violet Red",
+   "hex": "#3D0079",
+   "cmyk": [
+    75,
+    100,
+    50,
+    5
+   ],
+   "contrast_on_white": 14.24,
+   "contrast_on_black": 1.47,
+   "combinations": [
+    9
+   ]
+  },
+  {
+   "name": "Vistoris Lake",
+   "hex": "#5C2C45",
+   "cmyk": [
+    40,
+    71,
+    55,
+    40
+   ],
+   "contrast_on_white": 11.05,
+   "contrast_on_black": 1.9,
+   "combinations": [
+    63,
+    91,
+    165,
+    226,
+    290,
+    337
+   ]
+  },
+  {
+   "name": "Warm Gray",
+   "hex": "#9CB29E",
+   "cmyk": [
+    37,
+    28,
+    36,
+    3
+   ],
+   "contrast_on_white": 2.26,
+   "contrast_on_black": 9.28,
+   "combinations": [
+    69,
+    76,
+    81,
+    143,
+    169,
+    238,
+    259,
+    261
+   ]
+  },
+  {
+   "name": "White",
+   "hex": "#FFFFFF",
+   "cmyk": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "contrast_on_white": 1.0,
+   "contrast_on_black": 21.0,
+   "combinations": [
+    55
+   ]
+  },
+  {
+   "name": "Yellow",
+   "hex": "#FFFF00",
+   "cmyk": [
+    0,
+    0,
+    100,
+    0
+   ],
+   "contrast_on_white": 1.07,
+   "contrast_on_black": 19.56,
+   "combinations": [
+    22,
+    62,
+    68,
+    154,
+    240,
+    251,
+    295,
+    313
+   ]
+  },
+  {
+   "name": "Yellow Green",
+   "hex": "#A6FF47",
+   "cmyk": [
+    35,
+    0,
+    72,
+    0
+   ],
+   "contrast_on_white": 1.23,
+   "contrast_on_black": 17.02,
+   "combinations": [
+    111,
+    141,
+    276,
+    326,
+    334
+   ]
+  },
+  {
+   "name": "Yellow Ocher",
+   "hex": "#E0B81F",
+   "cmyk": [
+    12,
+    28,
+    88,
+    0
+   ],
+   "contrast_on_white": 1.9,
+   "contrast_on_black": 11.05,
+   "combinations": [
+    42,
+    96,
+    118,
+    124,
+    126,
+    191,
+    222,
+    325
+   ]
+  },
+  {
+   "name": "Yellow Orange",
+   "hex": "#FF8C00",
+   "cmyk": [
+    0,
+    45,
+    100,
+    0
+   ],
+   "contrast_on_white": 2.33,
+   "contrast_on_black": 9.0,
+   "combinations": [
+    2,
+    53,
+    89,
+    151,
+    171,
+    209,
+    222,
+    235,
+    267,
+    288,
+    297,
+    312,
+    319,
+    335
+   ]
+  }
+ ],
+ "combinations": {
+  "1": [
+   "Cerulian Blue",
+   "English Red"
+  ],
+  "2": [
+   "Dark Tyrian Blue",
+   "Yellow Orange"
+  ],
+  "3": [
+   "Pale Lemon Yellow",
+   "Raw Sienna"
+  ],
+  "4": [
+   "Isabella Color",
+   "Red Violet"
+  ],
+  "5": [
+   "Cossack Green",
+   "Vandar Poel\\'s Blue"
+  ],
+  "6": [
+   "Deep Indigo",
+   "Grenadine Pink"
+  ],
+  "7": [
+   "Glaucous Green",
+   "Orange"
+  ],
+  "8": [
+   "Cinnamon Rufous",
+   "Grayish Lavender - A"
+  ],
+  "9": [
+   "Dull Blue Violet",
+   "Violet Red"
+  ],
+  "10": [
+   "Cinnamon Rufous",
+   "Dark Citrine"
+  ],
+  "11": [
+   "Ivory Buff",
+   "Mineral Gray"
+  ],
+  "12": [
+   "Green Blue",
+   "Isabella Color"
+  ],
+  "13": [
+   "Raw Sienna",
+   "Veronia Purple"
+  ],
+  "14": [
+   "Naples Yellow",
+   "Spinel Red"
+  ],
+  "15": [
+   "Benzol Green",
+   "Grayish Lavender - A"
+  ],
+  "16": [
+   "Pale King\\'s Blue",
+   "Vandyke Red"
+  ],
+  "17": [
+   "Eugenia Red | B",
+   "Sea Green"
+  ],
+  "18": [
+   "Dusky Madder Violet",
+   "Fawn"
+  ],
+  "19": [
+   "Mars Brown Tobacco",
+   "Night Green"
+  ],
+  "20": [
+   "Calamine BLue",
+   "Laelia Pink"
+  ],
+  "21": [
+   "Grenadine Pink",
+   "Sea Green"
+  ],
+  "22": [
+   "Deep Lyons Blue",
+   "Yellow"
+  ],
+  "23": [
+   "Cinnamon Buff",
+   "Light Mauve"
+  ],
+  "24": [
+   "Sepia",
+   "Veronia Purple"
+  ],
+  "25": [
+   "Etruscan Red",
+   "Nile Blue"
+  ],
+  "26": [
+   "Golden Yellow",
+   "Pale Raw Umber"
+  ],
+  "27": [
+   "Corinthian Pink",
+   "Slate Color"
+  ],
+  "28": [
+   "Deep Indigo",
+   "Madder Brown"
+  ],
+  "29": [
+   "Krongbergs Green",
+   "Salvia Blue"
+  ],
+  "30": [
+   "Mineral Gray",
+   "Pompeian Red"
+  ],
+  "31": [
+   "Pale Lemon Yellow",
+   "Red Orange"
+  ],
+  "32": [
+   "Night Green",
+   "Ochraceous Salmon"
+  ],
+  "33": [
+   "Raw Sienna",
+   "Slate Color"
+  ],
+  "34": [
+   "Eosine Pink",
+   "Neutral Gray"
+  ],
+  "35": [
+   "Carmine Red",
+   "Light Brown Drab"
+  ],
+  "36": [
+   "Sulphine Yellow",
+   "Turquoise Green"
+  ],
+  "37": [
+   "Brick Red",
+   "Red Violet"
+  ],
+  "38": [
+   "Deep Lyons Blue",
+   "Diamine Green"
+  ],
+  "39": [
+   "Carmine",
+   "Helvetia Blue"
+  ],
+  "40": [
+   "Citron Yellow",
+   "Vinaceous Tawny"
+  ],
+  "41": [
+   "Calamine BLue",
+   "Dark Citrine"
+  ],
+  "42": [
+   "Violet",
+   "Yellow Ocher"
+  ],
+  "43": [
+   "Aconite Violet",
+   "Corinthian Pink"
+  ],
+  "44": [
+   "Light Porcelain Green",
+   "Olympic Blue"
+  ],
+  "45": [
+   "Lemon Yellow",
+   "Seashell Pink"
+  ],
+  "46": [
+   "Black",
+   "Orange"
+  ],
+  "47": [
+   "Etruscan Red",
+   "Grayish Lavender - B"
+  ],
+  "48": [
+   "Helvetia Blue",
+   "Rosolanc Purple"
+  ],
+  "49": [
+   "Blue",
+   "Pale King\\'s Blue"
+  ],
+  "50": [
+   "Dusky Madder Violet",
+   "Ivory Buff"
+  ],
+  "51": [
+   "Blue",
+   "Carmine Red"
+  ],
+  "52": [
+   "Black",
+   "Sulpher Yellow"
+  ],
+  "53": [
+   "Dusky Madder Violet",
+   "Yellow Orange"
+  ],
+  "54": [
+   "Benzol Green",
+   "Light Glaucous Blue"
+  ],
+  "55": [
+   "Old Rose",
+   "White"
+  ],
+  "56": [
+   "Grayish Lavender - B",
+   "Violet"
+  ],
+  "57": [
+   "Slate Color",
+   "Taupe Brown"
+  ],
+  "58": [
+   "Hay\\'s Russet",
+   "Sea Green"
+  ],
+  "59": [
+   "Citrine",
+   "Eosine Pink"
+  ],
+  "60": [
+   "Dark Tyrian Blue",
+   "Pale Lemon Yellow"
+  ],
+  "61": [
+   "Cotinga Purple",
+   "Light Green Yellow"
+  ],
+  "62": [
+   "Black",
+   "Yellow"
+  ],
+  "63": [
+   "Cerulian Blue",
+   "Vistoris Lake"
+  ],
+  "64": [
+   "Aconite Violet",
+   "Dark Soft Violet"
+  ],
+  "65": [
+   "Calamine BLue",
+   "Sulphine Yellow"
+  ],
+  "66": [
+   "Olive Green",
+   "Olive Ocher"
+  ],
+  "67": [
+   "Dark Tyrian Blue",
+   "Olympic Blue"
+  ],
+  "68": [
+   "Light Brown Drab",
+   "Yellow"
+  ],
+  "69": [
+   "Black",
+   "Warm Gray"
+  ],
+  "70": [
+   "Lincoln Green",
+   "Raw Sienna"
+  ],
+  "71": [
+   "Ochraceous Salmon",
+   "Pompeian Red"
+  ],
+  "72": [
+   "Pale King\\'s Blue",
+   "Sulpher Yellow"
+  ],
+  "73": [
+   "Pale Raw Umber",
+   "Rainette Green"
+  ],
+  "74": [
+   "Green Blue",
+   "Turquoise Green"
+  ],
+  "75": [
+   "Pale King\\'s Blue",
+   "Violet Blue"
+  ],
+  "76": [
+   "Pale Lemon Yellow",
+   "Warm Gray"
+  ],
+  "77": [
+   "Eugenia Red | B",
+   "Vandar Poel\\'s Blue"
+  ],
+  "78": [
+   "Pinkish Cinnamon",
+   "Venice Green"
+  ],
+  "79": [
+   "Green Blue",
+   "Madder Brown"
+  ],
+  "80": [
+   "Light Mauve",
+   "Sulpher Yellow"
+  ],
+  "81": [
+   "Golden Yellow",
+   "Warm Gray"
+  ],
+  "82": [
+   "Dusky Madder Violet",
+   "Hay\\'s Russet"
+  ],
+  "83": [
+   "Olive Buff",
+   "Violet Blue"
+  ],
+  "84": [
+   "Deep Slate Green",
+   "Seashell Pink"
+  ],
+  "85": [
+   "Antwarp Blue",
+   "Vinaceous Tawny"
+  ],
+  "86": [
+   "Raw Sienna",
+   "Sea Green"
+  ],
+  "87": [
+   "Citron Yellow",
+   "Corinthian Pink"
+  ],
+  "88": [
+   "Blue",
+   "Seashell Pink"
+  ],
+  "89": [
+   "Violet Blue",
+   "Yellow Orange"
+  ],
+  "90": [
+   "Aconite Violet",
+   "Eosine Pink"
+  ],
+  "91": [
+   "Orange Rufous",
+   "Vistoris Lake"
+  ],
+  "92": [
+   "Benzol Green",
+   "Coral Red"
+  ],
+  "93": [
+   "Citrine",
+   "Light Glaucous Blue"
+  ],
+  "94": [
+   "Dusky Green",
+   "Ivory Buff"
+  ],
+  "95": [
+   "Dull Violet Black",
+   "Hay\\'s Russet"
+  ],
+  "96": [
+   "Olive",
+   "Yellow Ocher"
+  ],
+  "97": [
+   "Corinthian Pink",
+   "Etruscan Red"
+  ],
+  "98": [
+   "Madder Brown",
+   "Violet Blue"
+  ],
+  "99": [
+   "Cerulian Blue",
+   "Pale Lemon Yellow"
+  ],
+  "100": [
+   "Buffy Citrine",
+   "Dull Blue Violet"
+  ],
+  "101": [
+   "Cameo Pink",
+   "Deep Lyons Blue"
+  ],
+  "102": [
+   "Ivory Buff",
+   "Orange Rufous"
+  ],
+  "103": [
+   "Cinnamon Rufous",
+   "Dusky Madder Violet"
+  ],
+  "104": [
+   "Carmine Red",
+   "Sulpher Yellow"
+  ],
+  "105": [
+   "Cameo Pink",
+   "Chromium Green"
+  ],
+  "106": [
+   "Antwarp Blue",
+   "Dull Violet Black"
+  ],
+  "107": [
+   "Apricot Yellow",
+   "Light Grayish Olive"
+  ],
+  "108": [
+   "Brick Red",
+   "Eosine Pink"
+  ],
+  "109": [
+   "Blackish Olive",
+   "Pale Lemon Yellow"
+  ],
+  "110": [
+   "Brown",
+   "Vandyke Brown"
+  ],
+  "111": [
+   "Pale Lemon Yellow",
+   "Yellow Green"
+  ],
+  "112": [
+   "Black",
+   "Grenadine Pink"
+  ],
+  "113": [
+   "Seashell Pink",
+   "Vandyke Brown"
+  ],
+  "114": [
+   "Antwarp Blue",
+   "Orange Yellow"
+  ],
+  "115": [
+   "Naples Yellow",
+   "Peach Red"
+  ],
+  "116": [
+   "Blue Violet",
+   "Cameo Pink"
+  ],
+  "117": [
+   "Black",
+   "Carmine"
+  ],
+  "118": [
+   "Vandyke Brown",
+   "Yellow Ocher"
+  ],
+  "119": [
+   "Dark Tyrian Blue",
+   "Light Glaucous Blue"
+  ],
+  "120": [
+   "Cameo Pink",
+   "Pompeian Red"
+  ],
+  "121": [
+   "Brown",
+   "Lincoln Green",
+   "Ochraceous Salmon"
+  ],
+  "122": [
+   "Benzol Green",
+   "Carmine",
+   "Cream Yellow"
+  ],
+  "123": [
+   "Coral Red",
+   "Lemon Yellow",
+   "Taupe Brown"
+  ],
+  "124": [
+   "Olive Yellow",
+   "Pale Burnt Lake",
+   "Yellow Ocher"
+  ],
+  "125": [
+   "Cerulian Blue",
+   "Fawn",
+   "Violet Blue"
+  ],
+  "126": [
+   "Deep Lyons Blue",
+   "Ivory Buff",
+   "Yellow Ocher"
+  ],
+  "127": [
+   "Cinnamon Buff",
+   "Dark Soft Violet",
+   "Pistachio Green"
+  ],
+  "128": [
+   "Corinthian Pink",
+   "Light Mauve",
+   "Venice Green"
+  ],
+  "129": [
+   "Apricot Yellow",
+   "Khaki",
+   "Salvia Blue"
+  ],
+  "130": [
+   "Carmine Red",
+   "Raw Sienna",
+   "Violet"
+  ],
+  "131": [
+   "English Red",
+   "Peacock Blue",
+   "Raw Sienna"
+  ],
+  "132": [
+   "Citrine",
+   "Golden Yellow",
+   "Sulpher Yellow"
+  ],
+  "133": [
+   "Citrine",
+   "Sea Green",
+   "Vandyke Red"
+  ],
+  "134": [
+   "Eosine Pink",
+   "Light Mauve",
+   "Red Violet"
+  ],
+  "135": [
+   "Cossack Green",
+   "Salvia Blue",
+   "Sulpher Yellow"
+  ],
+  "136": [
+   "Dull Viridian Green",
+   "Red Violet",
+   "Scarlet"
+  ],
+  "137": [
+   "Cinnamon Buff",
+   "Etruscan Red",
+   "Pistachio Green"
+  ],
+  "138": [
+   "Golden Yellow",
+   "Lemon Yellow",
+   "Venice Green"
+  ],
+  "139": [
+   "Deep Indigo",
+   "Neutral Gray",
+   "Salvia Blue"
+  ],
+  "140": [
+   "Antwarp Blue",
+   "Golden Yellow",
+   "Slate Color"
+  ],
+  "141": [
+   "Dark Tyrian Blue",
+   "Orange",
+   "Yellow Green"
+  ],
+  "142": [
+   "Hydrangea Red",
+   "Salvia Blue",
+   "Sulphine Yellow"
+  ],
+  "143": [
+   "Blue",
+   "Lilac",
+   "Warm Gray"
+  ],
+  "144": [
+   "Black",
+   "Orange",
+   "Rosolanc Purple"
+  ],
+  "145": [
+   "Brown",
+   "Citron Yellow",
+   "Dull Violet Black"
+  ],
+  "146": [
+   "Deep Grayish Olive",
+   "Diamine Green",
+   "Khaki"
+  ],
+  "147": [
+   "Spinel Red",
+   "Turquoise Green",
+   "Vandyke Red"
+  ],
+  "148": [
+   "Cerulian Blue",
+   "Olive Ocher",
+   "Orange Yellow"
+  ],
+  "149": [
+   "Deep Slate Green",
+   "Olive Ocher",
+   "Orange"
+  ],
+  "150": [
+   "Citron Yellow",
+   "Glaucous Green",
+   "Seashell Pink"
+  ],
+  "151": [
+   "Sulpher Yellow",
+   "Vandar Poel\\'s Blue",
+   "Yellow Orange"
+  ],
+  "152": [
+   "Etruscan Red",
+   "Hay\\'s Russet",
+   "Light Glaucous Blue"
+  ],
+  "153": [
+   "Citron Yellow",
+   "Eosine Pink",
+   "Orange Yellow"
+  ],
+  "154": [
+   "Blue",
+   "Carmine",
+   "Yellow"
+  ],
+  "155": [
+   "Benzol Green",
+   "Deep Indigo",
+   "Jasper Red"
+  ],
+  "156": [
+   "Cobalt Green",
+   "Olive Ocher",
+   "Violet"
+  ],
+  "157": [
+   "Olive Ocher",
+   "Olympic Blue",
+   "Pansy Purple"
+  ],
+  "158": [
+   "Cinnamon Rufous",
+   "Lemon Yellow",
+   "Night Green"
+  ],
+  "159": [
+   "Calamine BLue",
+   "Grayish Lavender - A",
+   "Khaki"
+  ],
+  "160": [
+   "Dark Medici Blue",
+   "Pale Raw Umber",
+   "Sulphine Yellow"
+  ],
+  "161": [
+   "Brown",
+   "Helvetia Blue",
+   "Pinkish Cinnamon"
+  ],
+  "162": [
+   "Lilac",
+   "Old Rose",
+   "Rainette Green"
+  ],
+  "163": [
+   "Antwarp Blue",
+   "Apricot Yellow",
+   "Turquoise Green"
+  ],
+  "164": [
+   "Orange Yellow",
+   "Red Orange",
+   "Violet"
+  ],
+  "165": [
+   "Cameo Pink",
+   "Spinel Red",
+   "Vistoris Lake"
+  ],
+  "166": [
+   "Deep Slate Green",
+   "Grenadine Pink",
+   "Naples Yellow"
+  ],
+  "167": [
+   "Ecru",
+   "Pale King\\'s Blue",
+   "Vandar Poel\\'s Blue"
+  ],
+  "168": [
+   "Lemon Yellow",
+   "Vandar Poel\\'s Blue",
+   "Veronia Purple"
+  ],
+  "169": [
+   "Corinthian Pink",
+   "Pale Lemon Yellow",
+   "Warm Gray"
+  ],
+  "170": [
+   "Orange Yellow",
+   "Red Violet",
+   "Rosolanc Purple"
+  ],
+  "171": [
+   "Glaucous Green",
+   "Pale Burnt Lake",
+   "Yellow Orange"
+  ],
+  "172": [
+   "Antwarp Blue",
+   "Cinnamon Rufous",
+   "Red Violet"
+  ],
+  "173": [
+   "Lemon Yellow",
+   "Madder Brown",
+   "Turquoise Green"
+  ],
+  "174": [
+   "Corinthian Pink",
+   "Grayish Lavender - B",
+   "Taupe Brown"
+  ],
+  "175": [
+   "Blue Violet",
+   "Olive Buff",
+   "Pinkish Cinnamon"
+  ],
+  "176": [
+   "Calamine BLue",
+   "Hermosa Pink",
+   "Seashell Pink"
+  ],
+  "177": [
+   "Buffy Citrine",
+   "Grayish Lavender - A",
+   "Pale Burnt Lake"
+  ],
+  "178": [
+   "Green Blue",
+   "Ivory Buff",
+   "Light Glaucous Blue"
+  ],
+  "179": [
+   "Deep Lyons Blue",
+   "Golden Yellow",
+   "Red Orange"
+  ],
+  "180": [
+   "Cinnamon Buff",
+   "Light Mauve",
+   "Neutral Gray"
+  ],
+  "181": [
+   "Carmine Red",
+   "Cotinga Purple",
+   "Violet"
+  ],
+  "182": [
+   "Deep Indigo",
+   "Raw Sienna",
+   "Vandyke Brown"
+  ],
+  "183": [
+   "Deep Violet / Plumbeous",
+   "Red Violet",
+   "Veronia Purple"
+  ],
+  "184": [
+   "Ivory Buff",
+   "Light Grayish Olive",
+   "Spinel Red"
+  ],
+  "185": [
+   "Etruscan Red",
+   "Light Brown Drab",
+   "Pale Lemon Yellow"
+  ],
+  "186": [
+   "Blue",
+   "Hay\\'s Russet",
+   "Ochraceous Salmon"
+  ],
+  "187": [
+   "Aconite Violet",
+   "Grayish Lavender - B",
+   "Helvetia Blue"
+  ],
+  "188": [
+   "Cobalt Green",
+   "Rainette Green",
+   "Salvia Blue"
+  ],
+  "189": [
+   "Deep Slate Olive",
+   "Lemon Yellow",
+   "Venice Green"
+  ],
+  "190": [
+   "Black",
+   "English Red",
+   "Ivory Buff"
+  ],
+  "191": [
+   "Blue",
+   "Light Brown Drab",
+   "Yellow Ocher"
+  ],
+  "192": [
+   "Cream Yellow",
+   "Deep Violet / Plumbeous",
+   "Vandyke Brown"
+  ],
+  "193": [
+   "Grenadine Pink",
+   "Light Porcelain Green",
+   "Naples Yellow"
+  ],
+  "194": [
+   "Jasper Red",
+   "Olympic Blue",
+   "Seashell Pink"
+  ],
+  "195": [
+   "Neutral Gray",
+   "Pale Lemon Yellow",
+   "Spinel Red"
+  ],
+  "196": [
+   "Blue Violet",
+   "Citron Yellow",
+   "Pale King\\'s Blue"
+  ],
+  "197": [
+   "Dark Soft Violet",
+   "Eosine Pink",
+   "Neutral Gray"
+  ],
+  "198": [
+   "Apricot Yellow",
+   "Burnt Sienna",
+   "Green"
+  ],
+  "199": [
+   "Deep Lyons Blue",
+   "Light Brownish Olive",
+   "Ochre Red"
+  ],
+  "200": [
+   "Carmine Red",
+   "Chromium Green",
+   "Olive Buff"
+  ],
+  "201": [
+   "Cobalt Green",
+   "Grenadine Pink",
+   "Olive"
+  ],
+  "202": [
+   "Cobalt Green",
+   "Slate Color",
+   "Turquoise Green"
+  ],
+  "203": [
+   "Lincoln Green",
+   "Pale Lemon Yellow",
+   "Vinaceous Cinnamon"
+  ],
+  "204": [
+   "Cinnamon Rufous",
+   "Light Glaucous Blue",
+   "Rosolanc Purple"
+  ],
+  "205": [
+   "Pale Burnt Lake",
+   "Vinaceous Cinnamon",
+   "Violet"
+  ],
+  "206": [
+   "Cinnamon Rufous",
+   "Corinthian Pink",
+   "Golden Yellow"
+  ],
+  "207": [
+   "Black",
+   "Glaucous Green",
+   "Sudan Brown"
+  ],
+  "208": [
+   "Antwarp Blue",
+   "Green Blue",
+   "Sulpher Yellow"
+  ],
+  "209": [
+   "Ivory Buff",
+   "Salvia Blue",
+   "Yellow Orange"
+  ],
+  "210": [
+   "Cinnamon Buff",
+   "Lemon Yellow",
+   "Lincoln Green"
+  ],
+  "211": [
+   "Apricot Orange",
+   "Deep Indigo",
+   "Olive Yellow"
+  ],
+  "212": [
+   "Orange Citrine",
+   "Pompeian Red",
+   "Salvia Blue"
+  ],
+  "213": [
+   "Apricot Yellow",
+   "Pale King\\'s Blue",
+   "Vinaceous Cinnamon"
+  ],
+  "214": [
+   "Ivory Buff",
+   "Sudan Brown",
+   "Violet"
+  ],
+  "215": [
+   "Blue",
+   "Cream Yellow",
+   "Eupatorium Purple"
+  ],
+  "216": [
+   "Black",
+   "Green",
+   "Jasper Red"
+  ],
+  "217": [
+   "Diamine Green",
+   "Ochraceous Salmon",
+   "Pale Burnt Lake"
+  ],
+  "218": [
+   "Deep Violet / Plumbeous",
+   "Grayish Lavender - A",
+   "Helvetia Blue"
+  ],
+  "219": [
+   "Chromium Green",
+   "Dusky Green",
+   "Jasper Red"
+  ],
+  "220": [
+   "Aconite Violet",
+   "Ochraceous Salmon",
+   "Pomegranite Purple"
+  ],
+  "221": [
+   "Black",
+   "Carmine Red",
+   "Neutral Gray"
+  ],
+  "222": [
+   "Orange Rufous",
+   "Yellow Ocher",
+   "Yellow Orange"
+  ],
+  "223": [
+   "Light Brown Drab",
+   "Ochraceous Salmon",
+   "Turquoise Green"
+  ],
+  "224": [
+   "Dark Medici Blue",
+   "Spinel Red",
+   "Taupe Brown"
+  ],
+  "225": [
+   "Carmine",
+   "Dark Slate Purple",
+   "Dusky Green"
+  ],
+  "226": [
+   "Cream Yellow",
+   "Violet",
+   "Vistoris Lake"
+  ],
+  "227": [
+   "Cerulian Blue",
+   "Hermosa Pink",
+   "Light Glaucous Blue"
+  ],
+  "228": [
+   "Carmine Red",
+   "Neutral Gray",
+   "Pale Lemon Yellow"
+  ],
+  "229": [
+   "Deep Slate Olive",
+   "Golden Yellow",
+   "Neutral Gray"
+  ],
+  "230": [
+   "Cobalt Green",
+   "Grenadine Pink",
+   "Turquoise Green"
+  ],
+  "231": [
+   "Cameo Pink",
+   "Hay\\'s Russet",
+   "Olympic Blue"
+  ],
+  "232": [
+   "Carmine",
+   "Deep Indigo",
+   "Pinkish Cinnamon"
+  ],
+  "233": [
+   "Buffy Citrine",
+   "Carmine Red",
+   "Violet Blue"
+  ],
+  "234": [
+   "Cinnamon Buff",
+   "Pale King\\'s Blue",
+   "Pale Raw Umber"
+  ],
+  "235": [
+   "Grayish Lavender - B",
+   "Ivory Buff",
+   "Yellow Orange"
+  ],
+  "236": [
+   "Deep Lyons Blue",
+   "Khaki",
+   "Purple Drab"
+  ],
+  "237": [
+   "Carmine Red",
+   "Madder Brown",
+   "Salvia Blue"
+  ],
+  "238": [
+   "Cotinga Purple",
+   "Ochraceous Salmon",
+   "Warm Gray"
+  ],
+  "239": [
+   "Glaucous Green",
+   "Light Brown Drab",
+   "Pyrite Yellow"
+  ],
+  "240": [
+   "Cerulian Blue",
+   "Fresh Color",
+   "Yellow"
+  ],
+  "241": [
+   "Dark Medici Blue",
+   "Isabella Color",
+   "Pale Lemon Yellow",
+   "Red Orange"
+  ],
+  "242": [
+   "Black",
+   "Burnt Sienna",
+   "Diamine Green",
+   "Eosine Pink"
+  ],
+  "243": [
+   "Ivory Buff",
+   "Olive Green",
+   "Raw Sienna",
+   "Slate Color"
+  ],
+  "244": [
+   "Andover Green",
+   "Antwarp Blue",
+   "Light Brown Drab",
+   "Vinaceous Tawny"
+  ],
+  "245": [
+   "Carmine Red",
+   "Dark Tyrian Blue",
+   "Oil Green",
+   "Slate Color"
+  ],
+  "246": [
+   "Brick Red",
+   "Cinnamon Buff",
+   "Corinthian Pink",
+   "Sulpher Yellow"
+  ],
+  "247": [
+   "Apricot Yellow",
+   "Benzol Green",
+   "Deep Lyons Blue",
+   "Raw Sienna"
+  ],
+  "248": [
+   "Dark Slate Purple",
+   "Eosine Pink",
+   "Grayish Lavender - A",
+   "Khaki"
+  ],
+  "249": [
+   "Dark Medici Blue",
+   "Ecru",
+   "Hay\\'s Russet",
+   "Olive Ocher"
+  ],
+  "250": [
+   "Nile Blue",
+   "Peach Red",
+   "Pyrite Yellow",
+   "Sea Green"
+  ],
+  "251": [
+   "Diamine Green",
+   "Red",
+   "Slate Color",
+   "Yellow"
+  ],
+  "252": [
+   "Eugenia Red | B",
+   "Green Blue",
+   "Raw Sienna",
+   "Sulphine Yellow"
+  ],
+  "253": [
+   "Apricot Orange",
+   "Cotinga Purple",
+   "Lemon Yellow",
+   "Slate Color"
+  ],
+  "254": [
+   "Corinthian Pink",
+   "Laelia Pink",
+   "Olive",
+   "Sulpher Yellow"
+  ],
+  "255": [
+   "Black",
+   "Calamine BLue",
+   "Pyrite Yellow",
+   "Raw Sienna"
+  ],
+  "256": [
+   "Black",
+   "Dull Viridian Green",
+   "Orange",
+   "Vinaceous Cinnamon"
+  ],
+  "257": [
+   "Aconite Violet",
+   "Blue",
+   "Orange Yellow",
+   "Spectrum Red"
+  ],
+  "258": [
+   "Antwarp Blue",
+   "Olive",
+   "Pale Burnt Lake",
+   "Pinkish Cinnamon"
+  ],
+  "259": [
+   "Green Blue",
+   "Helvetia Blue",
+   "Lemon Yellow",
+   "Warm Gray"
+  ],
+  "260": [
+   "Glaucous Green",
+   "Old Rose",
+   "Sea Green",
+   "Vinaceous Cinnamon"
+  ],
+  "261": [
+   "Calamine BLue",
+   "Pale Lemon Yellow",
+   "Red",
+   "Warm Gray"
+  ],
+  "262": [
+   "Citrine",
+   "Cossack Green",
+   "Eugenia Red | B",
+   "Ivory Buff"
+  ],
+  "263": [
+   "Burnt Sienna",
+   "Pinkish Cinnamon",
+   "Slate Color",
+   "Turquoise Green"
+  ],
+  "264": [
+   "Cerulian Blue",
+   "Corinthian Pink",
+   "Dark Greenish Glaucous",
+   "Red Orange"
+  ],
+  "265": [
+   "Apricot Yellow",
+   "Dull Violet Black",
+   "Old Rose",
+   "Olive Yellow"
+  ],
+  "266": [
+   "Benzol Green",
+   "Ivory Buff",
+   "Rainette Green",
+   "Spectrum Red"
+  ],
+  "267": [
+   "Benzol Green",
+   "Blue",
+   "Cream Yellow",
+   "Yellow Orange"
+  ],
+  "268": [
+   "Deep Slate Olive",
+   "Light Brown Drab",
+   "Nile Blue",
+   "Raw Sienna"
+  ],
+  "269": [
+   "Aconite Violet",
+   "Black",
+   "Pale Burnt Lake",
+   "Raw Sienna"
+  ],
+  "270": [
+   "Cossack Green",
+   "Eugenia Red | B",
+   "Olive Green",
+   "Sulpher Yellow"
+  ],
+  "271": [
+   "Cobalt Green",
+   "Deep Slate Green",
+   "Green Blue",
+   "Pomegranite Purple"
+  ],
+  "272": [
+   "Orange",
+   "Pale Lemon Yellow",
+   "Salvia Blue",
+   "Turquoise Green"
+  ],
+  "273": [
+   "Hermosa Pink",
+   "Neutral Gray",
+   "Pansy Purple",
+   "Sudan Brown"
+  ],
+  "274": [
+   "Dark Citrine",
+   "Light Mauve",
+   "Olympic Blue",
+   "Peach Red"
+  ],
+  "275": [
+   "Ecru",
+   "Etruscan Red",
+   "Madder Brown",
+   "Taupe Brown"
+  ],
+  "276": [
+   "Black",
+   "Eosine Pink",
+   "Seashell Pink",
+   "Yellow Green"
+  ],
+  "277": [
+   "Dull Violet Black",
+   "Olive",
+   "Rosolanc Purple",
+   "Spinel Red"
+  ],
+  "278": [
+   "Cossack Green",
+   "Cream Yellow",
+   "Dusky Green",
+   "Olive Ocher"
+  ],
+  "279": [
+   "Dark Tyrian Blue",
+   "Ecru",
+   "Raw Sienna",
+   "Vinaceous Cinnamon"
+  ],
+  "280": [
+   "Eugenia Red | B",
+   "Laelia Pink",
+   "Lincoln Green",
+   "Taupe Brown"
+  ],
+  "281": [
+   "Antwarp Blue",
+   "Benzol Green",
+   "Cobalt Green",
+   "Pale Lemon Yellow"
+  ],
+  "282": [
+   "Cobalt Green",
+   "Eugenia Red | B",
+   "Lilac",
+   "Maple"
+  ],
+  "283": [
+   "Chromium Green",
+   "Ochre Red",
+   "Pale Burnt Lake",
+   "Venice Green"
+  ],
+  "284": [
+   "Apricot Yellow",
+   "Dusky Green",
+   "Eugenia Red | A",
+   "Sea Green"
+  ],
+  "285": [
+   "Burnt Sienna",
+   "Light Brown Drab",
+   "Peach Red",
+   "Turquoise Green"
+  ],
+  "286": [
+   "Burnt Sienna",
+   "Orange Yellow",
+   "Peacock Blue",
+   "Violet Blue"
+  ],
+  "287": [
+   "Calamine BLue",
+   "Eosine Pink",
+   "Pale King\\'s Blue",
+   "Pyrite Yellow"
+  ],
+  "288": [
+   "Black",
+   "Sepia",
+   "Taupe Brown",
+   "Yellow Orange"
+  ],
+  "289": [
+   "Dull Violet Black",
+   "Lemon Yellow",
+   "Light Green Yellow",
+   "Violet Blue"
+  ],
+  "290": [
+   "Cobalt Green",
+   "Lincoln Green",
+   "Pale Lemon Yellow",
+   "Vistoris Lake"
+  ],
+  "291": [
+   "Calamine BLue",
+   "Cobalt Green",
+   "Light Green Yellow",
+   "Sea Green"
+  ],
+  "292": [
+   "Ecru",
+   "Isabella Color",
+   "Pale Lemon Yellow",
+   "Pinkish Cinnamon"
+  ],
+  "293": [
+   "Artemesia Green",
+   "Green",
+   "Raw Sienna",
+   "Turquoise Green"
+  ],
+  "294": [
+   "Cossack Green",
+   "Cream Yellow",
+   "Salvia Blue",
+   "Sulpher Yellow"
+  ],
+  "295": [
+   "Blue",
+   "Cream Yellow",
+   "Dull Violet Black",
+   "Yellow"
+  ],
+  "296": [
+   "Ochraceous Salmon",
+   "Pale Raw Umber",
+   "Slate Color",
+   "Sulpher Yellow"
+  ],
+  "297": [
+   "Burnt Sienna",
+   "Olive Green",
+   "Violet Blue",
+   "Yellow Orange"
+  ],
+  "298": [
+   "Black",
+   "Lemon Yellow",
+   "Peach Red",
+   "Raw Sienna"
+  ],
+  "299": [
+   "Antwarp Blue",
+   "Indian Lake",
+   "Oil Green",
+   "Vinaceous Cinnamon"
+  ],
+  "300": [
+   "Calamine BLue",
+   "Cream Yellow",
+   "Grenadine Pink",
+   "Turquoise Green"
+  ],
+  "301": [
+   "Aconite Violet",
+   "Ivory Buff",
+   "Rainette Green",
+   "Spectrum Red"
+  ],
+  "302": [
+   "Antwarp Blue",
+   "Cream Yellow",
+   "Ecru",
+   "Nile Blue"
+  ],
+  "303": [
+   "Deep Slate Olive",
+   "Naples Yellow",
+   "Neutral Gray",
+   "Peach Red"
+  ],
+  "304": [
+   "Benzol Green",
+   "Cream Yellow",
+   "Dark Citrine",
+   "Hay\\'s Russet"
+  ],
+  "305": [
+   "Apricot Yellow",
+   "Citron Yellow",
+   "Pinkish Cinnamon",
+   "Turquoise Green"
+  ],
+  "306": [
+   "Benzol Green",
+   "Dull Viridian Green",
+   "Lemon Yellow",
+   "Nile Blue"
+  ],
+  "307": [
+   "Aconite Violet",
+   "Carmine",
+   "Cotinga Purple",
+   "Grayish Lavender - A"
+  ],
+  "308": [
+   "Cobalt Green",
+   "English Red",
+   "Fawn",
+   "Scarlet"
+  ],
+  "309": [
+   "Apricot Orange",
+   "Golden Yellow",
+   "Vandar Poel\\'s Blue",
+   "Violet Blue"
+  ],
+  "310": [
+   "Deep Slate Olive",
+   "Olive",
+   "Pinkish Cinnamon",
+   "Sulpher Yellow"
+  ],
+  "311": [
+   "Cream Yellow",
+   "Dark Greenish Glaucous",
+   "Light Green Yellow",
+   "Pompeian Red"
+  ],
+  "312": [
+   "Artemesia Green",
+   "Burnt Sienna",
+   "Helvetia Blue",
+   "Yellow Orange"
+  ],
+  "313": [
+   "Black",
+   "Carmine",
+   "Diamine Green",
+   "Yellow"
+  ],
+  "314": [
+   "Deep Lyons Blue",
+   "Dusky Madder Violet",
+   "Eosine Pink",
+   "Hay\\'s Russet"
+  ],
+  "315": [
+   "Eupatorium Purple",
+   "Golden Yellow",
+   "Grenadine Pink",
+   "Sulpher Yellow"
+  ],
+  "316": [
+   "Dull Viridian Green",
+   "Red Violet",
+   "Vandyke Red",
+   "Violet"
+  ],
+  "317": [
+   "Ecru",
+   "Lemon Yellow",
+   "Light Pinkish Cinnamon",
+   "Turquoise Green"
+  ],
+  "318": [
+   "Blackish Olive",
+   "Deep Slate Green",
+   "Dusky Green",
+   "Light Brownish Olive"
+  ],
+  "319": [
+   "Apricot Yellow",
+   "Cossack Green",
+   "Raw Sienna",
+   "Yellow Orange"
+  ],
+  "320": [
+   "Coral Red",
+   "Light Glaucous Blue",
+   "Oil Green",
+   "Sulpher Yellow"
+  ],
+  "321": [
+   "Deep Slate Olive",
+   "Light Brown Drab",
+   "Salvia Blue",
+   "Sulpher Yellow"
+  ],
+  "322": [
+   "Blue Violet",
+   "Brick Red",
+   "Eupatorium Purple",
+   "Spectrum Red"
+  ],
+  "323": [
+   "Black",
+   "Cinnamon Buff",
+   "Citron Yellow",
+   "Madder Brown"
+  ],
+  "324": [
+   "Aconite Violet",
+   "Neutral Gray",
+   "Olympic Blue",
+   "Pompeian Red"
+  ],
+  "325": [
+   "Deep Slate Green",
+   "Eugenia Red | B",
+   "Naples Yellow",
+   "Yellow Ocher"
+  ],
+  "326": [
+   "Night Green",
+   "Peach Red",
+   "Sulpher Yellow",
+   "Yellow Green"
+  ],
+  "327": [
+   "Ecru",
+   "Eosine Pink",
+   "Grayish Lavender - B",
+   "Raw Sienna"
+  ],
+  "328": [
+   "Apricot Orange",
+   "Brick Red",
+   "Light Porcelain Green",
+   "Vandyke Brown"
+  ],
+  "329": [
+   "Cotinga Purple",
+   "Cream Yellow",
+   "Grayish Lavender - B",
+   "Slate Color"
+  ],
+  "330": [
+   "Green Blue",
+   "Nile Blue",
+   "Olive Buff",
+   "Salvia Blue"
+  ],
+  "331": [
+   "Dull Violet Black",
+   "Indian Lake",
+   "Light Mauve",
+   "Violet"
+  ],
+  "332": [
+   "Coral Red",
+   "Deep Slate Olive",
+   "Dusky Green",
+   "Scarlet"
+  ],
+  "333": [
+   "Blue",
+   "Burnt Sienna",
+   "Cobalt Green",
+   "Lemon Yellow"
+  ],
+  "334": [
+   "Antwarp Blue",
+   "Olive",
+   "Seashell Pink",
+   "Yellow Green"
+  ],
+  "335": [
+   "Slate Color",
+   "Vandyke Red",
+   "Violet",
+   "Yellow Orange"
+  ],
+  "336": [
+   "Blackish Olive",
+   "Eosine Pink",
+   "Hay\\'s Russet",
+   "Pale Lemon Yellow"
+  ],
+  "337": [
+   "Black",
+   "Laelia Pink",
+   "Violet Carmine",
+   "Vistoris Lake"
+  ],
+  "338": [
+   "Carmine Red",
+   "Dusky Green",
+   "Grayish Lavender - B",
+   "Orange Yellow"
+  ],
+  "339": [
+   "English Red",
+   "Light Glaucous Blue",
+   "Ochraceous Salmon",
+   "Violet Blue"
+  ],
+  "340": [
+   "Black",
+   "Neutral Gray",
+   "Peach Red",
+   "Sea Green"
+  ],
+  "341": [
+   "Cossack Green",
+   "Deep Slate Olive",
+   "Grenadine Pink",
+   "Light Glaucous Blue"
+  ],
+  "342": [
+   "Corinthian Pink",
+   "Cream Yellow",
+   "Deep Slate Olive",
+   "Orange Citrine"
+  ],
+  "343": [
+   "Burnt Sienna",
+   "Deep Grayish Olive",
+   "Ivory Buff",
+   "Vandar Poel\\'s Blue"
+  ],
+  "344": [
+   "Aconite Violet",
+   "Black",
+   "Cinnamon Buff",
+   "Deep Lyons Blue"
+  ],
+  "345": [
+   "Blue Violet",
+   "Hay\\'s Russet",
+   "Nile Blue",
+   "Venice Green"
+  ],
+  "346": [
+   "Andover Green",
+   "Light Green Yellow",
+   "Rosolanc Purple",
+   "Turquoise Green"
+  ],
+  "347": [
+   "Helvetia Blue",
+   "Lilac",
+   "Olive Yellow",
+   "Sea Green"
+  ],
+  "348": [
+   "Cossack Green",
+   "Cotinga Purple",
+   "Deep Slate Olive",
+   "Olive Buff"
+  ]
+ }
+}
