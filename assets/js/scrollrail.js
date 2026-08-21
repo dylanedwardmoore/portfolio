@@ -42,9 +42,21 @@
             return isWindow || getComputedStyle(el).overflowY === "auto";
         }
 
+        // A window rail can be told to begin below something -- here the
+        // sticky bar -- so the track starts at the rule under it rather than
+        // running up behind it to the top of the screen.
+        var topSel = rail.getAttribute("data-rail-top");
+
+        function railTop() {
+            if (!topSel) return 0;
+            var t = document.querySelector(topSel);
+            return t ? Math.max(0, t.getBoundingClientRect().bottom) : 0;
+        }
+
         function metrics() {
+            var start = isWindow ? railTop() : 0;
             var box = isWindow
-                ? { top: 0, height: window.innerHeight }
+                ? { top: start, height: window.innerHeight - start }
                 : el.getBoundingClientRect();
             return {
                 box: box,
@@ -149,6 +161,20 @@
         });
         draw();
     }
+
+    // The sticky section labels have to start exactly where the bar ends, or
+    // rows scroll past in the open between them. Measured rather than guessed,
+    // since the bar's height follows the type scale.
+    function syncStickyTop() {
+        var bar = document.querySelector(".topbar");
+        if (!bar) return;
+        document.documentElement.style.setProperty(
+            "--sticky-top", bar.getBoundingClientRect().height + "px");
+    }
+
+    window.addEventListener("resize", syncStickyTop);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncStickyTop);
+    syncStickyTop();
 
     Array.prototype.forEach.call(document.querySelectorAll(".scrollrail"), setup);
 })();

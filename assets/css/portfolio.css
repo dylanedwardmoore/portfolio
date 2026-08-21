@@ -104,7 +104,7 @@
     top: 0;
     z-index: 20;
     background: var(--paper);
-    padding: 0 var(--m-min) calc(var(--u) * 0.5);
+    padding: calc(var(--u) * 0.25) var(--m-min) calc(var(--u) * 0.5);
 }
 
 .backlink {
@@ -352,7 +352,8 @@
            and sits above it in the stack, so full-width padding would paint
            over the green. */
         margin-left: var(--bar);
-        padding: 0 calc(var(--u) * 1.4) calc(var(--u) * 0.55) calc(var(--u) * 1.4);
+        padding: calc(var(--u) * 0.25) calc(var(--u) * 1.4) calc(var(--u) * 0.55)
+            calc(var(--u) * 1.4);
     }
 
     /* Left inset identical to the landing page's type area, so the two titles
@@ -376,8 +377,9 @@
 
     .section-label {
         position: sticky;
-        /* Clears the sticky back bar rather than sliding under it. */
-        top: calc(var(--u) * 2.2);
+        /* Exactly the bar's height, measured at runtime. Anything larger
+           leaves a band where the rows scroll past in the open. */
+        top: var(--sticky-top, 3.4rem);
     }
 
     .section-label p {
@@ -389,22 +391,46 @@
         column-gap: calc(var(--u) * 0.6);
     }
 
-    /* Placed by column rather than by source order: the narrow layout needs
+    /* Two rows: the title on its own, everything else beneath it. Placed by
+       column and row rather than by source order -- the narrow layout needs
        the figure to sit in the flow just before the title, and grid lets that
-       order mean nothing here. */
+       order mean nothing here.
+
+       The figure takes the second row, so its top edge meets the first line
+       of the description rather than the top of the title. At this width the
+       title has room to run its full length, and lining the picture up with
+       the prose reads calmer than lining it up with a heading of unpredictable
+       depth. */
+    .entry {
+        grid-template-rows: auto auto;
+        /* Carried on the grid rather than on the blurb, so the figure and the
+           first line of description share a top edge exactly. */
+        row-gap: calc(var(--u) * 0.18);
+    }
+
+    .entry-blurb {
+        margin-top: 0;
+    }
+
     .entry-year {
         grid-column: 1;
+        grid-row: 1 / span 2;
+    }
+
+    .entry-title {
+        grid-column: 2;
         grid-row: 1;
     }
 
     .entry-body {
         grid-column: 2;
-        grid-row: 1;
+        grid-row: 2;
     }
 
     .entry-figure {
         grid-column: 3;
-        grid-row: 1;
+        grid-row: 2;
+        align-self: start;
         float: none;
         width: auto;
         margin: 0;
@@ -474,7 +500,7 @@
        than beside it. */
     .section-label {
         position: sticky;
-        top: calc(var(--u) * 1.9);
+        top: var(--sticky-top, 3rem);
         z-index: 5;
         background: var(--paper);
         padding-bottom: calc(var(--u) * 0.3);
