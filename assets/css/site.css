@@ -89,8 +89,10 @@
     --t-name: 53.7px;
 
     /* The printed rules. A third of the unit, so the frame is on the same
-       system as everything else. */
+       system as everything else. The scroll bar is twice the rule, and sits
+       against it. */
     --bar: 13px;
+    --scrollbar: 26px;
 
     /* Floor margins, used once the viewport is too small for the canon. */
     --m-min: 24px;
@@ -304,6 +306,115 @@ img {
     font-size: var(--t-meta);
     line-height: 1.35;
     color: rgba(14, 31, 23, 0.62);
+}
+
+/*---------------------------------------------------------------------------
+    Desktop: the page itself does not scroll.
+
+    The name, the figure, and the three blocks are always on screen; only the
+    blurb scrolls, and only when it does not fit. Two consequences worth
+    recording:
+
+    * A scroll container establishes a block formatting context, and a BFC
+      will not overlap a float. So the wrap has to give way to a column here:
+      the figure moves into its own grid track and the blurb sits beside it.
+      The wrap survives below the breakpoint, where the page scrolls normally
+      and no container is needed.
+    * The bar is pulled out to sit against the frame using `direction: rtl`,
+      which puts the scrollbar on the inline-start edge. `scrollbar-gutter:
+      stable` reserves that space whether or not the bar is showing, so the
+      text does not jump when the blurb happens to fit.
+
+    Gated on height as well as width: on a short window there is nothing left
+    for the blurb after the fixed parts, so the page reverts to scrolling.
+---------------------------------------------------------------------------*/
+
+@media (min-width: 768px) and (min-height: 560px) {
+
+    .page {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        grid-template-rows:
+            minmax(var(--u), 1fr)
+            minmax(0, auto)
+            minmax(calc(var(--u) + var(--bar)), 2fr);
+    }
+
+    .sheet {
+        min-height: 0;
+        max-height: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 46%;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        column-gap: calc(var(--u) * 1.6);
+    }
+
+    .name {
+        grid-column: 1;
+        grid-row: 1;
+        max-width: none;
+    }
+
+    .portrait {
+        float: none;
+        margin: 0.14em 0 0 0;
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: start;
+        width: 100%;
+    }
+
+    .bio {
+        grid-column: 1;
+        grid-row: 2;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+
+        /* Reach back past the type-area margin so the scroll lane starts at
+           the frame; the padding puts the text back on the line it was
+           already on, and the bar is drawn inside that padding. */
+        margin-left: calc(-1 * var(--u) * 1.4);
+        padding-left: calc(var(--u) * 1.4);
+        padding-right: calc(var(--u) * 0.6);
+        margin-right: calc(var(--u) * -0.6);
+
+        /* The native bar is hidden and replaced, because whether it reserves
+           layout width is not something a browser guarantees -- overlay
+           scrollbars take none -- and the text position must not depend on
+           it. The replacement is positioned outright. */
+        scrollbar-width: none;
+    }
+
+    .bio::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Twice the rule, hard against it. Only shown when the blurb overflows;
+       the script sets [hidden] otherwise. */
+    .scrollrail {
+        position: fixed;
+        left: var(--bar);
+        width: var(--scrollbar);
+        z-index: 12;
+    }
+
+    .scrollrail[hidden] {
+        display: none;
+    }
+
+    .scrollrail-thumb {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        background: var(--sea);
+    }
+
+    .doclinks {
+        grid-column: 1 / -1;
+        grid-row: 3;
+    }
 }
 
 /*---------------------------------------------------------------------------

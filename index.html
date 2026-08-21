@@ -27,6 +27,9 @@
 <body>
     <div class="frame-left" aria-hidden="true"></div>
     <div class="frame-bottom" aria-hidden="true"></div>
+    <div class="scrollrail" aria-hidden="true" hidden>
+        <div class="scrollrail-thumb"></div>
+    </div>
 
     <div class="page">
         <main class="sheet">
@@ -55,12 +58,10 @@
             <nav class="doclinks">
                 <a class="doclink" href="resume/">
                     <span class="doclink-title">Resume</span>
-                    <span class="doclink-meta">Updated August 2026</span>
                 </a>
 
                 <a class="doclink" href="dissertation/">
                     <span class="doclink-title">PhD Dissertation</span>
-                    <span class="doclink-meta">Dartmouth, 2026</span>
                 </a>
 
                 <a class="doclink" href="portfolio/">
@@ -70,6 +71,42 @@
             </nav>
         </main>
     </div>
+    <script>
+        // Draws the scroll indicator for the blurb. Native scrollbars are
+        // hidden because whether they occupy layout width is not guaranteed
+        // (overlay scrollbars take none), and the text must not shift. With
+        // no script the blurb still scrolls -- it just scrolls unmarked.
+        (function () {
+            var bio = document.querySelector('.bio');
+            var rail = document.querySelector('.scrollrail');
+            if (!bio || !rail) return;
+            var thumb = rail.querySelector('.scrollrail-thumb');
+
+            function draw() {
+                var over = bio.scrollHeight - bio.clientHeight;
+                // The rail only exists in the desktop layout; below that the
+                // page scrolls normally and .bio is not a scroll container.
+                if (over <= 1 || getComputedStyle(bio).overflowY !== 'auto') {
+                    rail.hidden = true;
+                    return;
+                }
+                var box = bio.getBoundingClientRect();
+                rail.hidden = false;
+                rail.style.top = box.top + 'px';
+                rail.style.height = box.height + 'px';
+
+                var ratio = bio.clientHeight / bio.scrollHeight;
+                var h = Math.max(28, box.height * ratio);
+                thumb.style.height = h + 'px';
+                thumb.style.top = (bio.scrollTop / over) * (box.height - h) + 'px';
+            }
+
+            bio.addEventListener('scroll', draw, { passive: true });
+            window.addEventListener('resize', draw);
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+            draw();
+        })();
+    </script>
 </body>
 
 </html>

@@ -1,173 +1,298 @@
 /*-----------------------------------------------------------------------------
-    Portfolio page overrides.
+    Portfolio: a register, not a gallery.
 
-    The card grid is still the original template markup, so this file only
-    pulls its typography and chrome into the flat treatment: fff throughout,
-    hard edges, sea green as the single accent, no shadows and no motion.
-    Loaded after styles.css and site.css.
+    The three-column masonry made everything look equally important, which is
+    the opposite of what a recruiter needs. This is a single reading column,
+    ordered so the current work comes first and the student projects compress
+    into a plain list at the end.
+
+    STRUCTURE
+    Each section is a two-column band: a label that sticks while its entries
+    scroll past it, and the entries themselves. The stickiness is the only
+    motion on the page -- you always know which part of the register you are
+    in without a nav bar, and nothing animates.
+
+    COLOUR
+    Five colours from the Wada palette, each used exactly twice: a filled
+    square by the section label, and a wash behind a row on hover. Sea Green,
+    Dusky Green, Eugenia Red, and Apricot Yellow are combination 284; Neutral
+    Gray is combination 340. The last section takes no colour, which is itself
+    the signal that it is the back matter.
+
+    Spacing and type continue site.css: the same 8px-derived unit, the same
+    root-2 scale, the same measure cap.
 -----------------------------------------------------------------------------*/
 
-body,
-.prt-item,
-.fortfolio-filter button {
-    font-family: var(--sans);
+.portfolio {
+    --tone: var(--grey);
+    --red: #ed3d66;
+    --yellow: #ffe600;
+    --rule: #e4e4e2;
+}
+
+[data-tone="sea"] {
+    --tone: var(--sea);
+}
+
+[data-tone="dusky"] {
+    --tone: #00592e;
+}
+
+[data-tone="red"] {
+    --tone: var(--red);
+}
+
+[data-tone="yellow"] {
+    --tone: var(--yellow);
+}
+
+[data-tone="grey"] {
+    --tone: var(--grey);
+}
+
+/*---------------------------------------------------------------------------
+    Masthead
+---------------------------------------------------------------------------*/
+
+.masthead {
+    padding: calc(var(--u) * 1.2) var(--m-min) calc(var(--u) * 1.2);
+    max-width: 34rem;
+}
+
+.masthead .backlink {
+    display: inline-block;
+    font-size: var(--t-meta);
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: calc(var(--u) * 0.5);
+}
+
+.masthead .backlink::before {
+    content: "\2190\00a0";
+}
+
+.masthead .backlink:hover {
     color: var(--ink);
 }
 
-.fortfolio-area {
-    padding: var(--s4) 0 var(--s6);
-    background: var(--paper);
+.masthead h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5.2vw, var(--t-name));
+    line-height: 1.0;
+    letter-spacing: -0.028em;
 }
 
-.fortfolio-area .container {
-    max-width: 100%;
-    padding-left: var(--s3);
-    padding-right: var(--s3);
+.masthead-note {
+    margin: calc(var(--u) * 0.4) 0 0;
+    color: var(--muted);
+    font-size: var(--t-small);
 }
 
-/* Filter bar: plain text switches, the active one filled like a printed tab. */
-.fortfolio-filter {
-    margin: 0 0 var(--s5);
-    padding-bottom: var(--s3);
-    border-bottom: 2px solid var(--ink);
+/*---------------------------------------------------------------------------
+    Sections
+---------------------------------------------------------------------------*/
+
+.register {
+    padding: 0 var(--m-min) calc(var(--u) * 2);
+}
+
+.section {
+    border-top: 1px solid var(--ink);
+    padding-top: calc(var(--u) * 0.6);
+    margin-bottom: calc(var(--u) * 1.6);
+}
+
+.section-label h2 {
+    margin: 0;
+    font-size: var(--t-lead);
+    line-height: 1.15;
+    letter-spacing: -0.018em;
+}
+
+/* The colour appears here as a small filled square, and nowhere else until
+   you hover a row. */
+.section-index {
+    display: block;
+    width: 13px;
+    height: 13px;
+    background: var(--tone);
+    margin-bottom: calc(var(--u) * 0.3);
+    /* The index digits are for the document, not the page; the square is the
+       signal. Sized in px, not em, so it cannot collapse. */
+    overflow: hidden;
+    text-indent: 110%;
+    white-space: nowrap;
+}
+
+.section-label p {
+    margin: calc(var(--u) * 0.25) 0 calc(var(--u) * 0.6);
+    color: var(--muted);
+    font-size: var(--t-meta);
+    line-height: 1.45;
+    max-width: 24rem;
+}
+
+/*---------------------------------------------------------------------------
+    Entries
+---------------------------------------------------------------------------*/
+
+.entry {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    column-gap: calc(var(--u) * 0.5);
+    padding: calc(var(--u) * 0.45) calc(var(--u) * 0.3);
+    margin: 0 calc(var(--u) * -0.3);
+    border-top: 1px solid var(--rule);
+}
+
+.section-entries .entry:first-child {
+    border-top: 0;
+}
+
+/* The wash is the section's own colour at low alpha, so hovering tells you
+   both that the row is live and which part of the register it belongs to. */
+.entry:hover {
+    background: color-mix(in srgb, var(--tone) 16%, #fff);
+}
+
+.entry-year {
+    font-size: var(--t-meta);
+    line-height: 1.9;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.entry-title {
+    margin: 0;
+    font-size: var(--t-body);
+    line-height: 1.32;
+    letter-spacing: -0.012em;
+}
+
+.entry-blurb {
+    margin: calc(var(--u) * 0.18) 0 0;
+    max-width: 34rem;
+    font-size: var(--t-small);
+    line-height: 1.5;
+    color: #3a4640;
+}
+
+.entry-links {
+    list-style: none;
+    margin: calc(var(--u) * 0.28) 0 0;
+    padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 2px calc(var(--u) * 0.45);
 }
 
-.fortfolio-filter button {
-    background: none;
-    border: 0;
-    border-radius: 0;
-    padding: 5px 10px;
-    margin: 0;
-    font-size: 0.86rem;
-    line-height: 1.3;
-    font-weight: 400;
+.entry-links li {
+    font-size: var(--t-meta);
+    line-height: 1.5;
+}
+
+.entry-links a {
+    color: var(--link);
+    text-decoration: none;
+    box-shadow: inset 0 -1px 0 var(--tone);
+}
+
+.entry-links a:hover {
+    box-shadow: inset 0 -2px 0 var(--tone);
+}
+
+/* An entry with nothing to link to reads as plain text. */
+.entry-links span {
     color: var(--muted);
-    cursor: pointer;
 }
 
-.fortfolio-filter button:hover {
-    color: var(--ink);
-}
-
-.fortfolio-filter button.active {
-    background: var(--sea);
-    color: var(--ink);
-}
-
-/* The template marks the active filter with a floating dot; the fill does
-   that job now. */
-.fortfolio-filter button:before {
+.entry-figure {
     display: none;
 }
 
-/* Cards. */
-.prt-grid {
-    margin-bottom: var(--s5);
-}
+/*---------------------------------------------------------------------------
+    Wide enough for the register proper: the label sticks beside its entries,
+    and the two featured sections show their figures.
+---------------------------------------------------------------------------*/
 
-.prt-item {
-    border: 0;
-    border-radius: 0;
-    padding: 0;
-    font-size: 0.92rem;
-    line-height: 1.5;
-    color: var(--ink);
-}
+@media (min-width: 860px) {
 
-.prt-item a {
-    display: block;
-    text-decoration: none;
-}
-
-.prt-item a img {
-    width: 100%;
-    border: 0;
-    border-radius: 0;
-    filter: none;
-    -webkit-filter: none;
-    margin-bottom: var(--s2);
-}
-
-.prt-item h3 {
-    font-family: var(--sans);
-    font-weight: 400;
-    font-size: 1.04rem;
-    line-height: 1.28;
-    letter-spacing: -0.014em;
-    color: var(--ink);
-    margin: 0 0 var(--s1);
-}
-
-.prt-item a:hover h3 {
-    box-shadow: inset 0 -2px 0 var(--sea);
-}
-
-/* Reference links under each card. */
-.prt-item .col-md-12 {
-    padding: 0;
-    margin-top: var(--s1);
-}
-
-.prt-item .col-md-12 a,
-.prt-item .col-md-12 > div {
-    display: block;
-    font-family: var(--sans);
-    font-size: 0.8rem;
-    line-height: 1.45;
-    letter-spacing: 0;
-    margin-top: 5px;
-    color: var(--muted);
-}
-
-.prt-item .col-md-12 a:hover {
-    color: var(--ink);
-    background: var(--sea);
-}
-
-.prt-item .col-md-12 a span,
-.prt-item .col-md-12 > div span {
-    color: inherit;
-}
-
-/* The template indents these icons a long way; pull them back in. */
-.prt-item [class^="flaticon-"]:before,
-.prt-item [class*=" flaticon-"]:before {
-    margin-left: 0;
-    margin-right: 7px;
-    font-size: 13px;
-    vertical-align: -1px;
-}
-
-@media (min-width: 768px) {
-    .fortfolio-area {
-        padding: var(--s4) var(--gutter) calc(var(--s6) + var(--bar))
-            calc(var(--gutter) + var(--bar));
+    .masthead {
+        padding: calc(var(--u) * 1.6) calc(var(--u) * 1.4) calc(var(--u) * 1.4)
+            calc(var(--bar) + var(--u) * 1.4);
     }
 
-    /* 15px here cancels the row's -15px margin, so the outer card edges land
-       exactly on the page gutter. */
-    .fortfolio-area .container {
-        max-width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+    .register {
+        padding: 0 calc(var(--u) * 1.4) calc(var(--u) * 3)
+            calc(var(--bar) + var(--u) * 1.4);
+    }
+
+    .section {
+        display: grid;
+        grid-template-columns: 15rem minmax(0, 1fr);
+        column-gap: calc(var(--u) * 1.2);
+        align-items: start;
+    }
+
+    .section-label {
+        position: sticky;
+        top: calc(var(--u) * 0.9);
+    }
+
+    .section-label p {
+        margin-bottom: 0;
+    }
+
+    .entry {
+        grid-template-columns: 5.5rem minmax(0, 1fr);
+        column-gap: calc(var(--u) * 0.6);
+    }
+
+    /* Featured rows carry a thumbnail in a third column; the rest do not, so
+       the eye is drawn to the top of the register rather than down it. */
+    .entry--featured {
+        grid-template-columns: 5.5rem minmax(0, 1fr) 8.5rem;
+    }
+
+    .entry--featured .entry-figure {
+        display: block;
+    }
+
+    .entry-figure img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
     }
 }
 
-@media (max-width: 767px) {
-    .fortfolio-filter {
-        margin-bottom: var(--s4);
-        padding-bottom: var(--s2);
+@media (min-width: 1180px) {
+    .section {
+        grid-template-columns: 17rem minmax(0, 1fr);
     }
 
-    .fortfolio-filter button {
-        font-size: 0.8rem;
-        padding: 4px 8px;
+    .entry--featured {
+        grid-template-columns: 5.5rem minmax(0, 1fr) 10rem;
+    }
+}
+
+/*---------------------------------------------------------------------------
+    Narrow screens: the label stops sticking and simply heads its section,
+    and the year moves above the title so the measure is not squeezed.
+---------------------------------------------------------------------------*/
+
+@media (max-width: 859px) {
+
+    .entry {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 2px;
     }
 
-    .prt-grid {
-        margin-bottom: var(--s4);
+    .entry-year {
+        line-height: 1.4;
+    }
+
+    .entry-year:empty {
+        display: none;
     }
 }
