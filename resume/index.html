@@ -15,8 +15,14 @@
         window.location.replace("Dylan_Moore_Resume.pdf");
     </script>
     <style>
+        .page {
+            display: block;
+            padding-top: 12vh;
+        }
+
         .sheet {
-            text-align: center;
+            display: block;
+            max-width: 52ch;
         }
 
         .sheet h1 {
@@ -32,16 +38,16 @@
 </head>
 
 <body>
-    <main class="sheet">
+    <div class="page"><main class="sheet">
         <div>
             <h1>Resume</h1>
             <p>Dylan Edward Moore &mdash; engineer and founder with research and industry experience in building human-centered AI systems.</p>
             <p>If the PDF does not open automatically,
                 <a href="Dylan_Moore_Resume.pdf">click here to view or download it</a>.
             </p>
-            <p><a href="../">&larr; Dylan Moore</a></p>
+            <p><a class="doclink-inline" href="../">&larr; Dylan Moore</a></p>
         </div>
-    </main>
+    </main></div>
 </body>
 
 </html>
