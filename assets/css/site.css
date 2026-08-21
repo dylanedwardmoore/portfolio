@@ -222,12 +222,18 @@ img {
 /* The portrait is set as a printed figure: floated to the outer edge with the
    text running around it. Its right edge stays on the type-area edge where it
    was; the growth is all leftward, from 3/12 of the measure to 46% of it.
-   Text beside it therefore runs ~48 characters. */
+   Text beside it therefore runs ~48 characters.
+
+   The crop anchor is 26% down the source. In this photograph the head runs
+   from about 13% to 33%, so anchoring there holds the eyes near the upper
+   third and takes the trim off the bottom -- which is where a portrait can
+   afford to lose height. */
 .portrait {
     float: right;
     width: 46%;
     aspect-ratio: 1;
     object-fit: cover;
+    object-position: 50% 26%;
     margin: 0.14em 0 calc(var(--u) * 0.6) calc(var(--u) * 1.6);
 }
 
@@ -266,11 +272,6 @@ img {
     display: none;
 }
 
-/* The blurb is written as a note, so it ends with a signature. Set apart by
-   space rather than by a rule or a weight change -- there is only one weight. */
-.signoff {
-    margin-top: calc(var(--u) * 0.5) !important;
-}
 
 /* Three flat blocks. The accent colour does the work the icons used to. */
 .doclinks {
@@ -327,7 +328,7 @@ img {
     once the fixed parts are placed, so the page reverts to scrolling.
 ---------------------------------------------------------------------------*/
 
-@media (min-height: 520px) {
+@media (min-height: 440px) {
 
     .page {
         height: 100vh;
@@ -380,19 +381,27 @@ img {
     will not overlap a float, so the figure cannot be wrapped here -- it takes
     its own track instead and the blurb scrolls beside it.
 
-    The figure is capped against viewport height as well as width. On a wide,
-    short window a 46% square is taller than the space left after the name and
-    the blocks, which is what used to push the whole page into scrolling; the
-    vh term shrinks the figure instead so the blocks always fit.
+    The figure keeps its width at 46% whatever the window does; it is the
+    HEIGHT that gives way. On a wide, short window a 46% square is taller than
+    the room left after the name and the blocks, which used to push the whole
+    page into scrolling. Now the figure is bounded by the blurb's row and
+    cropped to fit it, so it goes wide-and-short rather than small.
 ---------------------------------------------------------------------------*/
 
-@media (min-width: 768px) and (min-height: 520px) {
+@media (min-width: 768px) and (min-height: 440px) {
 
     .sheet {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) min(46%, 42vh);
+        grid-template-columns: minmax(0, 1fr) 46%;
         grid-template-rows: auto minmax(0, 1fr) auto;
         column-gap: calc(var(--u) * 1.6);
+        /* Carried on the grid rather than on .bio, so the figure and the
+           first line of body text share a top edge. */
+        row-gap: calc(var(--u) * 0.6);
+    }
+
+    .bio {
+        margin-top: 0;
     }
 
     .name {
@@ -401,14 +410,25 @@ img {
         max-width: none;
     }
 
+    /* Row 2 only. Two things follow: the top always lands on the first line
+       of body text -- never on the title, and never drifting between the two
+       as the window changes -- and the figure is bounded by the blurb's row,
+       so it cannot reach the blocks whatever the window does.
+
+       Height fills that row and is capped so the figure stays wider than it
+       is tall; when the cap binds, `object-fit: cover` trims it rather than
+       scaling it down, which is what keeps it wide on a short window. */
     .portrait {
         float: none;
         position: static;
         grid-column: 2;
-        grid-row: 1 / span 2;
+        grid-row: 2;
         align-self: start;
         width: 100%;
-        margin: 0.14em 0 0 0;
+        height: 100%;
+        max-height: min(46vh, 100%);
+        aspect-ratio: auto;
+        margin: 0;
     }
 
     .bio {
@@ -490,26 +510,38 @@ img {
     }
 }
 
-@media (max-width: 767px) and (min-height: 520px) {
+@media (max-width: 767px) and (min-height: 440px) {
 
     .sheet {
         position: relative;
         display: grid;
         grid-template-rows: auto minmax(0, 1fr) auto;
+        row-gap: calc(var(--u) * 0.6);
+    }
+
+    .bio {
+        margin-top: 0;
     }
 
     .name {
         grid-row: 1;
         max-width: none;
-        padding-right: calc(34% + var(--u) * 0.7);
     }
 
+    /* Absolutely positioned but still assigned a grid area, so the blurb's
+       row is its containing block: same rule as the desktop layout, the top
+       lands on the first line of body text. */
     .portrait {
         float: none;
         position: absolute;
-        top: 0.14em;
+        grid-row: 2;
+        grid-column: 1;
+        top: 0;
         right: 0;
-        width: 34%;
+        width: 38%;
+        height: auto;
+        aspect-ratio: 1;
+        max-height: 42%;
         margin: 0;
     }
 
