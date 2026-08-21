@@ -153,7 +153,7 @@ SECTIONS = [
          "was a free, open enrollment version of Stanford\u2019s intro to CS course "
          "that was specifically tailored for the circumstances of the COVID-19 "
          "pandemic.",
-         "code_in_place.jpg", [
+         "code_in_place copy.jpg", [
              ("https://www.stanforddaily.com/2020/03/31/stanford-to-offer-free-online-cs-class-during-pandemic/",
               "About the course"),
          ]),
@@ -165,7 +165,7 @@ SECTIONS = [
          "I was elected as a Junior class president. In this role I attended "
          "administrative meetings and planned campus wide events, such as our class "
          "formal on a boat and Stanford Full Moon on the Quad.",
-         "class_president-2.jpg", [
+         "class_president copy.jpg", [
              ("https://assu.stanford.edu/leadership/class-presidents", "About the role"),
          ]),
         ("2012\u201316", "Founding member, Stanford Competitive Running Club",
@@ -183,16 +183,16 @@ SECTIONS = [
              ("https://www.loom.com/share/0384b3cc46e44df1b9ec43597344bc3b?fbclid=IwZXh0bgNhZW0CMTEAAR7qr_NHFGTN8-G8X0mTv2MydZGL8QpBrReZ-Tl9ZaE5o-aQI__uKZ7RnySn2A_aem_d1gABC_XAQOppTyQNZAL7A", "Our presentation"),
              ("https://www.linkedin.com/feed/update/urn:li:activity:7341167981479010306/", "Rilla announcement"),
          ]),
-        ("2023", "Dartmouth Digital Health Summit, third place", "", "dartmouth.jpg", [
+        ("2023", "Dartmouth Digital Health Summit, third place", "", None, [
             ("https://drive.google.com/file/d/1UxroTa7q3ECYXxjUGsLFnHApo3x0Yz7d/view?usp=sharing", "The entry"),
         ]),
-        ("2022", "Dartmouth Guarini Alumni Research Award", "", "dartmouth.jpg", [
+        ("2022", "Dartmouth Guarini Alumni Research Award", "", None, [
             ("https://graduate.dartmouth.edu/admissions-financial-aid/awards-grants/alumni-research-award",
              "About the award"),
         ]),
-        ("2022", "Millett G. Morgan Fund Fellow", "", "dartmouth.jpg", []),
-        ("2021", "Dartmouth Innovation Fellowship", "", "dartmouth.jpg", []),
-        ("2021", "Dartmouth CompX Faculty Grant", "", "dartmouth.jpg", [
+        ("2022", "Millett G. Morgan Fund Fellow", "", None, []),
+        ("2021", "Dartmouth Innovation Fellowship", "", None, []),
+        ("2021", "Dartmouth CompX Faculty Grant", "", None, [
             ("https://neukom.dartmouth.edu/funding/faculty/compx-faculty-grants", "About the grant"),
             ("https://docs.google.com/document/d/1Yvx1Sue6kzviB6CeQbl7xRb53pOHmTE_CSreMIMzaUA/edit?usp=sharing",
              "Our proposal"),
@@ -210,7 +210,7 @@ SECTIONS = [
     ]),
 
     ("Earlier work", None,
-     "Research and course projects from Stanford, kept for the record.", [
+     "Older work from my time at Stanford.", [
         ("", "Facet",
          "Corporate meetings are notoriously inefficient and often biased. My CS210 "
          "senior project team confirmed this through rounds of user research at "
@@ -323,7 +323,7 @@ SECTIONS = [
         ("", "Call center audio transcription and analytics",
          "I created the audio transcription and conversation analytics prototype for "
          "an early stage political polling data analytics startup.",
-         "phone_icon.jpg", [("https://www.cbinsights.com/company/permanent-majority-corp", "Company info")]),
+         None, [("https://www.cbinsights.com/company/permanent-majority-corp", "Company info")]),
     ]),
 ]
 
@@ -375,7 +375,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260821m"
+V = "v=20260821p"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -389,6 +389,18 @@ HEAD = """<!doctype html>
     <link rel="preload" as="font" type="font/woff" href="../assets/fonts/fff/fff-Regular.woff?{V}" crossorigin>
     <link rel="stylesheet" href="../assets/css/site.css?{V}">
     <link rel="stylesheet" href="../assets/css/portfolio.css?{V}">
+    <script>
+        // Marks documents that arrived through a view transition, so the
+        // title's colour settle runs only then and not on a cold load.
+        // In <head> deliberately: `pagereveal` fires before end-of-body
+        // scripts, and the class has to be present for the first frame.
+        window.addEventListener('pagereveal', function (e) {
+            if (e.viewTransition) document.documentElement.classList.add('vt-in');
+        });
+        window.addEventListener('pagehide', function () {
+            document.documentElement.classList.remove('vt-in');
+        });
+    </script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125440044-1"></script>
@@ -413,7 +425,6 @@ HEAD = """<!doctype html>
 
     <header class="masthead">
         <h1>Portfolio</h1>
-        <p class="masthead-note">Ventures, research, industry work, teaching, and awards.</p>
     </header>
 
     <div class="topbar">

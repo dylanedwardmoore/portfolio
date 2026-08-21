@@ -190,6 +190,112 @@ img {
 }
 
 /*---------------------------------------------------------------------------
+    Page transitions.
+
+    Cross-document view transitions: the browser snapshots both pages and
+    animates between them on the compositor, so nothing here costs layout or
+    paint on the main thread. Where the API is missing the navigation is
+    simply instant, which is what it was before.
+
+    The two page titles share one name, so the browser treats them as the same
+    object and moves one into the other. They roll like a drum -- the outgoing
+    line tips up and away, the incoming one arrives from below -- which is the
+    quietest way to say "same thing, different face" without sliding the whole
+    page around.
+
+    The frame and the rail carry their own names so they are held still rather
+    than cross-faded; they are the one fixed thing on both pages and should
+    read as continuous.
+---------------------------------------------------------------------------*/
+
+@view-transition {
+    navigation: auto;
+}
+
+.name,
+.masthead h1 {
+    view-transition-name: page-title;
+}
+
+.frame-left {
+    view-transition-name: frame-left;
+}
+
+.frame-bottom {
+    view-transition-name: frame-bottom;
+}
+
+@keyframes title-wheel-out {
+    to {
+        transform: translateY(-0.42em) rotateX(72deg);
+        opacity: 0;
+    }
+}
+
+@keyframes title-wheel-in {
+    from {
+        transform: translateY(0.42em) rotateX(-72deg);
+        opacity: 0;
+    }
+}
+
+/* Perspective on the group is what makes the tip read as a wheel turning
+   rather than a card flipping. */
+::view-transition-group(page-title) {
+    perspective: 900px;
+}
+
+::view-transition-old(page-title) {
+    animation: title-wheel-out 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    transform-origin: 50% 50%;
+}
+
+::view-transition-new(page-title) {
+    animation: title-wheel-in 340ms cubic-bezier(0.22, 0.61, 0.36, 1) 40ms both;
+    transform-origin: 50% 50%;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 220ms;
+}
+
+/* The frame does not move between the pages, so it is held rather than
+   animated -- any cross-fade on a flat colour just reads as a flicker. */
+::view-transition-group(frame-left),
+::view-transition-group(frame-bottom) {
+    animation: none;
+}
+
+/* The colour half of the roll. A snapshot cannot animate its own colour, so
+   the settle runs on the live element once the new page is revealed. Gated on
+   the transition actually having happened, via .vt-in. */
+@keyframes title-settle {
+    from {
+        color: #2f6b4a;
+    }
+}
+
+.vt-in .name,
+.vt-in .masthead h1 {
+    animation: title-settle 520ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+
+    .vt-in .name,
+    .vt-in .masthead h1 {
+        animation: none;
+    }
+}
+
+/*---------------------------------------------------------------------------
     The scroll rail.
 
     Drawn rather than native: whether a native bar occupies layout width is not
@@ -340,6 +446,13 @@ img {
     box-shadow: none;
     padding: calc(var(--u) * 0.4) calc(var(--u) * 0.4) calc(var(--u) * 0.45);
     text-decoration: none;
+    transition: background-color 170ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .doclink {
+        transition: none;
+    }
 }
 
 /* The blocks rest in grey and take the accent only on hover, so the green
@@ -416,7 +529,33 @@ img {
         z-index: 12;
         color: var(--sea);
         line-height: 0;
-        pointer-events: none;
+        /* Clickable: it is the one control that says there is more, so it may
+           as well take you there. */
+        appearance: none;
+        border: 0;
+        padding: 0;
+        background: none;
+        cursor: pointer;
+        transition: transform 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    .scrollcue:hover {
+        transform: translateY(2px);
+    }
+
+    .scrollcue:focus-visible {
+        outline: 2px solid var(--link);
+        outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .scrollcue {
+            transition: none;
+        }
+
+        .scrollcue:hover {
+            transform: none;
+        }
     }
 
     .scrollcue[hidden] {

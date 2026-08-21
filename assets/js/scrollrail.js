@@ -45,12 +45,18 @@
         // A window rail can be told to begin below something -- here the
         // sticky bar -- so the track starts at the rule under it rather than
         // running up behind it to the top of the screen.
+        //
+        // Its HEIGHT, not its current bottom: the bar is sticky, so its
+        // bottom travels upward during the first stretch of scrolling before
+        // it pins. Following that would drag the top of the rail up with it.
+        // The height is where the bar comes to rest, so the rail is fixed
+        // from the first pixel.
         var topSel = rail.getAttribute("data-rail-top");
 
         function railTop() {
             if (!topSel) return 0;
             var t = document.querySelector(topSel);
-            return t ? Math.max(0, t.getBoundingClientRect().bottom) : 0;
+            return t ? Math.max(0, t.offsetHeight) : 0;
         }
 
         function metrics() {
@@ -58,11 +64,12 @@
             var box = isWindow
                 ? { top: start, height: window.innerHeight - start }
                 : el.getBoundingClientRect();
-            return {
-                box: box,
-                over: el.scrollHeight - viewport(),
-                pos: isWindow ? (window.scrollY || el.scrollTop) : el.scrollTop
-            };
+            var over = Math.max(0, el.scrollHeight - viewport());
+            var pos = isWindow ? (window.scrollY || el.scrollTop) : el.scrollTop;
+            // Elastic scrolling drives this past both ends -- negative at the
+            // top, beyond `over` at the bottom -- and an unclamped value threw
+            // the thumb off the track for a frame before the bounce settled.
+            return { box: box, over: over, pos: Math.max(0, Math.min(over, pos)) };
         }
 
         function draw() {
@@ -83,9 +90,12 @@
             rail.style.top = m.box.top + "px";
             rail.style.height = m.box.height + "px";
 
-            var h = Math.max(24, m.box.height * (viewport() / el.scrollHeight));
+            var h = Math.max(24, Math.min(m.box.height,
+                m.box.height * (viewport() / el.scrollHeight)));
+            var travel = Math.max(0, m.box.height - h);
             thumb.style.height = h + "px";
-            thumb.style.top = (m.pos / m.over) * (m.box.height - h) + "px";
+            thumb.style.top = Math.max(0, Math.min(travel,
+                (m.pos / m.over) * travel)) + "px";
 
             // The cue answers one question -- does this move -- and only
             // while that question is open.
@@ -142,6 +152,37 @@
             thumb.addEventListener("pointerup", up);
             thumb.addEventListener("pointercancel", up);
         });
+
+        // Clicking the cue glides on by roughly a screenful. Hand-run rather
+        // than `behavior: "smooth"`, so the curve matches the rest of the site
+        // (ease-in-out, same duration family as the hover states) instead of
+        // whatever the browser picks.
+        function glide(delta) {
+            var m = metrics();
+            var from = m.pos;
+            var to = Math.max(0, Math.min(m.over, from + delta));
+            if (to === from) return;
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                scrollTo(to);
+                return;
+            }
+            var start = performance.now(), dur = 520;
+            (function frame(now) {
+                var t = Math.min(1, (now - start) / dur);
+                // ease-in-out cubic: settles rather than stopping dead
+                var e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                scrollTo(from + (to - from) * e);
+                if (t < 1) requestAnimationFrame(frame);
+            })(start);
+        }
+
+        if (cue) {
+            cue.addEventListener("click", function () {
+                everScrolled = true;
+                glide(viewport() * 0.85);
+                draw();
+            });
+        }
 
         // A click on the empty track jumps the thumb's centre to the pointer.
         rail.addEventListener("pointerdown", function (e) {

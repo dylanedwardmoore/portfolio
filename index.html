@@ -10,8 +10,20 @@
     <meta name="description"
         content="Dylan Moore is a human-AI interaction researcher, startup founder, and ex-Google software engineer.">
     <link rel="shortcut icon" type="image/png" href="assets/img/icon/DEM_logo.ico">
-    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260821m" crossorigin>
-    <link rel="stylesheet" href="assets/css/site.css?v=20260821m">
+    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260821p" crossorigin>
+    <link rel="stylesheet" href="assets/css/site.css?v=20260821p">
+    <script>
+        // Marks documents that arrived through a view transition, so the
+        // title's colour settle runs only then and not on a cold load.
+        // In <head> deliberately: `pagereveal` fires before end-of-body
+        // scripts, and the class has to be present for the first frame.
+        window.addEventListener('pagereveal', function (e) {
+            if (e.viewTransition) document.documentElement.classList.add('vt-in');
+        });
+        window.addEventListener('pagehide', function () {
+            document.documentElement.classList.remove('vt-in');
+        });
+    </script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125440044-1"></script>
@@ -30,12 +42,12 @@
     <div class="scrollrail" data-scroll=".bio" data-cue="1" aria-hidden="true" hidden>
         <div class="scrollrail-thumb"></div>
     </div>
-    <div class="scrollcue" aria-hidden="true" hidden>
+    <button class="scrollcue" type="button" hidden aria-label="Read on">
         <svg viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="2.4"
-            stroke-linecap="square">
+            stroke-linecap="square" aria-hidden="true">
             <path d="M6 4.5 13 11l7-6.5" />
         </svg>
-    </div>
+    </button>
 
     <div class="page">
         <main class="sheet">
@@ -81,7 +93,7 @@
             </nav>
         </main>
     </div>
-    <script src="assets/js/scrollrail.js?v=20260821m"></script>
+    <script src="assets/js/scrollrail.js?v=20260821p"></script>
 </body>
 
 </html>

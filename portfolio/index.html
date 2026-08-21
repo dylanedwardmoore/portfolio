@@ -8,9 +8,21 @@
     <title>Portfolio &mdash; Dylan Edward Moore</title>
     <meta name="description" content="Ventures, research, industry work, teaching, and awards by Dylan Edward Moore.">
     <link rel="shortcut icon" type="image/png" href="../assets/img/icon/DEM_logo.ico">
-    <link rel="preload" as="font" type="font/woff" href="../assets/fonts/fff/fff-Regular.woff?v=20260821m" crossorigin>
-    <link rel="stylesheet" href="../assets/css/site.css?v=20260821m">
-    <link rel="stylesheet" href="../assets/css/portfolio.css?v=20260821m">
+    <link rel="preload" as="font" type="font/woff" href="../assets/fonts/fff/fff-Regular.woff?v=20260821p" crossorigin>
+    <link rel="stylesheet" href="../assets/css/site.css?v=20260821p">
+    <link rel="stylesheet" href="../assets/css/portfolio.css?v=20260821p">
+    <script>
+        // Marks documents that arrived through a view transition, so the
+        // title's colour settle runs only then and not on a cold load.
+        // In <head> deliberately: `pagereveal` fires before end-of-body
+        // scripts, and the class has to be present for the first frame.
+        window.addEventListener('pagereveal', function (e) {
+            if (e.viewTransition) document.documentElement.classList.add('vt-in');
+        });
+        window.addEventListener('pagehide', function () {
+            document.documentElement.classList.remove('vt-in');
+        });
+    </script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125440044-1"></script>
@@ -35,7 +47,6 @@
 
     <header class="masthead">
         <h1>Portfolio</h1>
-        <p class="masthead-note">Ventures, research, industry work, teaching, and awards.</p>
     </header>
 
     <div class="topbar">
@@ -257,7 +268,7 @@
         </article>
         <article class="entry">
             <div class="entry-year">2020</div>
-            <div class="entry-figure"><img src="../assets/img/portfolio/code_in_place.jpg" alt="" loading="lazy"></div>
+            <div class="entry-figure"><img src="../assets/img/portfolio/code_in_place copy.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Section leader, Code in Place</h3>
             <div class="entry-body">
                 <p class="entry-blurb">I was a section leader (TA) for Stanford’s Code in Place course. This was a free, open enrollment version of Stanford’s intro to CS course that was specifically tailored for the circumstances of the COVID-19 pandemic.</p>
@@ -279,7 +290,7 @@
         </article>
         <article class="entry">
             <div class="entry-year"></div>
-            <div class="entry-figure"><img src="../assets/img/portfolio/class_president-2.jpg" alt="" loading="lazy"></div>
+            <div class="entry-figure"><img src="../assets/img/portfolio/class_president copy.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Junior Class President, Stanford</h3>
             <div class="entry-body">
                 <p class="entry-blurb">I was elected as a Junior class president. In this role I attended administrative meetings and planned campus wide events, such as our class formal on a boat and Stanford Full Moon on the Quad.</p>
@@ -322,7 +333,6 @@
         </article>
         <article class="entry">
             <div class="entry-year">2023</div>
-            <div class="entry-figure"><img src="../assets/img/portfolio/dartmouth.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Dartmouth Digital Health Summit, third place</h3>
             <div class="entry-body">
                 <ul class="entry-links">
@@ -332,7 +342,6 @@
         </article>
         <article class="entry">
             <div class="entry-year">2022</div>
-            <div class="entry-figure"><img src="../assets/img/portfolio/dartmouth.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Dartmouth Guarini Alumni Research Award</h3>
             <div class="entry-body">
                 <ul class="entry-links">
@@ -342,21 +351,18 @@
         </article>
         <article class="entry">
             <div class="entry-year">2022</div>
-            <div class="entry-figure"><img src="../assets/img/portfolio/dartmouth.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Millett G. Morgan Fund Fellow</h3>
             <div class="entry-body">
             </div>
         </article>
         <article class="entry">
             <div class="entry-year">2021</div>
-            <div class="entry-figure"><img src="../assets/img/portfolio/dartmouth.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Dartmouth Innovation Fellowship</h3>
             <div class="entry-body">
             </div>
         </article>
         <article class="entry">
             <div class="entry-year">2021</div>
-            <div class="entry-figure"><img src="../assets/img/portfolio/dartmouth.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Dartmouth CompX Faculty Grant</h3>
             <div class="entry-body">
                 <ul class="entry-links">
@@ -403,7 +409,7 @@
         <div class="section-label">
             <span class="section-index">06</span>
             <h2>Earlier work</h2>
-            <p>Research and course projects from Stanford, kept for the record.</p>
+            <p>Older work from my time at Stanford.</p>
         </div>
         <div class="section-entries">
         <article class="entry">
@@ -585,7 +591,6 @@
         </article>
         <article class="entry">
             <div class="entry-year"></div>
-            <div class="entry-figure"><img src="../assets/img/portfolio/phone_icon.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Call center audio transcription and analytics</h3>
             <div class="entry-body">
                 <p class="entry-blurb">I created the audio transcription and conversation analytics prototype for an early stage political polling data analytics startup.</p>
@@ -598,8 +603,8 @@
     </section>
     </main>
 
-    <script src="../assets/js/scrollrail.js?v=20260821m"></script>
-    <script src="../assets/js/figures.js?v=20260821m"></script>
+    <script src="../assets/js/scrollrail.js?v=20260821p"></script>
+    <script src="../assets/js/figures.js?v=20260821p"></script>
 </body>
 
 </html>

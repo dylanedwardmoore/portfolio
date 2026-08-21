@@ -118,6 +118,8 @@
     /* Double the rule the prose links carry, so it reads as a control rather
        than as a reference. */
     box-shadow: inset 0 -4px 0 var(--sea);
+    transition: background-color 170ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        box-shadow 170ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .backlink::before {
@@ -136,12 +138,6 @@
     font-size: clamp(2rem, 5.2vw, var(--t-name));
     line-height: 1.0;
     letter-spacing: -0.028em;
-}
-
-.masthead-note {
-    margin: calc(var(--u) * 0.4) 0 0;
-    color: var(--muted);
-    font-size: var(--t-small);
 }
 
 /*---------------------------------------------------------------------------
@@ -248,6 +244,8 @@
     padding: 1px 5px;
     margin: 0 -5px;
     box-shadow: inset 0 -1px 0 var(--tone);
+    transition: background-color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        color 150ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 /* The row washes, and the link you are actually on fills solid, so the
@@ -283,6 +281,13 @@
     position: relative;
     /* Contains the blend, or it would reach the page behind. */
     isolation: isolate;
+    /* The isolation makes this the blend's backdrop, and a `color` blend over
+       transparency returns the raw tone -- so a figure whose image has not
+       arrived yet (they load lazily) painted as a solid coloured square. A
+       white ground underneath means the blend has something to compute
+       against at all times: white stays white, and the tone only shows where
+       the picture does. */
+    background: var(--paper);
 }
 
 .entry-figure::after {
@@ -291,22 +296,22 @@
     inset: 0;
     background: var(--tone);
     mix-blend-mode: color;
-    opacity: 0.66;
+    opacity: 0.8;
     pointer-events: none;
     transition: opacity 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .entry-figure img {
-    filter: saturate(0.25) contrast(0.94) brightness(1.03);
+    filter: saturate(0.1) contrast(0.9) brightness(1.06);
     transition: filter 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .entry-figure.is-near::after {
-    opacity: 0.32;
+    opacity: 0.44;
 }
 
 .entry-figure.is-near img {
-    filter: saturate(0.62) contrast(0.97) brightness(1.01);
+    filter: saturate(0.5) contrast(0.95) brightness(1.03);
 }
 
 .entry-figure.is-in::after,
@@ -332,7 +337,9 @@
 @media (prefers-reduced-motion: reduce) {
 
     .entry-figure::after,
-    .entry-figure img {
+    .entry-figure img,
+    .entry-links a,
+    .backlink {
         transition: none;
     }
 }
@@ -434,6 +441,13 @@
         float: none;
         width: auto;
         margin: 0;
+    }
+
+    /* An entry with no description has nothing on the second row to line up
+       with, so the figure goes back to the title rather than dropping to the
+       links and leaving a hole beside the heading. */
+    .entry:not(:has(.entry-blurb)) .entry-figure {
+        grid-row: 1 / span 2;
     }
 
     /* Any row with a figure gets a third column for it. The lead sections
