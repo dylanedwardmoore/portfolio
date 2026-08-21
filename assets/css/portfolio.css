@@ -1,0 +1,153 @@
+/*-----------------------------------------------------------------------------
+    Portfolio page overrides.
+
+    The card grid is still the original template markup, so this file only
+    pulls its typography and chrome into line with the rest of the site:
+    Computer Modern throughout, white ground, hairline rules, no motion.
+    Loaded after styles.css and site.css.
+-----------------------------------------------------------------------------*/
+
+body,
+.prt-item,
+.fortfolio-filter button {
+    font-family: var(--serif);
+    color: var(--ink);
+}
+
+.fortfolio-area {
+    padding: 34px 0 72px;
+    background: #fff;
+}
+
+/* Filter bar: a plain row of text switches rather than the template's chips. */
+.fortfolio-filter {
+    margin: 0 0 30px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+    text-align: center;
+}
+
+.fortfolio-filter button {
+    background: none;
+    border: 0;
+    padding: 2px 0;
+    margin: 0 14px;
+    font-size: 0.95rem;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.fortfolio-filter button:hover {
+    color: var(--ink);
+}
+
+.fortfolio-filter button.active {
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+}
+
+/* Cards. */
+.prt-grid {
+    margin-bottom: 34px;
+}
+
+.prt-item {
+    border: 0;
+    padding: 0;
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+
+.prt-item a {
+    display: block;
+}
+
+.prt-item a img {
+    width: 100%;
+    border-radius: 0;
+    border: 1px solid var(--rule);
+    filter: none;
+    -webkit-filter: none;
+    margin-bottom: 12px;
+}
+
+.prt-item h3 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.06rem;
+    line-height: 1.3;
+    letter-spacing: 0;
+    color: var(--link);
+    margin: 0 0 6px;
+}
+
+/* The reference links under each card. */
+.prt-item .col-md-12 {
+    padding: 0;
+    margin-top: 8px;
+}
+
+.prt-item .col-md-12 a,
+.prt-item .col-md-12 > div {
+    display: block;
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    letter-spacing: 0;
+    margin-top: 5px;
+    color: var(--link);
+}
+
+/* An entry with no link behind it reads as plain text. */
+.prt-item .col-md-12 > div {
+    color: var(--muted);
+}
+
+.prt-item .col-md-12 a span,
+.prt-item .col-md-12 > div span {
+    color: inherit;
+}
+
+/* The template indents these icons a long way; pull them back in. */
+.prt-item [class^="flaticon-"]:before,
+.prt-item [class*=" flaticon-"]:before {
+    margin-left: 0;
+    margin-right: 7px;
+    font-size: 14px;
+    vertical-align: -1px;
+}
+
+.page-colophon {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 16px 24px 40px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.page-colophon p {
+    margin: 0;
+}
+
+@media (max-width: 767px) {
+    .fortfolio-filter button {
+        margin: 0 9px;
+        font-size: 0.88rem;
+    }
+
+    .page-colophon {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+    }
+}
+
+/* The template marks the active filter with a floating dot; the underline
+   above already does that job. */
+.fortfolio-filter button:before {
+    display: none;
+}

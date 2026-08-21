@@ -1,0 +1,283 @@
+/*-----------------------------------------------------------------------------
+    dylanedwardmoore.com
+
+    A deliberately plain, LaTeX-flavoured stylesheet: Computer Modern on white,
+    a single measured column, and no motion. Shared by the landing page and the
+    portfolio page.
+-----------------------------------------------------------------------------*/
+
+/* Computer Modern Unicode, the web build of the default LaTeX body face. */
+@font-face {
+    font-family: 'Computer Modern';
+    src: url('../fonts/computer-modern/cmunrm.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Computer Modern';
+    src: url('../fonts/computer-modern/cmunti.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Computer Modern';
+    src: url('../fonts/computer-modern/cmunbx.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --ink: #131313;
+    --muted: #6a6a6a;
+    --rule: #d8d8d8;
+    --link: #1a4d8f;
+    --serif: 'Computer Modern', 'Latin Modern Roman', 'CMU Serif', Georgia, 'Times New Roman', serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: #fff;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    color: var(--link);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/*--------------------------------------------------------------------------
+    Landing page
+--------------------------------------------------------------------------*/
+
+.sheet {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 40px 24px;
+}
+
+.sheet > * {
+    width: 100%;
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Title block: portrait, then the name, centred like a LaTeX \maketitle. */
+.titleblock {
+    text-align: center;
+}
+
+.portrait {
+    display: block;
+    width: 132px;
+    height: 132px;
+    margin: 0 auto 20px;
+    border: 1px solid var(--rule);
+    object-fit: cover;
+}
+
+.titleblock h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+}
+
+/* Body copy, justified with an indent on continuation paragraphs. */
+.bio {
+    margin-top: 30px;
+    text-align: justify;
+    hyphens: auto;
+}
+
+.bio p {
+    margin: 0;
+}
+
+.bio p + p {
+    margin-top: 0.55em;
+    text-indent: 1.5em;
+}
+
+/* The three document links. */
+.doclinks {
+    margin-top: 34px;
+    padding-top: 26px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    gap: 16px;
+}
+
+.doclink {
+    flex: 1 1 0;
+    text-align: center;
+    color: inherit;
+    padding: 4px 0;
+}
+
+.doclink:hover {
+    text-decoration: none;
+}
+
+.doclink svg {
+    display: block;
+    width: 26px;
+    height: 26px;
+    margin: 0 auto 9px;
+    color: var(--ink);
+}
+
+.doclink-title {
+    display: block;
+    color: var(--link);
+    font-size: 1.05rem;
+    line-height: 1.25;
+}
+
+.doclink:hover .doclink-title {
+    text-decoration: underline;
+}
+
+.doclink-meta {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+.colophon {
+    margin-top: 34px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.colophon p {
+    margin: 0;
+}
+
+/*--------------------------------------------------------------------------
+    Portfolio page chrome (the card grid keeps the original template styles)
+--------------------------------------------------------------------------*/
+
+.page-head {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 56px 24px 0;
+    text-align: center;
+}
+
+.page-head h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 400;
+    line-height: 1.15;
+}
+
+.page-head .backlink {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.92rem;
+}
+
+/*--------------------------------------------------------------------------
+    Narrow screens
+--------------------------------------------------------------------------*/
+
+@media (max-width: 640px) {
+    body {
+        font-size: 17px;
+    }
+
+    .sheet {
+        justify-content: flex-start;
+        padding: 34px 20px 28px;
+    }
+
+    .portrait {
+        width: 108px;
+        height: 108px;
+        margin-bottom: 16px;
+    }
+
+    .titleblock h1 {
+        font-size: 2rem;
+    }
+
+    .bio {
+        margin-top: 22px;
+        text-align: left;
+    }
+
+    .bio p + p {
+        text-indent: 0;
+        margin-top: 0.85em;
+    }
+
+    .doclinks {
+        margin-top: 26px;
+        padding-top: 20px;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .doclink {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-align: left;
+    }
+
+    .doclink svg {
+        margin: 0;
+        flex: none;
+    }
+
+    .doclink-meta {
+        display: inline;
+        margin-left: 6px;
+    }
+
+    .colophon {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+    }
+
+    .page-head {
+        padding-top: 36px;
+    }
+}
