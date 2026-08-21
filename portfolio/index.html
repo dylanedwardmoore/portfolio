@@ -8,9 +8,9 @@
     <title>Portfolio &mdash; Dylan Edward Moore</title>
     <meta name="description" content="Ventures, research, industry work, teaching, and awards by Dylan Edward Moore.">
     <link rel="shortcut icon" type="image/png" href="../assets/img/icon/DEM_logo.ico">
-    <link rel="preload" as="font" type="font/woff" href="../assets/fonts/fff/fff-Regular.woff?v=20260821p" crossorigin>
-    <link rel="stylesheet" href="../assets/css/site.css?v=20260821p">
-    <link rel="stylesheet" href="../assets/css/portfolio.css?v=20260821p">
+    <link rel="preload" as="font" type="font/woff" href="../assets/fonts/fff/fff-Regular.woff?v=20260821s" crossorigin>
+    <link rel="stylesheet" href="../assets/css/site.css?v=20260821s">
+    <link rel="stylesheet" href="../assets/css/portfolio.css?v=20260821s">
     <script>
         // Marks documents that arrived through a view transition, so the
         // title's colour settle runs only then and not on a cold load.
@@ -19,6 +19,9 @@
         window.addEventListener('pagereveal', function (e) {
             if (e.viewTransition) document.documentElement.classList.add('vt-in');
         });
+        // Arms the entry cascade. Set from script so that with none, nothing
+        // is ever left invisible.
+        document.documentElement.classList.add('js-cascade');
         window.addEventListener('pagehide', function () {
             document.documentElement.classList.remove('vt-in');
         });
@@ -55,13 +58,13 @@
 
     <main class="register">
     <section class="section" data-tone="sea">
-        <div class="section-label">
+        <div class="section-label" style="--d:3">
             <span class="section-index">01</span>
             <h2>Ventures</h2>
             <p>Companies I have built and run.</p>
         </div>
         <div class="section-entries">
-        <article class="entry entry--featured">
+        <article class="entry entry--featured" style="--d:4">
             <div class="entry-year">2023 – present</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/memcara.png" alt="" loading="lazy"></div>
             <h3 class="entry-title">Memcara</h3>
@@ -75,7 +78,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry entry--featured">
+        <article class="entry entry--featured" style="--d:5">
             <div class="entry-year">2025–26</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/companion_iq.png" alt="" loading="lazy"></div>
             <h3 class="entry-title">Companion IQ</h3>
@@ -89,13 +92,13 @@
         </div>
     </section>
     <section class="section" data-tone="dusky">
-        <div class="section-label">
+        <div class="section-label" style="--d:6">
             <span class="section-index">02</span>
             <h2>Research</h2>
             <p>Peer-reviewed work in human-AI interaction.</p>
         </div>
         <div class="section-entries">
-        <article class="entry entry--featured">
+        <article class="entry entry--featured" style="--d:7">
             <div class="entry-year">2025</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/imwut.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">CareInsights: AI-Enabled Infrastructure for Person-Centered Dementia Care</h3>
@@ -106,7 +109,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry entry--featured">
+        <article class="entry entry--featured" style="--d:8">
             <div class="entry-year">2025</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/cscw_2025.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Family In The Loop</h3>
@@ -117,7 +120,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry entry--featured">
+        <article class="entry entry--featured" style="--d:9">
             <div class="entry-year">2025</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/sparc.png" alt="" loading="lazy"></div>
             <h3 class="entry-title">Collaborative Meaning-Making in Networked Learning Environments</h3>
@@ -128,7 +131,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry entry--featured">
+        <article class="entry entry--featured" style="--d:10">
             <div class="entry-year">2024</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/chi2024.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Teaching AI in Extracurricular Contexts Through Narrative-Based Learnersourcing</h3>
@@ -142,13 +145,13 @@
         </div>
     </section>
     <section class="section" data-tone="red">
-        <div class="section-label">
+        <div class="section-label" style="--d:11">
             <span class="section-index">03</span>
             <h2>Industry</h2>
             <p>Software engineering before my PhD.</p>
         </div>
         <div class="section-entries">
-        <article class="entry">
+        <article class="entry" style="--d:12">
             <div class="entry-year">2021</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/youtube.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Software Engineer, YouTube</h3>
@@ -159,7 +162,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:13">
             <div class="entry-year">2018–21</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/lark.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Software Engineer, Lark Health</h3>
@@ -170,7 +173,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:14">
             <div class="entry-year">2015–16</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/google_big_g.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Software Engineering Intern, Google</h3>
@@ -178,7 +181,7 @@
                 <p class="entry-blurb">Two internships, on the AdWords (Dart/Angular) and Knowledge Graph (Java/C++) teams.</p>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:15">
             <div class="entry-year">2014</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/paypal.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Software Engineering Intern, PayPal</h3>
@@ -189,7 +192,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:16">
             <div class="entry-year">2011</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/makani.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Mechanical Engineering Intern, Makani Power (now Google X)</h3>
@@ -200,13 +203,13 @@
         </div>
     </section>
     <section class="section" data-tone="yellow">
-        <div class="section-label">
+        <div class="section-label" style="--d:17">
             <span class="section-index">04</span>
             <h2>Leadership and Teaching</h2>
             <p>Eleven quarters as a TA at Stanford and Dartmouth, plus workshops, mentoring, and student leadership.</p>
         </div>
         <div class="section-entries">
-        <article class="entry">
+        <article class="entry" style="--d:18">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/stanford_icon.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Teaching Assistant, Stanford and Dartmouth</h3>
@@ -220,7 +223,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:19">
             <div class="entry-year">2019–22</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/tumo.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Workshop leader, TUMO</h3>
@@ -232,7 +235,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:20">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/TUMO_self_learning.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Curriculum advisor, TUMO Self-Learning Initiative</h3>
@@ -243,7 +246,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:21">
             <div class="entry-year">2021</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/fung_fellowship.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Mentor, UC Berkeley Fung Fellowship</h3>
@@ -254,7 +257,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:22">
             <div class="entry-year">2020</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/cs_plus_social_good.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Mentor, Stanford CS + Social Good</h3>
@@ -266,7 +269,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:23">
             <div class="entry-year">2020</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/code_in_place copy.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Section leader, Code in Place</h3>
@@ -277,7 +280,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:24">
             <div class="entry-year">2014</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/bases-2.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">E-Challenge Coordinator, BASES</h3>
@@ -288,7 +291,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:25">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/class_president copy.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Junior Class President, Stanford</h3>
@@ -299,7 +302,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2012–16</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/running_club.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Founding member, Stanford Competitive Running Club</h3>
@@ -313,13 +316,13 @@
         </div>
     </section>
     <section class="section" data-tone="grey">
-        <div class="section-label">
+        <div class="section-label" style="--d:26">
             <span class="section-index">05</span>
             <h2>Recognition</h2>
             <p>Awards, grants, and fellowships.</p>
         </div>
         <div class="section-entries">
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2025</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/rlla.png" alt="" loading="lazy"></div>
             <h3 class="entry-title">Rilla NYC Hackathon, winner</h3>
@@ -331,7 +334,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2023</div>
             <h3 class="entry-title">Dartmouth Digital Health Summit, third place</h3>
             <div class="entry-body">
@@ -340,7 +343,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2022</div>
             <h3 class="entry-title">Dartmouth Guarini Alumni Research Award</h3>
             <div class="entry-body">
@@ -349,19 +352,19 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2022</div>
             <h3 class="entry-title">Millett G. Morgan Fund Fellow</h3>
             <div class="entry-body">
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2021</div>
             <h3 class="entry-title">Dartmouth Innovation Fellowship</h3>
             <div class="entry-body">
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2021</div>
             <h3 class="entry-title">Dartmouth CompX Faculty Grant</h3>
             <div class="entry-body">
@@ -371,7 +374,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2021</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/aps.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Armenian Professional Society Scholarship</h3>
@@ -381,21 +384,21 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2017</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/stanford_icon.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Stanford Teaching Honors</h3>
             <div class="entry-body">
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2012</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/eagle_scout.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Eagle Scout</h3>
             <div class="entry-body">
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year">2011</div>
             <div class="entry-figure"><img src="../assets/img/portfolio/isef.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Intel ISEF, third place, Physics and Astronomy</h3>
@@ -406,13 +409,13 @@
         </div>
     </section>
     <section class="section">
-        <div class="section-label">
+        <div class="section-label" style="--d:26">
             <span class="section-index">06</span>
             <h2>Earlier work</h2>
             <p>Older work from my time at Stanford.</p>
         </div>
         <div class="section-entries">
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/facet_circle.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Facet</h3>
@@ -420,7 +423,7 @@
                 <p class="entry-blurb">Corporate meetings are notoriously inefficient and often biased. My CS210 senior project team confirmed this through rounds of user research at large software companies, where "too many inefficient and biased meetings" was a frequent complaint. To address the problem, we built Facet, a smart assistant that facilitates and analyses corporate meetings.</p>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/navcog.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">NavCog and Ability Hacks</h3>
@@ -431,7 +434,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/smart_primer_circle.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Smart Primer</h3>
@@ -442,7 +445,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/creative_drive.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Creativity boosting environments in cars</h3>
@@ -453,7 +456,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/adversarial2.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Adversarial Examples for NLP Contexts</h3>
@@ -464,7 +467,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/robot_arm3.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Visuomotor Learning: Object Classification</h3>
@@ -475,7 +478,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/video_tagging.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Video tagging using frame captions</h3>
@@ -486,7 +489,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/eye_green.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Finding protests in social media</h3>
@@ -497,7 +500,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/photo_assist_circle.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">“Can you take my photo?”</h3>
@@ -508,7 +511,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/pensieve4.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Pensieve</h3>
@@ -519,7 +522,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/rally.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Rally</h3>
@@ -531,7 +534,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/chess_piece2.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">A general game playing agent</h3>
@@ -542,7 +545,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/connect_four3.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">CS106B Recursion Competition, Grand Prize</h3>
@@ -550,7 +553,7 @@
                 <p class="entry-blurb">Connect Four with an AI opponent — my freshman-year entry to the 2013 competition in CS106B (Programming Abstractions).</p>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/shape3.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">CS106A Graphics Competition, Grand Prize</h3>
@@ -558,7 +561,7 @@
                 <p class="entry-blurb">A platform for creating, manipulating, and visualising multidimensional shapes — my freshman-year entry to the 2012 competition in CS106A (Programming Methodology).</p>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/water_catchment.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Stanford Change Labs: water catchment for rural India</h3>
@@ -566,7 +569,7 @@
                 <p class="entry-blurb">I did mechanical engineering and design research with The 100 Liter Water Project at Stanford Change Labs. My focus in this project was on designing a sun-tracking solar panel power supply.</p>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/peru2.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Archaeology research at Chavín de Huántar</h3>
@@ -577,7 +580,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <div class="entry-figure"><img src="../assets/img/portfolio/sani_circle.jpg" alt="" loading="lazy"></div>
             <h3 class="entry-title">Sustainable Amazon ecotourism</h3>
@@ -589,7 +592,7 @@
                 </ul>
             </div>
         </article>
-        <article class="entry">
+        <article class="entry" style="--d:26">
             <div class="entry-year"></div>
             <h3 class="entry-title">Call center audio transcription and analytics</h3>
             <div class="entry-body">
@@ -603,8 +606,8 @@
     </section>
     </main>
 
-    <script src="../assets/js/scrollrail.js?v=20260821p"></script>
-    <script src="../assets/js/figures.js?v=20260821p"></script>
+    <script src="../assets/js/scrollrail.js?v=20260821s"></script>
+    <script src="../assets/js/figures.js?v=20260821s"></script>
 </body>
 
 </html>

@@ -59,10 +59,22 @@
             return t ? Math.max(0, t.offsetHeight) : 0;
         }
 
+        // The frame's bottom rule is a fixed band across the foot of the
+        // window. A full-height track runs underneath it, so the thumb
+        // collides with the rule whenever it reaches the end. The track stops
+        // one rule-width short instead, which also leaves the two greens
+        // reading as separate marks rather than one smear.
+        function railFoot() {
+            if (!isWindow) return 0;
+            var frame = document.querySelector(".frame-bottom");
+            if (!frame || getComputedStyle(frame).display === "none") return 0;
+            return frame.getBoundingClientRect().height + 6;
+        }
+
         function metrics() {
             var start = isWindow ? railTop() : 0;
             var box = isWindow
-                ? { top: start, height: window.innerHeight - start }
+                ? { top: start, height: window.innerHeight - start - railFoot() }
                 : el.getBoundingClientRect();
             var over = Math.max(0, el.scrollHeight - viewport());
             var pos = isWindow ? (window.scrollY || el.scrollTop) : el.scrollTop;

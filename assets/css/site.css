@@ -94,6 +94,10 @@
     --bar: 13px;
     --scrollbar: 26px;
 
+    /* How far the title travels as it swipes. About half its height: enough
+       to read as a move, short enough to stay unhurried. */
+    --title-shift: 26px;
+
     /* Floor margins, used once the viewport is too small for the canon. */
     --m-min: 24px;
 
@@ -225,34 +229,36 @@ img {
     view-transition-name: frame-bottom;
 }
 
-@keyframes title-wheel-out {
+/* The titles swipe.
+
+   Both carry the same view-transition-name, so the browser treats them as one
+   object and runs the pair together: the outgoing line lifts and fades out
+   while the incoming one rises into its place. The two overlap by design --
+   the new title starts before the old has finished leaving, which is what
+   makes it read as one continuous move rather than two separate ones.
+
+   Unhurried on purpose: the curves are ease-out, so most of the distance is
+   covered early and the line settles rather than arriving abruptly. */
+@keyframes title-swipe-out {
     to {
-        transform: translateY(-0.42em) rotateX(72deg);
+        transform: translateY(calc(-1 * var(--title-shift)));
         opacity: 0;
     }
 }
 
-@keyframes title-wheel-in {
+@keyframes title-swipe-in {
     from {
-        transform: translateY(0.42em) rotateX(-72deg);
+        transform: translateY(var(--title-shift));
         opacity: 0;
     }
-}
-
-/* Perspective on the group is what makes the tip read as a wheel turning
-   rather than a card flipping. */
-::view-transition-group(page-title) {
-    perspective: 900px;
 }
 
 ::view-transition-old(page-title) {
-    animation: title-wheel-out 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
-    transform-origin: 50% 50%;
+    animation: title-swipe-out 460ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 ::view-transition-new(page-title) {
-    animation: title-wheel-in 340ms cubic-bezier(0.22, 0.61, 0.36, 1) 40ms both;
-    transform-origin: 50% 50%;
+    animation: title-swipe-in 620ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
 }
 
 ::view-transition-old(root),
@@ -296,6 +302,96 @@ img {
 }
 
 /*---------------------------------------------------------------------------
+    The cascade.
+
+    On arrival the page assembles rather than appearing at once: the head
+    first, then each band down the register, each a beat behind the last. The
+    order is document order, which is already top-then-left-then-across, so no
+    separate sequencing is needed -- the generator just stamps a running index
+    and the delay is that index times a beat.
+
+    Short and shallow on purpose. It is a settling, not an entrance: 380ms per
+    item, a 7px rise, and the whole run capped at 26 beats so anything below
+    the fold has finished long before it could be scrolled to.
+
+    Armed by a class the script adds, so with no script nothing is ever left
+    invisible.
+---------------------------------------------------------------------------*/
+
+@keyframes cascade-in {
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+}
+
+@keyframes cascade-fade {
+    from {
+        opacity: 0;
+    }
+}
+
+.js-cascade .masthead,
+.js-cascade .topbar,
+.js-cascade .entry {
+    animation: cascade-in 380ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--d, 0) * 26ms);
+}
+
+/* Opacity only: the labels are sticky, and animating a transform on a sticky
+   box makes it a containing block mid-flight. */
+.js-cascade .section-label {
+    animation: cascade-fade 380ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--d, 0) * 26ms);
+}
+
+.js-cascade .masthead {
+    --d: 0;
+}
+
+.js-cascade .topbar {
+    --d: 1;
+}
+
+/* The landing page only assembles when you have come back to it, never on a
+   cold open. */
+.js-cascade.vt-in .name {
+    --d: 0;
+}
+
+.js-cascade.vt-in .portrait {
+    --d: 1;
+}
+
+.js-cascade.vt-in .bio {
+    --d: 2;
+}
+
+.js-cascade.vt-in .doclinks {
+    --d: 3;
+}
+
+.js-cascade.vt-in .portrait,
+.js-cascade.vt-in .bio,
+.js-cascade.vt-in .doclinks {
+    animation: cascade-in 380ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--d, 0) * 34ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .js-cascade .masthead,
+    .js-cascade .topbar,
+    .js-cascade .entry,
+    .js-cascade .section-label,
+    .js-cascade.vt-in .portrait,
+    .js-cascade.vt-in .bio,
+    .js-cascade.vt-in .doclinks {
+        animation: none;
+    }
+}
+
+/*---------------------------------------------------------------------------
     The scroll rail.
 
     Drawn rather than native: whether a native bar occupies layout width is not
@@ -309,7 +405,11 @@ img {
     position: fixed;
     left: var(--bar);
     width: var(--scrollbar);
-    z-index: 12;
+    /* Above every sticky header on either page. Those carry opaque grounds so
+       rows do not show through them, and a header that outranks the rail
+       simply erases the part of it that it crosses. The rail is a fixed
+       instrument, not page content: it belongs in front of all of it. */
+    z-index: 40;
 }
 
 .scrollrail[hidden] {
@@ -526,7 +626,7 @@ img {
        rail, on the rail's own axis, so it reads as part of it. */
     .scrollcue {
         position: fixed;
-        z-index: 12;
+        z-index: 41;
         color: var(--sea);
         line-height: 0;
         /* Clickable: it is the one control that says there is more, so it may
@@ -699,6 +799,7 @@ img {
         --t-body: 17px;
         --t-lead: 20.2px;
         --t-name: 38px;
+        --title-shift: 19px;
     }
 
     .page {

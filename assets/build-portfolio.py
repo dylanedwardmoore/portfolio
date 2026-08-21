@@ -332,8 +332,9 @@ def esc(t):
     return html.escape(t, quote=False)
 
 
-def render_entry(year, title, blurb, img, links, featured):
-    out = ['        <article class="entry%s">' % (" entry--featured" if featured else "")]
+def render_entry(year, title, blurb, img, links, featured, delay=0):
+    out = ['        <article class="entry%s" style="--d:%d">'
+           % (" entry--featured" if featured else "", delay)]
     out.append('            <div class="entry-year">%s</div>' % esc(year))
     if img:
         out.append('            <div class="entry-figure"><img src="%s%s" alt="" loading="lazy"></div>'
@@ -358,10 +359,18 @@ def render_entry(year, title, blurb, img, links, featured):
 
 def build():
     parts = []
+    step = [2]   # 0 and 1 belong to the masthead and the bar
+
+    def nxt():
+        step[0] += 1
+        # Capped: past this the item is well below the fold and has finished
+        # long before anyone scrolls to it.
+        return min(step[0], 26)
+
     for idx, (name, tone, standfirst, entries) in enumerate(SECTIONS, 1):
         cls = ' data-tone="%s"' % tone if tone else ""
         parts.append('    <section class="section"%s>' % cls)
-        parts.append('        <div class="section-label">')
+        parts.append('        <div class="section-label" style="--d:%d">' % nxt())
         parts.append('            <span class="section-index">%02d</span>' % idx)
         parts.append('            <h2>%s</h2>' % esc(name))
         parts.append('            <p>%s</p>' % esc(standfirst))
@@ -369,13 +378,13 @@ def build():
         parts.append('        <div class="section-entries">')
         featured = name in ("Ventures", "Research")
         for e in entries:
-            parts.append(render_entry(*e, featured=featured))
+            parts.append(render_entry(*e, featured=featured, delay=nxt()))
         parts.append('        </div>')
         parts.append('    </section>')
     return "\n".join(parts)
 
 
-V = "v=20260821p"
+V = "v=20260821s"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -397,6 +406,9 @@ HEAD = """<!doctype html>
         window.addEventListener('pagereveal', function (e) {
             if (e.viewTransition) document.documentElement.classList.add('vt-in');
         });
+        // Arms the entry cascade. Set from script so that with none, nothing
+        // is ever left invisible.
+        document.documentElement.classList.add('js-cascade');
         window.addEventListener('pagehide', function () {
             document.documentElement.classList.remove('vt-in');
         });

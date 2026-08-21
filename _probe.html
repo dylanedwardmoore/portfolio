@@ -10,8 +10,8 @@
     <meta name="description"
         content="Dylan Moore is a human-AI interaction researcher, startup founder, and ex-Google software engineer.">
     <link rel="shortcut icon" type="image/png" href="assets/img/icon/DEM_logo.ico">
-    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260821s" crossorigin>
-    <link rel="stylesheet" href="assets/css/site.css?v=20260821s">
+    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260821r" crossorigin>
+    <link rel="stylesheet" href="assets/css/site.css?v=20260821r">
     <script>
         // Marks documents that arrived through a view transition, so the
         // title's colour settle runs only then and not on a cold load.
@@ -20,9 +20,6 @@
         window.addEventListener('pagereveal', function (e) {
             if (e.viewTransition) document.documentElement.classList.add('vt-in');
         });
-        // Arms the cascade. Set from script so that with none, nothing is
-        // ever left invisible.
-        document.documentElement.classList.add('js-cascade');
         window.addEventListener('pagehide', function () {
             document.documentElement.classList.remove('vt-in');
         });
@@ -96,7 +93,35 @@
             </nav>
         </main>
     </div>
-    <script src="assets/js/scrollrail.js?v=20260821s"></script>
+    <script src="assets/js/scrollrail.js?v=20260821r"></script>
+<script>
+window.addEventListener('load', function(){ setTimeout(function(){
+  var W=document.documentElement.clientWidth, issues=[], wide=W>=860;
+  if (document.documentElement.scrollWidth > W+1) issues.push('H-OVERFLOW');
+  Array.prototype.forEach.call(document.images, function(im){
+    if (im.complete && im.naturalWidth===0) issues.push('BROKEN '+im.getAttribute('src')); });
+  if (getComputedStyle(document.querySelector('.name')).viewTransitionName!=='page-title') issues.push('NO VT NAME');
+  if (!getComputedStyle(document.documentElement).getPropertyValue('--title-shift').trim()) issues.push('NO TITLE SHIFT');
+  var rail=document.querySelector('.scrollrail'), bar=document.querySelector('.topbar'),
+      lab=document.querySelector('.section-label');
+  if (rail && bar && parseInt(getComputedStyle(rail).zIndex) <= parseInt(getComputedStyle(bar).zIndex))
+    issues.push('RAIL BEHIND BAR');
+  if (rail && lab && parseInt(getComputedStyle(rail).zIndex) <= parseInt(getComputedStyle(lab).zIndex||0))
+    issues.push('RAIL BEHIND LABEL');
+  if (lab && wide && getComputedStyle(lab).backgroundColor==='rgba(0, 0, 0, 0)') issues.push('LABEL TRANSPARENT');
+  Array.prototype.forEach.call(document.querySelectorAll('.entry'), function(e){
+    var f=e.querySelector('.entry-figure'); if(!f) return;
+    var ti=e.querySelector('.entry-title'), b=e.querySelector('.entry-blurb');
+    var ref=(wide&&b)?b:ti;
+    if (Math.abs(f.getBoundingClientRect().top-ref.getBoundingClientRect().top)>1.5) issues.push('FIG OFF');
+  });
+  var links=document.querySelector('.doclinks');
+  if (links && window.innerHeight>=440 && links.getBoundingClientRect().bottom>window.innerHeight+1) issues.push('BLOCKS BELOW FOLD');
+  var d=document.createElement('pre'); d.id='PROBE';
+  d.textContent = W+'x'+window.innerHeight+'  issues '+issues.length+(issues.length?('  '+issues.slice(0,4).join('; ')):'');
+  document.body.appendChild(d);
+},1800);});
+</script>
 </body>
 
 </html>

@@ -355,9 +355,9 @@
        titles sit on the same line and moving between the pages does not
        shift them. */
     .topbar {
-        /* Starts after the frame rather than on top of it -- the bar is opaque
-           and sits above it in the stack, so full-width padding would paint
-           over the green. */
+        /* Starts after the frame so its ground never paints over that rule.
+           It may run under the rail's lane, because the rail now outranks it
+           and draws on top. */
         margin-left: var(--bar);
         padding: calc(var(--u) * 0.25) calc(var(--u) * 1.4) calc(var(--u) * 0.55)
             calc(var(--u) * 1.4);
@@ -387,6 +387,12 @@
         /* Exactly the bar's height, measured at runtime. Anything larger
            leaves a band where the rows scroll past in the open. */
         top: var(--sticky-top, 3.4rem);
+        /* Opaque, and above the rows: while one section hands over to the
+           next, the outgoing label passes directly behind the incoming one,
+           and with no ground the two read as a single smudge of text. */
+        background: var(--paper);
+        z-index: 5;
+        padding-bottom: calc(var(--u) * 0.5);
     }
 
     .section-label p {
