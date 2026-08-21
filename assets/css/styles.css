@@ -474,6 +474,12 @@
     font-size: 50px;
         color: #222;
 }
+/* Font Awesome glyphs render wider than the flaticon set at the same size,
+   so trim them a little to sit evenly beside the neighbouring service icons. */
+.single-service .icon span.fa:before{
+    font-size: 40px;
+    line-height: 50px;
+}
 .srvc-content{
     overflow: hidden;
 }
