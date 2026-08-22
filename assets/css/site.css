@@ -115,9 +115,11 @@
     --bar: 13px;
     --scrollbar: 26px;
 
-    /* How far the title travels. Small on purpose: enough to read as a move
-       and to say which way it went, not enough to draw attention to itself. */
+    /* How far the title travels, and how far it is indented as it arrives.
+       Small on purpose: enough to read as a move and to say which way it
+       went, not enough to draw attention to itself. */
     --title-shift: 11px;
+    --title-indent: 5px;
 
     /* Floor margins, used once the viewport is too small for the canon. */
     --m-min: 24px;
@@ -250,20 +252,31 @@ img {
     view-transition-name: frame-bottom;
 }
 
-/* The titles swipe, and the direction carries meaning.
+/* The titles step through a slot.
 
-   Portfolio is a subpage -- the control that leaves it says "Back" -- so
-   going in and coming out should not look the same. Going in, the pair moves
-   up: the old title lifts away and the new one rises into its place, the way
-   the view moves when you descend into something. Coming back reverses it.
-   The navigation supplies the direction as a view-transition type, so both
-   documents animate the same way round without either having to know which
-   link was clicked.
+   Adapted from CodeFronts' rotating word wheel (MIT), which is served at
+   .../css-elastic-bounce-text-animation/. Two things are borrowed: the masked
+   window, where a gradient softens the top and bottom edges so a line
+   dissolves into the opening rather than being clipped by it, and the easing,
+   cubic-bezier(.6,-0.2,.35,1.2) -- negative on the way out and past one on
+   the way in, which gives the small anticipation and overshoot that make the
+   step feel sprung rather than slid.
 
-   Deliberately small. Eleven pixels and a fade over about a third of a
-   second: enough to register as a move and to say which way, not enough to
-   perform. An untyped fallback keeps the plain swipe where the browser does
-   not support transition types.
+   The mask goes on the transition group rather than on the heading, so it
+   exists only while the transition runs and the settled title is never
+   faded at its edges.
+
+   HIERARCHY. Portfolio is a subpage -- the control that leaves it says
+   "Back" -- so the two directions are not mirror images of one motion, they
+   say which way you went:
+
+     going in   the line steps UP through the slot, and the arriving title
+                enters from below and slightly INDENTED, settling leftward
+                into place, the way a nested thing resolves out of its parent
+     coming out the line steps DOWN, and the arriving title enters from above
+                and slightly OUTDENTED, settling rightward: back out a level
+
+   The indent is five pixels. It is meant to be felt rather than seen.
 ---------------------------------------------------------------------------*/
 
 @keyframes title-out-up {
@@ -275,7 +288,7 @@ img {
 
 @keyframes title-in-up {
     from {
-        transform: translateY(var(--title-shift));
+        transform: translateY(var(--title-shift)) translateX(var(--title-indent));
         opacity: 0;
     }
 }
@@ -289,20 +302,28 @@ img {
 
 @keyframes title-in-down {
     from {
-        transform: translateY(calc(-1 * var(--title-shift)));
+        transform: translateY(calc(-1 * var(--title-shift)))
+            translateX(calc(-1 * var(--title-indent)));
         opacity: 0;
     }
 }
 
+/* The slot. Soft only at the very edges: the travel is eleven pixels, so a
+   deeper fade would read as the title being cut rather than passing through. */
+::view-transition-group(page-title) {
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+}
+
 ::view-transition-old(page-title) {
-    animation: title-out-up 300ms cubic-bezier(0.4, 0, 1, 1) both;
+    animation: title-out-up 320ms cubic-bezier(0.6, -0.2, 0.35, 1) both;
 }
 
 ::view-transition-new(page-title) {
-    animation: title-in-up 380ms cubic-bezier(0.16, 1, 0.3, 1) 70ms both;
+    animation: title-in-up 520ms cubic-bezier(0.6, -0.2, 0.35, 1.2) 60ms both;
 }
 
-/* Coming back out of the subpage: the same move, mirrored. */
+/* Coming back out of the subpage: the same step, the other way. */
 html:active-view-transition-type(go-out)::view-transition-old(page-title) {
     animation-name: title-out-down;
 }
@@ -856,6 +877,7 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
         --t-lead: 20.2px;
         --t-name: 38px;
         --title-shift: 8px;
+        --title-indent: 4px;
     }
 
     .page {
