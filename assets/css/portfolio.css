@@ -421,6 +421,101 @@
     }
 }
 
+/* INDUSTRY ROLLS.
+
+   It is the one mark with only two parts in it, so there is nothing else on
+   screen to look at while the offcut leaves -- and a body that only deflates,
+   next to a piece that travels, is read as the body having launched it however
+   carefully the piece is timed. Two parts cannot share the attention; one of
+   them has to be doing something of its own.
+
+   So this one goes over its corner. It rocks back a little first, rolls right
+   up onto the edge, hangs there past the point where it should have fallen,
+   and drops back. It pivots on its bottom-left corner rather than its middle,
+   because that is where a heavy thing tipping actually turns, and it rolls
+   TOWARDS where the offcut went rather than away from it -- a body leaning
+   after the thing that left is not a body that threw it.
+
+   The offcut waits three tenths of the telling before it moves. By then the
+   roll is plainly under way and is plainly the cause of nothing, which is the
+   entire point of the exercise. */
+[data-mark="industry"] i[data-lead] {
+    transform-origin: 0 100%;
+}
+
+.section-index.anim[data-mark="industry"] i[data-lead] {
+    animation-name: mark-roll-open;
+}
+
+.section-index.anim[data-mark="industry"]:not(.is-open) i[data-lead] {
+    animation-name: mark-roll-shut;
+}
+
+.section-index.anim[data-mark="industry"] i:not([data-lead]) {
+    animation-delay: calc(var(--dur, 800ms) * 0.3 + var(--i, 0) * var(--stagger, 60ms));
+}
+
+@keyframes mark-roll-open {
+    0% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    13% {
+        /* Rocks back. Nothing rolls without first going the other way. */
+        transform: scale(calc(var(--gs) * 1.01)) rotate(-5deg);
+    }
+
+    42% {
+        transform: scale(1.03) rotate(9deg) translateX(1px);
+        animation-timing-function: cubic-bezier(0.5, 0, 0.3, 1);
+    }
+
+    64% {
+        /* Up on the edge, and held there a beat longer than gravity allows.
+           That hang is the whole personality of it. */
+        transform: rotate(11.5deg) translateX(1.6px);
+    }
+
+    85% {
+        transform: rotate(-3deg);
+    }
+
+    94% {
+        transform: rotate(1.2deg);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mark-roll-shut {
+    0% {
+        transform: none;
+    }
+
+    17% {
+        transform: rotate(4deg);
+    }
+
+    46% {
+        transform: scale(1.03) rotate(-10deg) translateX(-1px);
+        animation-timing-function: cubic-bezier(0.5, 0, 0.3, 1);
+    }
+
+    69% {
+        transform: scale(calc(var(--gs) * 0.98)) rotate(-12.5deg) translateX(-1.6px);
+    }
+
+    89% {
+        transform: scale(calc(var(--gs) * 1.03)) rotate(3deg);
+    }
+
+    100% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+}
+
 /* UNROLL -- curls tighter into the body, then unwinds its way out. */
 [data-story="unroll"] i {
     transform-origin: 50% 100%;

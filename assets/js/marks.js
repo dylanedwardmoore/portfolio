@@ -39,6 +39,10 @@
     var marks = document.querySelectorAll(".section-index");
     if (!marks.length || !("IntersectionObserver" in window)) return;
 
+    var sections = document.querySelectorAll(".section");
+    var crossing = [];
+    var observer = null;
+
     // Opening is the event you are meant to watch and gets the longer telling;
     // closing happens behind you as you leave and is quicker in every case.
     var STORIES = [
@@ -69,8 +73,8 @@
         mark.classList.toggle("is-open", open);
     }
 
-    // The first answer is not a change, it is a starting position, and a page
-    // that opens with six marks performing is a page that is showing off.
+    // Everything before the observer's first answer is a starting position
+    // rather than a change, and starting positions are taken up, not performed.
     var primed = false;
 
     function set(section, on) {
@@ -84,40 +88,53 @@
         play(mark, on);
     }
 
-    /* THE TOP OF THE PAGE IS THE FIRST SECTION'S.
-
-       Above the first label nothing crosses the line, so by the letter of the
-       rule no mark is the header and every one of them is shut. But the reader
-       is not between sections up there -- they are at the head of the register
-       with the first one directly in front of them, and a shut mark says the
-       section is still coming when it is the only thing on screen.
-
-       So when nothing owns the line and the first section has not yet reached
-       it, the first section takes it. Scrolling off the foot of the register is
-       the other case where nothing owns the line, and this deliberately does
-       not fire there: by then the first section is far above and the test for
-       it being still ahead of you fails. */
-    function settle() {
-        var open = false;
-        Array.prototype.forEach.call(sections, function (s) {
-            var m = s.querySelector(".section-index");
-            if (m && m.classList.contains("is-open")) open = true;
-        });
-        if (open || !sections.length) return;
-        if (sections[0].getBoundingClientRect().top > stickyTop()) {
-            set(sections[0], true);
-        }
-    }
-
-    var sections = document.querySelectorAll(".section");
-    var observer = null;
-
     function stickyTop() {
         var v = parseFloat(getComputedStyle(document.documentElement)
             .getPropertyValue("--sticky-top"));
         // What the stylesheet falls back to where the bar has not been
         // measured yet.
         return v > 0 ? v : 48;
+    }
+
+    /* WHO OWNS THE HEADER.
+
+       Decided once for the whole register on every answer, rather than section
+       by section as the answers arrive. That matters at the top of the page.
+
+       Above the first label nothing crosses the line, so by the letter of the
+       rule no mark is the header and every one of them is shut. But the reader
+       is not between sections up there -- they are at the head of the register
+       with the first section directly in front of them, and a shut mark says
+       "still to come" about the only thing on screen. So when nothing owns the
+       line and the first section has not yet reached it, the first section
+       owns it: on load, and again every time anyone scrolls back to the top.
+
+       Section by section this produced a flinch. Scrolling up to the top, the
+       first section stops crossing the line and its own answer says shut --
+       and only afterwards would anything work out that it should be open
+       again, by which time it had already played its closing story. Deciding
+       first and assigning second, there is no moment in between to close in.
+
+       Scrolling off the FOOT of the register is the other case where nothing
+       crosses the line, and this deliberately does not fire there: by then the
+       first section is far above and the test for it being still ahead of you
+       fails, so the marks are all shut, which is correct. */
+    function owner() {
+        for (var i = 0; i < sections.length; i++) {
+            if (crossing[i]) return sections[i];
+        }
+        if (sections.length
+                && sections[0].getBoundingClientRect().top > stickyTop()) {
+            return sections[0];
+        }
+        return null;
+    }
+
+    function apply() {
+        var own = owner();
+        Array.prototype.forEach.call(sections, function (s) {
+            set(s, s === own);
+        });
     }
 
     function watch() {
@@ -128,17 +145,28 @@
 
         observer = new IntersectionObserver(function (entries) {
             entries.forEach(function (e) {
-                set(e.target, e.isIntersecting);
+                crossing[Array.prototype.indexOf.call(sections, e.target)]
+                    = e.isIntersecting;
             });
-            settle();
+            apply();
             primed = true;
         }, { rootMargin: -top + "px 0px " + -bottom + "px 0px", threshold: 0 });
 
         Array.prototype.forEach.call(sections, function (s) {
             observer.observe(s);
         });
+
+        // And decide once immediately, without waiting to be told. An observer
+        // reports at its own convenience and reports only what it watches, so a
+        // page sitting at the top -- where nothing crosses the line and
+        // therefore nothing has changed -- would otherwise show every mark shut
+        // until something happened. The head of the register should be open
+        // before anyone has done anything at all.
+        apply();
     }
 
+    // Resize fires in bursts while a window is dragged and each rebuild throws
+    // the observer away; one per frame is plenty.
     var queued = false;
     window.addEventListener("resize", function () {
         if (queued) return;
@@ -149,6 +177,8 @@
         });
     });
 
+    // After the fonts land: --sticky-top is measured off the bar, and the bar's
+    // height follows the type, so the line moves once when the type arrives.
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(watch);
 
     watch();

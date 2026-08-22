@@ -12,9 +12,12 @@ One field, divided, with a curve through it.
                                  end square: disc-panel is "flat where it was
                                  placed, round where it ran out", and it runs
                                  out into the grey in one long sweep
-    three chips  Yellow, Red,    a block in the corner with a stripe under one
-                 Sea Green       end of it, and a third at the foot answering
-                                 the bar from across the tile
+    the note     Yellow          a block in the corner, with a stripe of paper
+                 + Paper, Red     and a stripe of red run along under it -- the
+                                 only white in the tile, and the only place it
+                                 could go without reading as a hole
+    the answer   Helvetia Blue   one chip at the foot, right across the field
+                                 from the note and nowhere near it
 
 WHY IT IS NOT A ROW OF PLANES
 
@@ -54,6 +57,8 @@ DUSKY = (0x00, 0x59, 0x2E, 0xFF)
 GREY = (0xB5, 0xD1, 0xCC, 0xFF)
 RED = (0xFF, 0x33, 0x19, 0xFF)
 YELLOW = (0xFF, 0xE6, 0x00, 0xFF)
+BLUE = (0x00, 0x57, 0xBA, 0xFF)
+PAPER = (0xFF, 0xFF, 0xFF, 0xFF)
 
 # The ground. Not a plane in the composition -- the field everything else is
 # cut out of, which is why no part of this tile is ever paper.
@@ -70,19 +75,29 @@ BAR = ("disc-panel", SEA, 1.00)
 
 # The chips, as (x, y, w, h) in fractions of the tile.
 #
-# Three, and they are not scattered. Two of them are one thing -- a yellow
-# block in the corner with a red stripe under its right-hand end, which reads
-# as a single note with an accent rather than as two specks -- and the third is
-# a green one at the foot, well away from both, echoing the bar. Chips spread
-# evenly over the field looked like a spill; grouped and answered, they look
-# placed.
+# They are not scattered. Three of them are one thing -- a yellow block in the
+# corner with a paper stripe and a red stripe run along under it, which reads as
+# a single note with an accent rather than as three specks -- and the fourth is
+# alone at the foot, right across the field. Chips spread evenly over a field
+# look like a spill; grouped and answered, they look placed.
+#
+# The paper stripe is the only white anywhere in the tile, which is why it has
+# to be tucked under the yellow and against the red. White in the open on this
+# ground reads as a hole punched through it; white with a colour either side is
+# a stripe.
+#
+# The chip at the foot is Helvetia Blue -- the register's Recognition tone, and
+# a partner of Sea Green in Wada's book in its own right. It was Sea Green and
+# that was one green too many: three greens in a tile this size and the eye
+# stops counting.
 #
 # Every one runs off the side it is nearest, so the tile stays a crop of
 # something larger and nothing floats in the middle of it.
 CHIPS = [
     (0.760, 0.000, 0.240, 0.210, YELLOW),
+    (0.800, 0.210, 0.100, 0.070, PAPER),
     (0.900, 0.210, 0.100, 0.070, RED),
-    (0.520, 0.920, 0.100, 0.080, SEA),
+    (0.520, 0.920, 0.100, 0.080, BLUE),
 ]
 
 # Supersample, then come down. Every edge lands on a fraction of a pixel at the
