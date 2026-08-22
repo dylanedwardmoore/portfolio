@@ -10,8 +10,8 @@
     <meta name="description"
         content="Dylan Moore is a human-AI interaction researcher, startup founder, and ex-Google software engineer.">
     <link rel="shortcut icon" type="image/png" href="assets/img/icon/DEM_logo.ico">
-    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260822j" crossorigin>
-    <link rel="stylesheet" href="assets/css/site.css?v=20260822j">
+    <link rel="preload" as="font" type="font/woff" href="assets/fonts/fff/fff-Regular.woff?v=20260822k" crossorigin>
+    <link rel="stylesheet" href="assets/css/site.css?v=20260822k">
     <script>
         // Marks documents that arrived through a view transition, so the
         // title's colour settle runs only then and not on a cold load.
@@ -60,15 +60,13 @@
 <body>
     <div class="frame-left" aria-hidden="true"></div>
     <div class="frame-bottom" aria-hidden="true"></div>
-    <div class="scrollrail" data-scroll="window" data-cue="1" aria-hidden="true" hidden>
-        <div class="scrollrail-thumb"></div>
-    </div>
-    <button class="scrollcue" type="button" hidden aria-label="Read on">
-        <svg viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="2.4"
-            stroke-linecap="square" aria-hidden="true">
-            <path d="M6 4.5 13 11l7-6.5" />
-        </svg>
-    </button>
+    <!-- No drawn rail here. This page carries exactly one green mark, the rule
+         beside the text, and the blurb does not scroll. The rail was still
+         watching the window, so on the rare occasion the page itself had to
+         scroll it drew a second green bar hard against the first -- which on a
+         phone is most of the time, because collapsing the address bar changes
+         the viewport height and tips the page into scrolling. Page scrolling
+         is the browser's own affordance and needs no instrument from us. -->
 
     <div class="page">
         <main class="sheet">
@@ -109,7 +107,7 @@
             </nav>
         </main>
     </div>
-    <script src="assets/js/scrollrail.js?v=20260822j"></script>
+    <script src="assets/js/scrollrail.js?v=20260822k"></script>
 </body>
 
 </html>
