@@ -54,7 +54,7 @@
         "doclink-mark--stack": 1040,
         "doclink-mark--line": 1310
     };
-    var EMERGE = 400;
+    var EMERGE = 460;
     var FOLD = 470;
     var SPIN = 360;
     var PUDDLE = 460;
@@ -90,6 +90,48 @@
             mark.classList.remove("is-emerging", "is-spinning", "is-puddling",
                 "is-greening", "is-falling");
             if (name) mark.classList.add(name);
+        }
+
+        /* EACH PIECE BREATHES AS SOON AS IT LANDS.
+
+           The whole mark used to wait for the last piece before any of it
+           stirred, which meant about 1.7 seconds of holding still -- a 400ms
+           entrance and a telling of 1.3 -- before anything happened. Almost
+           nobody holds a pointer on a link that long, so the held state was
+           real, correct, and never once seen.
+
+           A piece is done when its own animation ends, and animationend says
+           so exactly. One listener each, taken off as it fires.
+
+           With a backstop on the timer, because animationend is the one signal
+           here that can simply not arrive -- a piece whose animation never
+           started has nothing to end. By the time the telling is over every
+           piece is breathing whether it reported in or not, so the listener
+           only ever buys time; it cannot lose the state. */
+        function letThemBreathe() {
+            Array.prototype.forEach.call(mark.querySelectorAll("i"),
+                function (part) {
+                    var on = function (e) {
+                        if (e.target !== part) return;
+                        part.removeEventListener("animationend", on);
+                        // Only if the mark is still open by the time it lands.
+                        if (mark.classList.contains("is-open")) {
+                            part.classList.add("breathes");
+                        }
+                    };
+                    part.addEventListener("animationend", on);
+                });
+        }
+
+        function breatheAll() {
+            if (!mark.classList.contains("is-open")) return;
+            Array.prototype.forEach.call(mark.querySelectorAll("i"),
+                function (part) { part.classList.add("breathes"); });
+        }
+
+        function stopBreathing() {
+            Array.prototype.forEach.call(mark.querySelectorAll("i"),
+                function (part) { part.classList.remove("breathes"); });
         }
 
         /* WHERE THE FLOOR IS.
@@ -132,7 +174,8 @@
             state = "idle";
             clear();
             phase(null);
-            mark.classList.remove("is-live", "is-open", "anim", "is-settled");
+            mark.classList.remove("is-live", "is-open", "anim");
+            stopBreathing();
             Array.prototype.forEach.call(mark.querySelectorAll("i"),
                 function (part) { part.style.removeProperty("--fall"); });
             mark.style.removeProperty("--drop");
@@ -153,7 +196,7 @@
         function shut() {
             state = "closing";
             clear();
-            mark.classList.remove("is-settled");
+            stopBreathing();
             findFloor();
             mark.classList.add("anim");
 
@@ -202,11 +245,12 @@
             at(already ? 0 : EMERGE, function () {
                 phase(null);
                 mark.classList.add("is-open");
+                letThemBreathe();
                 at(telling, function () {
                     state = "open";
-                    // Fully out and standing still: from here the pieces are
-                    // allowed to breathe. See .is-settled in the stylesheet.
-                    mark.classList.add("is-settled");
+                    // Backstop: anything that never reported in is breathing
+                    // by now regardless. See letThemBreathe.
+                    breatheAll();
                     if (!want) shut();
                 });
             });
