@@ -157,6 +157,29 @@
        already keeps decides who carries the pen. */
     --nib: 1.414;
 
+    /* How the controls behave, in one place, since the landing page and the
+       register have to agree exactly.
+
+       The ground is quick in both directions -- it is a surface arriving and
+       leaving, and a surface that takes its time reads as a lag. Barely a
+       fade, which is the point: it should be gone before you have decided it
+       was moving.
+
+       The rake is the slow one, and it is slow only outward. On the way in it
+       has 90ms because nobody can see it; on the way out it has 420, which is
+       long for this page and is meant to be -- it is the one thing here that
+       is watched rather than merely noticed.
+
+       The curve is not an ease-out. It leaves at once, covers most of the
+       distance early and then crawls the last of it, so the cut arrives
+       rather than decelerating into place. Held linear the same move reads as
+       a wipe. */
+    --fill-time: 110ms;
+    --fill-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --notch-in: 420ms;
+    --notch-out: 90ms;
+    --notch-ease: cubic-bezier(0.16, 0.84, 0.3, 1);
+
     /* The blocks hang left by exactly this, so their text keeps the margin
        while their rule starts a little before it. */
     --doclink-pad: calc(var(--u) * 0.4);
@@ -773,7 +796,7 @@ img {
     line-height: 1.2;
     letter-spacing: -0.016em;
     text-decoration: none;
-    transition: background-color 170ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: background-color var(--fill-time) var(--fill-ease);
 }
 
 /* The rule, drawn as a stroke.
@@ -782,25 +805,30 @@ img {
    width of the block -- with the far top corner cut back on the pen's rake.
    See --nib.
 
-   THE HANDOVER. At rest the mark is a rule; hovered, the block is a field of
-   the same green. Both states were already right and the crossing between
-   them was not: the shadow was dropped at the first frame while the ground
-   was still 170ms from arriving, so the bottom six pixels blinked off and
-   filled back in. Green does not leave green.
+   THE NOTCH IS THE WHOLE EVENT.
 
-   So the rule withdraws instead of vanishing. It pulls back from the raked
-   end by a few per cent -- the pen lifting off the exit, the tip retreating
-   the way it was drawn -- and only then fades, sixty milliseconds behind the
-   shrink, by which time the ground beneath it has covered the difference.
-   The dip is gone and what is left is a gesture rather than a cut.
+   At rest the mark is a rule with its end raked; hovered, the block is a
+   field of the same green, and the rule is inside it and cannot be seen. So
+   there is nothing to animate on the way IN: the ground arrives, quickly,
+   and the mark it covers is the same colour it is. Anything the rule did
+   under there would be motion nobody could watch.
 
-   Leaving is the same thing run backwards and slower. The transition
-   declared here is the LEAVING one, since it is the resting state's own:
-   the mark comes back promptly under a ground that is still green, then
-   draws itself back out to full length over 260ms, so the last thing the
-   eye catches as the block empties is the stroke being re-inked. Arriving
-   accelerates, leaving settles -- which is the way round motion usually
-   wants it. */
+   What can be watched is the way back. The ground goes almost at once, and
+   what it uncovers is the rule with a SQUARE end -- and then, unhurried, the
+   rake is cut back into it. One thing happens, it happens after the ground
+   has finished, and it is the only thing on the page that ever moves slowly.
+
+   An earlier version had the mark withdraw and re-ink on the way out, on a
+   transform. Two gestures crossing where one would do, and the shrink read as
+   a flinch rather than a stroke. The notch says the same thing with the shape
+   itself: the mark is a rule, and then it is a rule that was cut.
+
+   The curve matters more than the length here. Held linear this reads as a
+   wipe, so it starts with intent, runs most of the way early, and takes its
+   time arriving -- which is how a blade actually goes through anything.
+   Interpolation needs both polygons to have the same corners in the same
+   order, which is why the square state is written as four points with two of
+   them in the same place rather than as `none`. */
 .doclink::after {
     content: "";
     position: absolute;
@@ -813,10 +841,7 @@ img {
             calc(100% - (var(--rule-control) * var(--nib))) 0,
             100% 100%,
             0 100%);
-    /* Back towards the start of the stroke, never towards its middle. */
-    transform-origin: left center;
-    transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1) 40ms,
-        opacity 140ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: clip-path var(--notch-in) var(--notch-ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -843,11 +868,11 @@ img {
         outline: none;
     }
 
+    /* Square, and quickly, because it is under the ground by the time it gets
+       there. The rake is only ever watched on the way back out. */
     .doclink:hover::after {
-        transform: scaleX(0.96);
-        opacity: 0;
-        transition: transform 170ms cubic-bezier(0.22, 0.61, 0.36, 1),
-            opacity 110ms cubic-bezier(0.4, 0, 1, 1) 60ms;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        transition: clip-path var(--notch-out) var(--notch-ease);
     }
 }
 
@@ -857,10 +882,8 @@ img {
 }
 
 .doclink:focus-visible::after {
-    transform: scaleX(0.96);
-    opacity: 0;
-    transition: transform 170ms cubic-bezier(0.22, 0.61, 0.36, 1),
-        opacity 110ms cubic-bezier(0.4, 0, 1, 1) 60ms;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transition: clip-path var(--notch-out) var(--notch-ease);
 }
 
 /*---------------------------------------------------------------------------

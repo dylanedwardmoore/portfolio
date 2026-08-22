@@ -151,7 +151,7 @@
     margin-left: -5px;
     /* Holds the rule below, which used to be an inset shadow here. */
     position: relative;
-    transition: background-color 170ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: background-color var(--fill-time) var(--fill-ease);
 }
 
 .backlink::before {
@@ -174,9 +174,7 @@
             calc(100% - (var(--rule-back) * var(--nib))) 0,
             100% 100%,
             0 100%);
-    transform-origin: left center;
-    transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1) 40ms,
-        opacity 140ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: clip-path var(--notch-in) var(--notch-ease);
 }
 
 /* The rule grows into the whole block: the same gesture as the buttons on the
@@ -188,10 +186,8 @@
     }
 
     .backlink:hover::after {
-        transform: scaleX(0.96);
-        opacity: 0;
-        transition: transform 170ms cubic-bezier(0.22, 0.61, 0.36, 1),
-            opacity 110ms cubic-bezier(0.4, 0, 1, 1) 60ms;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        transition: clip-path var(--notch-out) var(--notch-ease);
     }
 }
 
