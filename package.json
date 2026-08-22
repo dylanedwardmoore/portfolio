@@ -1,0 +1,17 @@
+{
+  "name": "dylanedwardmoore-site",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Personal site. See tests/README.md for what is verified and why.",
+  "scripts": {
+    "test": "node --test --test-timeout=600000 --test-concurrency=1 tests/static/ tests/browser/",
+    "test:static": "node --test tests/static/",
+    "test:browser": "node --test --test-timeout=600000 --test-concurrency=1 tests/browser/",
+    "test:watch": "node --test --watch tests/static/",
+    "serve": "node tests/lib/serve-cli.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  },
+  "type": "module"
+}

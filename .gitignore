@@ -10,3 +10,10 @@
 # Everything downstream builds from that, so the site does not need them.
 ilya*.jpg
 ilya*.jpeg
+
+# The test suite's own machinery. The tests are committed; what runs them is
+# not -- node_modules is large, platform-specific, and reinstallable from
+# package.json with `npm install && npx playwright install chromium`.
+node_modules/
+test-results/
+.playwright/

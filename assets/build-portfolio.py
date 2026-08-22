@@ -138,7 +138,11 @@ def mark_parts(tone):
         # that leave it -- it stays where it is and relaxes, where they travel
         # -- and a stylesheet cannot pick an element out by the value of a
         # custom property, so it has to be said in an attribute.
-        out.append('<i%s style="%s"></i>'
+        # aria-hidden because these carry no meaning read aloud: each one is
+        # a masked rectangle, and <i> is a tag some screen readers announce as
+        # emphasis. The register's number beside them stays readable -- it is
+        # visible content, not decoration.
+        out.append('<i aria-hidden="true"%s style="%s"></i>'
                    % (" data-lead" if q is lead else "", style))
     return "".join(out), span, bw
 
@@ -504,7 +508,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260824u"
+V = "v=20260824v"
 HEAD = """<!doctype html>
 <html lang="en">
 
