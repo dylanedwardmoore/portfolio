@@ -252,6 +252,10 @@ img {
     view-transition-name: frame-bottom;
 }
 
+.scrollrail {
+    view-transition-name: scroll-rail;
+}
+
 /* The titles step through a slot.
 
    Adapted from CodeFronts' rotating word wheel (MIT), which is served at
@@ -332,16 +336,43 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
     animation-name: title-in-down;
 }
 
+/* The body of the page cross-fades. Coming back out it leaves a little
+   faster than it arrived -- the reverse of the cascade that assembles it on
+   the way in, so a return feels like undoing rather than a second entrance. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-    animation-duration: 220ms;
+    animation-duration: 240ms;
 }
 
-/* The frame does not move between the pages, so it is held rather than
-   animated -- any cross-fade on a flat colour just reads as a flicker. */
+html:active-view-transition-type(go-out)::view-transition-old(root) {
+    animation-duration: 170ms;
+}
+
+html:active-view-transition-type(go-out)::view-transition-new(root) {
+    animation-duration: 300ms;
+}
+
+/* The rules are the one constant across both pages, so the transition holds
+   them absolutely still: no group animation, and no cross-fade on the images
+   either. Naming the group alone is not enough -- the old and new snapshots
+   still carry the default fade, and on a flat colour that reads as the border
+   blinking. They are pinned at full opacity instead, so the frame simply
+   stays there while the pages change behind it. */
 ::view-transition-group(frame-left),
-::view-transition-group(frame-bottom) {
+::view-transition-group(frame-bottom),
+::view-transition-group(scroll-rail) {
     animation: none;
+}
+
+::view-transition-old(frame-left),
+::view-transition-new(frame-left),
+::view-transition-old(frame-bottom),
+::view-transition-new(frame-bottom),
+::view-transition-old(scroll-rail),
+::view-transition-new(scroll-rail) {
+    animation: none;
+    opacity: 1;
+    mix-blend-mode: normal;
 }
 
 /* The colour half of the roll. A snapshot cannot animate its own colour, so
@@ -931,12 +962,19 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
     /* Inside the scroller and floated, so the text wraps it and the two move
        together. As the first thing in the flow its top lands on the first
        line of body text, the same rule the desktop column follows. */
+    /* Height is capped against the viewport as well as the column. A 38%
+       square is most of a short window on its own, and it was the figure
+       rather than the text that pushed the blurb into scrolling; capping it
+       crops the picture instead, which the desktop column already does. */
     .portrait--inline {
         display: block;
         float: right;
         position: static;
         width: 38%;
         aspect-ratio: 1;
+        max-height: 34vh;
+        object-fit: cover;
+        object-position: 50% 26%;
         margin: 0.1em 0 calc(var(--u) * 0.4) calc(var(--u) * 0.6);
     }
 
@@ -978,6 +1016,109 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
     }
 }
 
+
+/*---------------------------------------------------------------------------
+    Landscape on a phone.
+
+    Its own case, because neither of the other two fits it. The wrapped layout
+    assumes height it does not have -- a 38% figure is taller than the whole
+    window -- and the desktop layout assumes width. A phone held sideways has
+    the opposite of both: plenty of width, almost no height.
+
+    So: the figure returns to its own column, where its height is bounded
+    rather than driven by its width; the blocks go back to a single row, which
+    is the difference between forty pixels and a hundred and twenty; the scale
+    steps down a size; and the page is pinned so nothing scrolls. What is left
+    is the whole thing on one screen, which is the point of the landing page.
+---------------------------------------------------------------------------*/
+
+@media (orientation: landscape) and (max-height: 460px) and (max-width: 1000px) {
+
+    :root {
+        --u: 15px;
+        --uh: 17px;
+        --t-meta: 10.5px;
+        --t-body: 13.5px;
+        --t-lead: 14.5px;
+        --t-name: 26px;
+        --title-shift: 6px;
+        --title-indent: 3px;
+    }
+
+    .page {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        align-items: initial;
+        grid-template-columns:
+            calc(var(--bar) + var(--uh))
+            minmax(0, 1fr)
+            var(--uh);
+        grid-template-rows: var(--u) minmax(0, auto) var(--u);
+    }
+
+    .sheet {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 26%;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        column-gap: calc(var(--uh) * 1.1);
+        row-gap: calc(var(--u) * 0.4);
+        min-height: 0;
+        max-height: 100%;
+    }
+
+    .name {
+        grid-column: 1;
+        grid-row: 1;
+        max-width: none;
+    }
+
+    /* Back to the column copy: in the flow its height follows its width, and
+       at this aspect that is far too tall. */
+    .portrait--inline {
+        display: none;
+    }
+
+    .portrait--column {
+        display: block;
+        float: none;
+        position: static;
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: start;
+        width: 100%;
+        height: 100%;
+        max-height: 62vh;
+        margin: 0;
+    }
+
+    .bio {
+        grid-column: 1;
+        grid-row: 2;
+        min-height: 0;
+        overflow-y: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    .doclinks {
+        grid-column: 1 / -1;
+        grid-row: 3;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        margin-top: calc(var(--u) * 0.5);
+    }
+
+    .doclink {
+        display: block;
+        padding: 7px 9px;
+    }
+
+    .doclink-meta {
+        margin-top: 1px;
+        text-align: left;
+    }
+}
 
 /*---------------------------------------------------------------------------
     Interior page chrome (portfolio)

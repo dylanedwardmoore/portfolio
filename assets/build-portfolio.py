@@ -176,7 +176,7 @@ SECTIONS = [
          "running_club.jpg", [("https://running.stanford.edu/index.html", "The club")]),
     ]),
 
-    ("Recognition", "grey", "Awards, grants, and fellowships.", [
+    ("Recognition", "blue", "Awards, grants, and fellowships.", [
         ("2025", "Rilla NYC Hackathon, winner",
          "Our three person team won the 2025 Rilla NYC Hackathon.",
          "rlla.png", [
@@ -384,7 +384,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260821u"
+V = "v=20260821w"
 HEAD = """<!doctype html>
 <html lang="en">
 

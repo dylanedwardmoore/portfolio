@@ -80,6 +80,14 @@
     --tone-ink: var(--ink);
 }
 
+/* Recognition takes Wada's "Helvetia Blue" -- a true sapphire hue, and a
+   partner of Sea Green in its own right (combination 347). Deep enough that
+   it carries white rather than ink, at 6.8:1. */
+[data-tone="blue"] {
+    --tone: #0057ba;
+    --tone-ink: var(--paper);
+}
+
 [data-tone="grey"] {
     --tone: var(--grey);
     --tone-ink: var(--ink);
