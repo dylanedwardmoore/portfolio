@@ -64,27 +64,37 @@
 .portfolio {
     --tone: var(--grey);
     --tone-ink: var(--ink);
+    --mark: url("../img/shapes/marks/earlier.svg");
+    --mark-w: 21px;
     --red: #ff3319;
     --yellow: #ffe600;
     --rule: #e4e4e2;
 }
 
 [data-tone="sea"] {
+    --mark: url("../img/shapes/marks/ventures.svg");
+    --mark-w: 34px;
     --tone: var(--sea);
     --tone-ink: var(--ink);
 }
 
 [data-tone="dusky"] {
+    --mark: url("../img/shapes/marks/research.svg");
+    --mark-w: 22px;
     --tone: #00592e;
     --tone-ink: var(--paper);
 }
 
 [data-tone="red"] {
+    --mark: url("../img/shapes/marks/industry.svg");
+    --mark-w: 30px;
     --tone: var(--red);
     --tone-ink: var(--ink);
 }
 
 [data-tone="yellow"] {
+    --mark: url("../img/shapes/marks/teaching.svg");
+    --mark-w: 32px;
     --tone: var(--yellow);
     --tone-ink: var(--ink);
 }
@@ -93,6 +103,8 @@
    partner of Sea Green in its own right (combination 347). Deep enough that
    it carries white rather than ink, at 6.8:1. */
 [data-tone="blue"] {
+    --mark: url("../img/shapes/marks/recognition.svg");
+    --mark-w: 18px;
     --tone: #0057ba;
     --tone-ink: var(--paper);
 }
@@ -211,15 +223,35 @@
     letter-spacing: -0.018em;
 }
 
-/* The colour appears here as a small filled square, and nowhere else until
-   you hover a row. */
+/* The colour appears here as a small flat mark, and nowhere else until you
+   hover a row.
+
+   It was a 13px square. A square is the absence of a decision: it says a
+   colour is coming and nothing else. These say something about the section
+   as well, while staying what the square was -- one flat mark, one colour,
+   about the same size, in the same place.
+
+   Each shape is a region traced out of a Bolotowsky and kept in
+   assets/img/shapes; see assets/build-shapes.py for which, and why each one
+   stands where it does. Nothing here draws them. The mark is the tone with a
+   shape MASKED out of it, so the register's palette is untouched, a shape can
+   be swapped without going near a colour, and a browser too old for masks is
+   left with the square this replaced.
+
+   Every mark is the same height and only the width changes. The mark sits
+   directly above its heading; one that changed height would push the heading
+   down with it and the headings would stop agreeing down the register. The
+   widths are not chosen either -- each is the shape's own proportion at this
+   height, so nothing is stretched to fit a box. */
 .section-index {
     display: block;
-    width: 13px;
-    height: 13px;
+    height: 16px;
+    width: var(--mark-w, 16px);
     background: var(--tone);
+    -webkit-mask: var(--mark) no-repeat center / 100% 100%;
+    mask: var(--mark) no-repeat center / 100% 100%;
     margin-bottom: calc(var(--u) * 0.3);
-    /* The index digits are for the document, not the page; the square is the
+    /* The index digits are for the document, not the page; the mark is the
        signal. Sized in px, not em, so it cannot collapse. */
     overflow: hidden;
     text-indent: 110%;

@@ -2,3 +2,11 @@
 .env.*
 !.env.example
 .DS_Store
+
+# The source paintings the shape library was traced from. Reference material,
+# not site assets, and not ours to redistribute -- assets/trace-shapes.py is
+# the only thing that reads them, it is run by hand when the sources change,
+# and what it writes into assets/img/shapes/traced/ is the committed record.
+# Everything downstream builds from that, so the site does not need them.
+ilya*.jpg
+ilya*.jpeg
