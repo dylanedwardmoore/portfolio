@@ -7,7 +7,7 @@ WHAT IT IS
 
 One field, divided, with a curve through it.
 
-    the ground   Neutral Gray    the whole tile, so nothing anywhere is white
+    the ground   Dusky Green     the whole tile, so nothing anywhere is white
     the bar      Sea Green       down the left, and where it ends it does not
                                  end square: disc-panel is "flat where it was
                                  placed, round where it ran out", and it runs
@@ -25,8 +25,8 @@ the grammar: marks in the register stand in a row because they sit above a
 heading in a strip. A tile is not a strip. It wants a field divided, which is
 what the paintings do with a square and what this site does with a page.
 
-So the grey is not a plane among planes here, it is the ground, and there is no
-paper showing anywhere in the tile. The one curve is the only event, and it is a
+So the dusky green is not a plane among planes here, it is the ground, and
+there is no paper showing anywhere in the tile. The one curve is the only event, and it is a
 boundary between two colours rather than a shape sitting on a background -- the
 same reason Neo-Plasticism divides a field instead of drawing on one.
 
@@ -57,7 +57,13 @@ YELLOW = (0xFF, 0xE6, 0x00, 0xFF)
 
 # The ground. Not a plane in the composition -- the field everything else is
 # cut out of, which is why no part of this tile is ever paper.
-GROUND = GREY
+#
+# Dusky Green, which is the page's other green: the one the links are set in,
+# deep enough to carry white at 8.5:1. Against it Sea Green stops being a
+# surface and becomes a light, which is the right way round for a mark that has
+# to hold at sixteen pixels on a strip of browser chrome. Neutral Gray was here
+# and was too polite -- a pale tile among pale tiles reads as an empty one.
+GROUND = DUSKY
 
 # The bar: a traced shape at its own proportion, full height, hard on the left.
 BAR = ("disc-panel", SEA, 1.00)
