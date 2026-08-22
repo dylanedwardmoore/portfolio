@@ -58,6 +58,8 @@
     var FOLD = 470;
     var SPIN = 360;
     var PUDDLE = 460;
+    var GREEN = 520;
+    var FALL = 1000;
 
     function kind(mark) {
         for (var k in TELLING) {
@@ -85,8 +87,37 @@
         }
 
         function phase(name) {
-            mark.classList.remove("is-emerging", "is-spinning", "is-puddling");
+            mark.classList.remove("is-emerging", "is-spinning", "is-puddling",
+                "is-greening", "is-falling");
             if (name) mark.classList.add(name);
+        }
+
+        /* WHERE THE FLOOR IS.
+
+           Measured, never guessed. It was worked out from the block's padding
+           before and the answer was short -- the pieces stopped in mid air
+           with a strip of paper still under them, which is the one thing a
+           fall must not do.
+
+           The rule sits on the bottom edge of the block and is --rule-control
+           deep at its full weight, so its top edge is the floor. Every piece
+           is told the distance from ITS OWN foot down to that line, which is
+           different for each of them: a bar high in the tile has further to go
+           than one low in it, and giving them all the same number is what
+           makes a group of things look like a lift rather than a fall. */
+        function findFloor() {
+            var deep = parseFloat(getComputedStyle(link)
+                .getPropertyValue("--rule-control")) || 6;
+            var floor = link.getBoundingClientRect().bottom - deep;
+            Array.prototype.forEach.call(mark.querySelectorAll("i"),
+                function (part) {
+                    var r = part.getBoundingClientRect();
+                    if (!r.height) return;
+                    part.style.setProperty("--fall",
+                        (floor - r.bottom).toFixed(2) + "px");
+                });
+            var m = mark.getBoundingClientRect();
+            mark.style.setProperty("--drop", (floor - m.bottom).toFixed(2) + "px");
         }
 
         function rest() {
@@ -94,27 +125,52 @@
             clear();
             phase(null);
             mark.classList.remove("is-live", "is-open", "anim");
+            Array.prototype.forEach.call(mark.querySelectorAll("i"),
+                function (part) { part.style.removeProperty("--fall"); });
+            mark.style.removeProperty("--drop");
             link.classList.remove("mark-live");
             // The rule takes its mass back as the puddle lands.
+        }
+
+        /* Hand the mass back while the ink is still on its way down, so the
+           rule is thickening as it arrives rather than after it. */
+        function giveBack(inMs, doneMs) {
+            at(inMs, function () { link.classList.remove("mark-live"); });
+            at(doneMs, rest);
         }
 
         function shut() {
             state = "closing";
             clear();
-            phase(null);
+            findFloor();
             mark.classList.add("anim");
-            mark.classList.remove("is-open");     // fold
+
+            if (mark.classList.contains("doclink-mark--name")) {
+                // Each piece for itself, from where it stands.
+                phase("is-falling");
+                giveBack(FALL * 0.55, FALL);
+                return;
+            }
+
+            if (mark.classList.contains("doclink-mark--stack")) {
+                // Green first, while they are still stacked, so what falls is
+                // four sticks of one stuff rather than four coloured bars.
+                phase("is-greening");
+                at(GREEN, function () {
+                    phase("is-falling");
+                    giveBack(FALL * 0.55, FALL);
+                });
+                return;
+            }
+
+            // One thing, so it goes as one thing: fold, turn, and fall whole.
+            phase(null);
+            mark.classList.remove("is-open");
             at(FOLD, function () {
                 phase("is-spinning");
                 at(SPIN, function () {
                     phase("is-puddling");
-                    // Hand the mass back while the puddle is still falling, so
-                    // the rule is thickening as the ink arrives rather than
-                    // after it.
-                    at(PUDDLE * 0.55, function () {
-                        link.classList.remove("mark-live");
-                    });
-                    at(PUDDLE, rest);
+                    giveBack(PUDDLE * 0.55, PUDDLE);
                 });
             });
         }
