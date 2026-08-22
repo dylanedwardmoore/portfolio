@@ -119,6 +119,18 @@
     /* Floor margins, used once the viewport is too small for the canon. */
     --m-min: 24px;
 
+    /* The controls' rule.
+
+       The page marks a link three ways, by rank: a reference in the prose
+       gets 1px, the Back control gets 4px, and the blocks below the blurb --
+       the only primary navigation on the page -- get this. Half the frame
+       rule, rounded to a whole pixel so it never lands on a half. */
+    --rule-control: 6px;
+
+    /* The blocks hang left by exactly this, so their text keeps the margin
+       while their rule starts a little before it. */
+    --doclink-pad: calc(var(--u) * 0.4);
+
     --sans: 'fff', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -634,20 +646,55 @@ img {
 
 
 /* Three flat blocks. The accent colour does the work the icons used to. */
+/* Three equal cells, and the rule fills each one.
+
+   Cutting each rule to its own word would give three ragged lengths --
+   Resume against PhD Dissertation is nearly double -- and read as accident.
+   Equal cells make one implied line across the foot of the page, broken into
+   three segments, which is the same flat gesture as the frame. It also puts
+   a long run of rule to the right of every word, where there is nothing else
+   to look at.
+
+   The row hangs left by the blocks' own padding so the first word keeps the
+   margin the name and the blurb sit on; the rule still starts before it. */
 .doclinks {
     clear: both;
     margin-top: calc(var(--u) * 1.2);
+    margin-left: calc(-1 * var(--doclink-pad));
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: calc(var(--u) * 0.2);
+    gap: calc(var(--u) * 0.55);
+    /* Content height, not whatever height is going spare.
+
+       The page's rows stretch to fill the window, and a stretched track
+       hands its extra height down: this grid was being made taller than its
+       three words, its own rows grew to match, and every block ended up 28px
+       deeper than its text. The rule sat at the bottom of that, a long way
+       under its own word and nearer the next one -- so it read as belonging
+       to the wrong link. Pinning the rows to their content puts the rule
+       back where it was drawn. */
+    align-content: start;
 }
 
 .doclink {
     display: block;
-    background: var(--grey);
+    background: none;
     color: var(--ink);
-    box-shadow: none;
-    padding: calc(var(--u) * 0.4) calc(var(--u) * 0.4) calc(var(--u) * 0.45);
+    /* Sat on the padding box, so it spans the block without taking part in
+       the layout -- the same way the prose links carry theirs. The bottom
+       padding is the rule plus a quarter unit, which is the gap that keeps
+       it reading as an underline rather than a detached bar. */
+    box-shadow: inset 0 calc(-1 * var(--rule-control)) 0 var(--sea);
+    padding: calc(var(--u) * 0.34) var(--doclink-pad)
+        calc(var(--rule-control) + var(--u) * 0.25);
+    /* The word is the anchor's own text. It used to be wrapped in a span,
+       which alongside the whitespace in the markup left the anchor holding a
+       block child and an anonymous line box beside it -- 28px of empty
+       leading that pushed the rule away from its word and left it sitting
+       closer to the next one. */
+    font-size: var(--t-lead);
+    line-height: 1.2;
+    letter-spacing: -0.016em;
     text-decoration: none;
     transition: background-color 170ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -671,28 +718,15 @@ img {
 @media (hover: hover) and (pointer: fine) {
     .doclink:hover {
         background: var(--sea);
+        box-shadow: none;
         outline: none;
     }
 }
 
 .doclink:focus-visible {
     background: var(--sea);
+    box-shadow: none;
     outline: none;
-}
-
-.doclink-title {
-    display: block;
-    font-size: var(--t-lead);
-    line-height: 1.2;
-    letter-spacing: -0.016em;
-}
-
-.doclink-meta {
-    display: block;
-    margin-top: 3px;
-    font-size: var(--t-meta);
-    line-height: 1.35;
-    color: rgba(14, 31, 23, 0.62);
 }
 
 /*---------------------------------------------------------------------------
@@ -904,24 +938,17 @@ img {
         grid-template-rows: var(--u) minmax(0, auto) calc(var(--u) * 2);
     }
 
+    /* Stacked, so the gap has to clear the rule above it or each rule reads
+       as an underline for the word below rather than the one above. */
     .doclinks {
         grid-template-columns: 1fr;
         margin-top: var(--u);
-        gap: 5px;
+        gap: calc(var(--u) * 0.45);
     }
 
     .doclink {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: calc(var(--u) * 0.5);
-        padding: calc(var(--u) * 0.42) calc(var(--u) * 0.5);
-    }
-
-    .doclink-meta {
-        margin-top: 0;
-        text-align: right;
-        flex: none;
+        padding: calc(var(--u) * 0.3) var(--doclink-pad)
+            calc(var(--rule-control) + var(--u) * 0.3);
     }
 }
 
@@ -1025,18 +1052,6 @@ img {
         bottom: 0;
         left: calc(-1 * var(--m-min));
         width: var(--bar);
-    }
-}
-
-@media (max-width: 420px) {
-
-    .doclink {
-        display: block;
-    }
-
-    .doclink-meta {
-        margin-top: 3px;
-        text-align: left;
     }
 }
 
@@ -1149,22 +1164,21 @@ img {
         pointer-events: none;
     }
 
+    :root {
+        --rule-control: 4px;
+    }
+
     .doclinks {
         grid-column: 1 / -1;
         grid-row: 3;
         grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
+        gap: calc(var(--u) * 0.7);
         margin-top: calc(var(--u) * 0.5);
     }
 
     .doclink {
         display: block;
-        padding: 7px 9px;
-    }
-
-    .doclink-meta {
-        margin-top: 1px;
-        text-align: left;
+        padding: 6px var(--doclink-pad) calc(var(--rule-control) + 6px);
     }
 }
 
