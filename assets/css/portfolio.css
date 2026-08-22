@@ -123,11 +123,39 @@
     Masthead
 ---------------------------------------------------------------------------*/
 
+/*  THE TWO HEADERS OUTRANK THE RAIL, and nothing else on this page does.
+
+    The rail's track begins at the bar's resting height, on the reasoning that
+    a sticky bar always ends up there. But the bar is not the first thing on
+    this page -- the masthead is above it -- so at the top of the page the bar
+    has not pinned yet and is sitting 77px lower than the track assumes. The
+    thumb sits at the top of its track when the page is at the top, and the
+    rail outranks everything, so it painted a green bar over the masthead in
+    the left gutter with nothing above or below to explain it.
+
+    Fixing it in the rail's arithmetic instead was tried and is worse: making
+    the track follow the bar's real position shortens it from the top as the
+    bar pins, and the thumb then travels 68px UPWARD on the first scroll down.
+
+    Two opaque things passing each other is the right model. These cover the
+    thumb while they are over it and uncover it as they go, and once the bar
+    pins its underside is exactly where the track starts, so from then on they
+    never overlap at all and this changes nothing.
+
+    The sticky section labels are deliberately NOT raised with them: the rail
+    has to cross one in every section, and a thumb that blinked out at each
+    would be unreadable. They stay under it, which is what the rail's own note
+    in site.css is about.  */
 .masthead {
     /* One unit down, the same distance the landing page's grid puts its
        title, so the two headers sit on the same line in both directions. */
     padding: var(--u) var(--m-min) calc(var(--u) * 0.5) var(--gutter-l);
     max-width: 34rem;
+    /* Needs both: z-index does nothing to a static box, and without a ground
+       of its own the thumb shows straight through it. */
+    position: relative;
+    z-index: 41;
+    background: var(--paper);
 }
 
 /* Sits under the title, then pins to the top edge once the title scrolls
@@ -136,7 +164,8 @@
 .topbar {
     position: sticky;
     top: 0;
-    z-index: 20;
+    /* Above the rail, for the stretch before it pins. See .masthead. */
+    z-index: 41;
     background: var(--paper);
     padding: calc(var(--u) * 0.25) var(--m-min) calc(var(--u) * 0.5) var(--gutter-l);
 }

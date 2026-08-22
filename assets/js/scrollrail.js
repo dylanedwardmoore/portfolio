@@ -383,11 +383,34 @@
                 start();
             },
 
+            /* Forget where the mark was, without touching what it is doing.
+
+               feed() reads a velocity off two positions and the time between
+               them, so it is only ever meaningful if both were measured of
+               the same layout. When the mark moves because the page changed
+               shape -- a resize, an orientation change, fonts arriving, an
+               image finally sizing itself -- the next scroll would otherwise
+               difference a new position against a position from the old
+               layout and call it motion. On a phone that is not rare: the
+               address bar collapsing is a resize, and it happens in the
+               middle of the scroll that caused it.
+
+               draw() is deliberately not fed for this reason, but that only
+               covered the frame of the change itself; the stale baseline sat
+               there waiting to spike on whatever came next. */
+            rebase: function () {
+                was = null;
+            },
+
             /* The drawn mark's position, whenever it moves for a reason that
                counts as motion. A resize does not count: a mark that shifted
                because the window changed shape has not been pulled anywhere. */
             feed: function (pos) {
                 var t = clock();
+                // Long enough between two samples and they are not one
+                // gesture any more -- start again rather than average a
+                // pause into a velocity.
+                if (was !== null && t - at > 250) was = null;
                 if (was !== null && t > at) {
                     var v = (pos - was) / ((t - at) / 1000);
                     lag += (v * (gripped ? K_LAG : K_LAG_SCROLL) - lag) * 0.4;
@@ -437,15 +460,42 @@
             return isWindow || getComputedStyle(el).overflowY === "auto";
         }
 
-        // A window rail can be told to begin below something -- here the
-        // sticky bar -- so the track starts at the rule under it rather than
-        // running up behind it to the top of the screen.
-        //
-        // Its HEIGHT, not its current bottom: the bar is sticky, so its
-        // bottom travels upward during the first stretch of scrolling before
-        // it pins. Following that would drag the top of the rail up with it.
-        // The height is where the bar comes to rest, so the rail is fixed
-        // from the first pixel.
+        /* A window rail can be told to begin below something -- here the
+           sticky bar -- so the track starts at the rule under it rather than
+           running up behind it to the top of the screen.
+
+           THE BAR IS NOT PINNED AT THE TOP OF THE PAGE. This used to read the
+           bar's HEIGHT and nothing else, on the reasoning that the height is
+           where a sticky bar comes to rest, so the rail could be fixed from
+           the first pixel and never have to follow it.
+
+           That holds only if the bar is the first thing on the page. On the
+           portfolio it is not: the masthead is above it, so at scroll 0 the
+           bar is sitting at 77 and has not pinned yet, while the rail had
+           already started its track at 50. The thumb, which sits at the top
+           of the track when the page is at the top, was drawn at 50..97 --
+           over the masthead, in the left gutter, above the bar entirely. It
+           outranks both of them, so it painted straight over the lot: a green
+           bar floating at the top left with nothing to explain it, which is
+           exactly what it looked like.
+
+           Following the bar's real position was tried and is wrong: the track
+           then shortens from the top as the bar pins, and the thumb -- pinned
+           to the top of a track whose top is rising faster than the thumb
+           descends -- travels 68 pixels UPWARD on the first scroll down. A
+           scroll indicator that runs backwards is a worse fault than the one
+           being fixed.
+
+           So the track stays where it was, fixed from the first pixel, and
+           the masthead and the bar are given opaque grounds that outrank it
+           instead. They cover the thumb for exactly as long as they are over
+           it and uncover it as they leave, which is what two opaque things
+           passing each other should do. The stylesheet carries the other half
+           of this; see .masthead there.
+
+           The section labels are NOT raised with them. The rail outranks
+           those on purpose -- it has to cross a label in every section, and a
+           thumb that blinked out at each one would be unreadable. */
         var topSel = rail.getAttribute("data-rail-top");
 
         function railTop() {
@@ -572,13 +622,19 @@
             if (!dragging) strain.feed(thumbTop);
         }
 
+        // Everything here moves the mark for a reason that is not motion.
+        function relayout() {
+            strain.rebase();
+            draw();
+        }
+
         (isWindow ? window : el).addEventListener("scroll", onScroll, { passive: true });
-        window.addEventListener("resize", draw);
-        window.addEventListener("orientationchange", draw);
-        if (window.ResizeObserver && !isWindow) new ResizeObserver(draw).observe(el);
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+        window.addEventListener("resize", relayout);
+        window.addEventListener("orientationchange", relayout);
+        if (window.ResizeObserver && !isWindow) new ResizeObserver(relayout).observe(el);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
         Array.prototype.forEach.call(document.images, function (im) {
-            if (!im.complete) im.addEventListener("load", draw);
+            if (!im.complete) im.addEventListener("load", relayout);
         });
         draw();
     }
