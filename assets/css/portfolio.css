@@ -310,25 +310,37 @@
    Five of them, and which one a mark tells is decided at the moment it is
    asked to move. The register has six marks and they are on screen one after
    another for as long as anyone is reading, so a single gesture repeated is
-   the one thing that would certainly wear out. A mark that has three ways of
-   coming apart never quite becomes furniture.
+   the one thing that would certainly wear out.
 
    None of them knows anything about which shapes it is moving. Every step is
    written against four numbers the generator puts on each part -- how far it
    travels to gather (--gx, --gy), how much it shrinks (--gs), and its place in
    the queue (--i) -- so any of the six marks can tell any of the five stories.
 
-   THE LEAD MOVES TOO, AND FOR FREE. Its travel is zero, so every translate in
-   every story collapses to nothing for it and only the turns and the swelling
-   are left. The same keyframes that fling a satellite across the mark make the
-   body it came off wobble in place. That is why the queue puts the lead first:
-   the body settles, and then the limbs come off it one at a time.
+   THE BODY DOES NOT THROW THE PIECES.
 
-   Written as steps rather than as a tween, because a tween has one idea in it
-   and these want four or five: wind up, go, overshoot, come back, settle. The
-   percentages are where the drawing is, not where the clock is -- most of them
-   spend a fifth of their time not going anywhere at all, which is the part
-   that makes a thing look like it decided to move. */
+   It did in the first draft, and that was the whole trouble with it. The lead
+   was swollen and the pieces started at its centre, so when the lead deflated
+   and the pieces flew out on the same beat, the reading was a big thing
+   spitting out small ones. The pieces had no part in it; they were luggage.
+
+   Two changes fix it, and they are both about who begins.
+
+   FIRST, the body is a different animation now. It stays where it is and
+   relaxes -- no lurch, no spike -- because it is the thing being left, and a
+   thing being left should be still. Opening, it lets go at once and takes no
+   further interest. Closing, it waits, and only swells at the end as the last
+   piece arrives, so the growth reads as absorbing them rather than as pushing.
+
+   SECOND, every piece begins by moving the WRONG WAY. It presses back into the
+   body, or curls tighter, or crouches against it, and only then leaves. That
+   inward beat is the whole of the difference: a thing that gathers itself
+   before it goes has decided to go. A thing that starts at speed was thrown.
+
+   The overshoots are small now for the same reason -- nothing here arrives
+   with more momentum than it set out with, because it is walking rather than
+   flying. What is left of them is a settle of two or three per cent, which is
+   a thing coming to rest, not a thing bouncing off a wall. */
 
 .section-index i {
     position: absolute;
@@ -356,30 +368,69 @@
 /* The animation only exists once a mark has actually been asked to change.
    Without this every mark on the page would tell its closing story on load,
    since "not open" is also where they all start. */
-.section-index.anim.is-open i {
+.section-index.anim i {
     animation-duration: var(--dur, 800ms);
     animation-delay: calc(var(--i, 0) * var(--stagger, 60ms));
     animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.42, 0, 0.24, 1);
 }
 
-.section-index.anim:not(.is-open) i {
-    animation-duration: var(--dur, 800ms);
-    animation-delay: calc(var(--i, 0) * var(--stagger, 60ms));
-    animation-fill-mode: both;
+/* THE BODY. One animation whatever story is being told, because there is only
+   one thing for it to do. */
+.section-index.anim i[data-lead] {
+    animation-delay: 0ms;
+    animation-name: mark-body-open;
 }
 
-/* UNROLL -- something rolled up leaning back, then swinging open and rocking
-   to a stop. Turned on its foot, because that is where a thing that unrolls is
-   attached. */
+.section-index.anim:not(.is-open) i[data-lead] {
+    /* Late, so the swell lands under the arriving pieces rather than ahead of
+       them. This is the difference between catching something and shoving it. */
+    animation-delay: calc(var(--dur, 800ms) * 0.3);
+    animation-name: mark-body-shut;
+}
+
+@keyframes mark-body-open {
+    0% {
+        transform: scale(var(--gs));
+    }
+
+    34% {
+        transform: scale(calc(var(--gs) * 1.02));
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mark-body-shut {
+    0% {
+        transform: none;
+    }
+
+    64% {
+        transform: scale(1.05);
+    }
+
+    88% {
+        transform: scale(calc(var(--gs) * 1.03));
+    }
+
+    100% {
+        transform: scale(var(--gs));
+    }
+}
+
+/* UNROLL -- curls tighter into the body, then unwinds its way out. */
 [data-story="unroll"] i {
     transform-origin: 50% 100%;
 }
 
-.anim[data-story="unroll"].is-open i {
+.anim[data-story="unroll"].is-open i:not([data-lead]) {
     animation-name: mark-unroll-open;
 }
 
-.anim[data-story="unroll"]:not(.is-open) i {
+.anim[data-story="unroll"]:not(.is-open) i:not([data-lead]) {
     animation-name: mark-unroll-shut;
 }
 
@@ -388,27 +439,21 @@
         transform: translate(var(--gx), var(--gy)) scale(var(--gs));
     }
 
-    10% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.06)) rotate(-7deg);
+    17% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.94)) rotate(-11deg);
     }
 
-    24% {
-        /* The hold. Nothing happens here and it is the most important step in
-           the file: a body that leans and then waits has decided to go. */
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.04)) rotate(-9deg);
-        animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+    31% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.97)) rotate(-6deg);
+        animation-timing-function: cubic-bezier(0.5, 0, 0.2, 1);
     }
 
-    56% {
-        transform: translate(calc(var(--gx) * 0.34), calc(var(--gy) * 0.34)) scale(1.03) rotate(14deg);
-    }
-
-    75% {
-        transform: translate(calc(var(--gx) * -0.09), calc(var(--gy) * -0.07)) rotate(-5deg);
+    68% {
+        transform: translate(calc(var(--gx) * 0.22), calc(var(--gy) * 0.22)) rotate(4deg);
     }
 
     89% {
-        transform: rotate(2.5deg) scaleY(0.94) scaleX(1.04);
+        transform: translate(calc(var(--gx) * -0.03), calc(var(--gy) * -0.02)) scale(1.01) rotate(-2deg);
     }
 
     100% {
@@ -421,22 +466,16 @@
         transform: none;
     }
 
-    15% {
-        transform: translate(calc(var(--gx) * -0.11), calc(var(--gy) * -0.07)) rotate(7deg);
+    19% {
+        transform: translate(calc(var(--gx) * -0.06), calc(var(--gy) * -0.04)) rotate(5deg);
     }
 
-    48% {
-        transform: translate(calc(var(--gx) * 0.72), calc(var(--gy) * 0.72)) scale(0.93) rotate(-17deg);
-    }
-
-    73% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.88)) rotate(7deg);
+    60% {
+        transform: translate(calc(var(--gx) * 0.6), calc(var(--gy) * 0.6)) scale(0.97) rotate(-8deg);
     }
 
     87% {
-        /* Arrives short, then swells past where it is going to stop. A thing
-           that lands at its final size has not landed, it has been placed. */
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.11)) rotate(-2deg);
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.97)) rotate(4deg);
     }
 
     100% {
@@ -444,17 +483,16 @@
     }
 }
 
-/* POP -- crouch, then burst. The quickest of them and the only one that is
-   over before you have finished looking at it. */
+/* POP -- crouches against the body and pushes off it. The quickest of them. */
 [data-story="pop"] i {
-    transform-origin: 50% 50%;
+    transform-origin: 50% 100%;
 }
 
-.anim[data-story="pop"].is-open i {
+.anim[data-story="pop"].is-open i:not([data-lead]) {
     animation-name: mark-pop-open;
 }
 
-.anim[data-story="pop"]:not(.is-open) i {
+.anim[data-story="pop"]:not(.is-open) i:not([data-lead]) {
     animation-name: mark-pop-shut;
 }
 
@@ -463,25 +501,21 @@
         transform: translate(var(--gx), var(--gy)) scale(var(--gs));
     }
 
-    17% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.79));
-        animation-timing-function: cubic-bezier(0.4, 0, 0.1, 1);
+    19% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.09), calc(var(--gs) * 0.85));
     }
 
-    25% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.2));
+    28% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.95), calc(var(--gs) * 1.07));
+        animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
     }
 
-    53% {
-        transform: translate(calc(var(--gx) * -0.17), calc(var(--gy) * -0.17)) scale(1.11) rotate(11deg);
+    62% {
+        transform: translate(calc(var(--gx) * 0.2), calc(var(--gy) * 0.2)) scale(1.02) rotate(3deg);
     }
 
-    73% {
-        transform: translate(calc(var(--gx) * 0.07), calc(var(--gy) * 0.05)) scale(0.95) rotate(-6deg);
-    }
-
-    88% {
-        transform: scale(1.04) rotate(2deg);
+    85% {
+        transform: translate(calc(var(--gx) * -0.02), 0) scale(0.99) rotate(-1.5deg);
     }
 
     100% {
@@ -494,20 +528,16 @@
         transform: none;
     }
 
-    19% {
-        transform: translate(calc(var(--gx) * -0.15), calc(var(--gy) * -0.11)) scale(1.09) rotate(-8deg);
+    21% {
+        transform: scale(1.06, 0.93) rotate(-4deg);
     }
 
-    59% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.85)) rotate(10deg);
+    64% {
+        transform: translate(calc(var(--gx) * 0.7), calc(var(--gy) * 0.7)) scale(0.96) rotate(6deg);
     }
 
-    79% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.17));
-    }
-
-    92% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.97));
+    89% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.98));
     }
 
     100% {
@@ -515,17 +545,17 @@
     }
 }
 
-/* SHED -- the slow one. Each part lifts, arcs over, and lands hard enough to
-   flatten itself before it rebounds. The only story here with weight in it. */
+/* SHED -- lifts itself off, walks out, and sets itself down. The slow one, and
+   the only one with any weight in it. */
 [data-story="shed"] i {
     transform-origin: 50% 100%;
 }
 
-.anim[data-story="shed"].is-open i {
+.anim[data-story="shed"].is-open i:not([data-lead]) {
     animation-name: mark-shed-open;
 }
 
-.anim[data-story="shed"]:not(.is-open) i {
+.anim[data-story="shed"]:not(.is-open) i:not([data-lead]) {
     animation-name: mark-shed-shut;
 }
 
@@ -534,26 +564,21 @@
         transform: translate(var(--gx), var(--gy)) scale(var(--gs));
     }
 
-    13% {
-        transform: translate(var(--gx), calc(var(--gy) - 2px)) scale(calc(var(--gs) * 1.03)) rotate(-4deg);
+    16% {
+        transform: translate(var(--gx), calc(var(--gy) - 1.5px)) scale(calc(var(--gs) * 0.97)) rotate(-4deg);
     }
 
-    32% {
-        transform: translate(calc(var(--gx) * 0.58), calc(var(--gy) * 0.58 - 4px)) rotate(12deg);
-        animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.45);
+    42% {
+        transform: translate(calc(var(--gx) * 0.44), calc(var(--gy) * 0.44 - 3px)) rotate(5deg);
+        animation-timing-function: cubic-bezier(0.5, 0, 0.35, 1);
     }
 
-    63% {
-        /* The landing. Flat, wide, and a third of the animation still to go. */
-        transform: translateY(3px) scaleY(0.83) scaleX(1.11);
-    }
-
-    77% {
-        transform: translateY(-2.5px) scaleY(1.1) scaleX(0.94);
+    75% {
+        transform: translateY(1.5px) scaleY(0.93) scaleX(1.04);
     }
 
     89% {
-        transform: translateY(0.8px) scaleY(0.96) scaleX(1.02);
+        transform: translateY(-0.6px) scaleY(1.04) scaleX(0.98);
     }
 
     100% {
@@ -566,21 +591,16 @@
         transform: none;
     }
 
-    17% {
-        transform: translateY(-3px) scaleY(1.07) scaleX(0.95) rotate(4deg);
+    18% {
+        transform: translateY(-2px) scaleY(1.04) rotate(3deg);
     }
 
-    54% {
-        transform: translate(calc(var(--gx) * 0.8), calc(var(--gy) * 0.8 - 5px)) rotate(-14deg);
-        animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.45);
+    58% {
+        transform: translate(calc(var(--gx) * 0.62), calc(var(--gy) * 0.62 - 3px)) rotate(-7deg);
     }
 
-    78% {
-        transform: translate(var(--gx), calc(var(--gy) + 2px)) scale(calc(var(--gs) * 0.88)) scaleY(0.86) scaleX(1.12);
-    }
-
-    91% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.08));
+    85% {
+        transform: translate(var(--gx), calc(var(--gy) + 1px)) scale(calc(var(--gs) * 0.96)) scaleY(0.94);
     }
 
     100% {
@@ -588,17 +608,17 @@
     }
 }
 
-/* UNSCREW -- winds itself up the wrong way and spirals out. The turns are
-   bigger than anything else here does, and they are the whole point of it. */
+/* UNSCREW -- winds up inside the body and threads its way out, still turning
+   when it arrives. */
 [data-story="unscrew"] i {
     transform-origin: 50% 50%;
 }
 
-.anim[data-story="unscrew"].is-open i {
+.anim[data-story="unscrew"].is-open i:not([data-lead]) {
     animation-name: mark-unscrew-open;
 }
 
-.anim[data-story="unscrew"]:not(.is-open) i {
+.anim[data-story="unscrew"]:not(.is-open) i:not([data-lead]) {
     animation-name: mark-unscrew-shut;
 }
 
@@ -607,21 +627,21 @@
         transform: translate(var(--gx), var(--gy)) scale(var(--gs));
     }
 
-    20% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.93)) rotate(-30deg);
-        animation-timing-function: cubic-bezier(0.34, 0, 0.16, 1);
+    22% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.96)) rotate(-17deg);
+        animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
     }
 
-    48% {
-        transform: translate(calc(var(--gx) * 0.48), calc(var(--gy) * 0.48)) rotate(17deg);
+    60% {
+        transform: translate(calc(var(--gx) * 0.4), calc(var(--gy) * 0.4)) rotate(8deg);
     }
 
-    71% {
-        transform: translate(calc(var(--gx) * 0.09), calc(var(--gy) * 0.07)) scale(1.06) rotate(-12deg);
+    83% {
+        transform: translate(calc(var(--gx) * 0.05), calc(var(--gy) * 0.04)) rotate(-4deg);
     }
 
-    87% {
-        transform: scale(0.98) rotate(5deg);
+    94% {
+        transform: rotate(1.5deg);
     }
 
     100% {
@@ -635,19 +655,15 @@
     }
 
     21% {
-        transform: scale(1.05) rotate(11deg);
+        transform: rotate(8deg) scale(0.99);
     }
 
-    57% {
-        transform: translate(calc(var(--gx) * 0.7), calc(var(--gy) * 0.7)) scale(0.91) rotate(-24deg);
+    62% {
+        transform: translate(calc(var(--gx) * 0.65), calc(var(--gy) * 0.65)) scale(0.95) rotate(-15deg);
     }
 
-    81% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.91)) rotate(13deg);
-    }
-
-    93% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.1)) rotate(-4deg);
+    88% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.97)) rotate(6deg);
     }
 
     100% {
@@ -655,17 +671,16 @@
     }
 }
 
-/* STRETCH -- pulls itself long and thin and back again twice before it goes
-   anywhere. The most creature-like of the five and the least like a machine. */
+/* STRETCH -- draws itself up thin against the body and extrudes out of it. */
 [data-story="stretch"] i {
     transform-origin: 50% 100%;
 }
 
-.anim[data-story="stretch"].is-open i {
+.anim[data-story="stretch"].is-open i:not([data-lead]) {
     animation-name: mark-stretch-open;
 }
 
-.anim[data-story="stretch"]:not(.is-open) i {
+.anim[data-story="stretch"]:not(.is-open) i:not([data-lead]) {
     animation-name: mark-stretch-shut;
 }
 
@@ -674,25 +689,21 @@
         transform: translate(var(--gx), var(--gy)) scale(var(--gs));
     }
 
-    15% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.23), calc(var(--gs) * 0.75));
+    19% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.9), calc(var(--gs) * 1.12));
     }
 
-    32% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.85), calc(var(--gs) * 1.21));
-        animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+    35% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.06), calc(var(--gs) * 0.94));
+        animation-timing-function: cubic-bezier(0.5, 0, 0.2, 1);
     }
 
-    60% {
-        transform: translate(calc(var(--gx) * 0.24), calc(var(--gy) * 0.24)) scale(1.13, 0.91) rotate(-6deg);
+    66% {
+        transform: translate(calc(var(--gx) * 0.3), calc(var(--gy) * 0.3)) scale(1.07, 0.95);
     }
 
-    81% {
-        transform: scale(0.92, 1.1);
-    }
-
-    93% {
-        transform: scale(1.04, 0.97);
+    87% {
+        transform: scale(0.96, 1.05);
     }
 
     100% {
@@ -705,20 +716,16 @@
         transform: none;
     }
 
-    19% {
-        transform: scale(1.15, 0.87) rotate(4deg);
+    21% {
+        transform: scale(1.08, 0.92);
     }
 
-    57% {
-        transform: translate(calc(var(--gx) * 0.75), calc(var(--gy) * 0.75)) scale(0.87, 1.15);
+    62% {
+        transform: translate(calc(var(--gx) * 0.68), calc(var(--gy) * 0.68)) scale(0.93, 1.08);
     }
 
-    79% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.19), calc(var(--gs) * 0.83));
-    }
-
-    92% {
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.93), calc(var(--gs) * 1.09));
+    88% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.04), calc(var(--gs) * 0.97));
     }
 
     100% {

@@ -88,7 +88,12 @@ def mark_parts(tone):
         style += ";--i:%d" % order[id(q)]
         if q["alpha"] < 1:
             style += ";--a:%g" % q["alpha"]
-        out.append('<i style="%s"></i>' % style)
+        # The body is marked as such. It behaves differently from the parts
+        # that leave it -- it stays where it is and relaxes, where they travel
+        # -- and a stylesheet cannot pick an element out by the value of a
+        # custom property, so it has to be said in an attribute.
+        out.append('<i%s style="%s"></i>'
+                   % (" data-lead" if q is lead else "", style))
     return "".join(out)
 
 
@@ -451,7 +456,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260823x"
+V = "v=20260823y"
 HEAD = """<!doctype html>
 <html lang="en">
 

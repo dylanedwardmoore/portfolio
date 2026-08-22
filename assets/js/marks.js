@@ -69,11 +69,44 @@
         mark.classList.toggle("is-open", open);
     }
 
+    // The first answer is not a change, it is a starting position, and a page
+    // that opens with six marks performing is a page that is showing off.
+    var primed = false;
+
     function set(section, on) {
         var mark = section.querySelector(".section-index");
         if (!mark) return;
         if (mark.classList.contains("is-open") === on) return;
+        if (!primed) {
+            mark.classList.toggle("is-open", on);
+            return;
+        }
         play(mark, on);
+    }
+
+    /* THE TOP OF THE PAGE IS THE FIRST SECTION'S.
+
+       Above the first label nothing crosses the line, so by the letter of the
+       rule no mark is the header and every one of them is shut. But the reader
+       is not between sections up there -- they are at the head of the register
+       with the first one directly in front of them, and a shut mark says the
+       section is still coming when it is the only thing on screen.
+
+       So when nothing owns the line and the first section has not yet reached
+       it, the first section takes it. Scrolling off the foot of the register is
+       the other case where nothing owns the line, and this deliberately does
+       not fire there: by then the first section is far above and the test for
+       it being still ahead of you fails. */
+    function settle() {
+        var open = false;
+        Array.prototype.forEach.call(sections, function (s) {
+            var m = s.querySelector(".section-index");
+            if (m && m.classList.contains("is-open")) open = true;
+        });
+        if (open || !sections.length) return;
+        if (sections[0].getBoundingClientRect().top > stickyTop()) {
+            set(sections[0], true);
+        }
     }
 
     var sections = document.querySelectorAll(".section");
@@ -97,6 +130,8 @@
             entries.forEach(function (e) {
                 set(e.target, e.isIntersecting);
             });
+            settle();
+            primed = true;
         }, { rootMargin: -top + "px 0px " + -bottom + "px 0px", threshold: 0 });
 
         Array.prototype.forEach.call(sections, function (s) {

@@ -12,8 +12,9 @@ One field, divided, with a curve through it.
                                  end square: disc-panel is "flat where it was
                                  placed, round where it ran out", and it runs
                                  out into the grey in one long sweep
-    three chips  Yellow, Red,    small, unequal, and nowhere near each other
-                 Sea Green
+    three chips  Yellow, Red,    a block in the corner with a stripe under one
+                 Sea Green       end of it, and a third at the foot answering
+                                 the bar from across the tile
 
 WHY IT IS NOT A ROW OF PLANES
 
@@ -61,13 +62,21 @@ GROUND = GREY
 # The bar: a traced shape at its own proportion, full height, hard on the left.
 BAR = ("disc-panel", SEA, 1.00)
 
-# The chips, as (x, y, w, h) in fractions of the tile. No two the same size, no
-# two sharing an edge or a line, and each running off the side it is nearest so
-# the tile stays a crop of something larger.
+# The chips, as (x, y, w, h) in fractions of the tile.
+#
+# Three, and they are not scattered. Two of them are one thing -- a yellow
+# block in the corner with a red stripe under its right-hand end, which reads
+# as a single note with an accent rather than as two specks -- and the third is
+# a green one at the foot, well away from both, echoing the bar. Chips spread
+# evenly over the field looked like a spill; grouped and answered, they look
+# placed.
+#
+# Every one runs off the side it is nearest, so the tile stays a crop of
+# something larger and nothing floats in the middle of it.
 CHIPS = [
-    (0.840, 0.000, 0.160, 0.150, YELLOW),
-    (0.560, 0.855, 0.155, 0.145, RED),
-    (0.885, 0.450, 0.115, 0.115, SEA),
+    (0.760, 0.000, 0.240, 0.210, YELLOW),
+    (0.900, 0.210, 0.100, 0.070, RED),
+    (0.520, 0.920, 0.100, 0.080, SEA),
 ]
 
 # Supersample, then come down. Every edge lands on a fraction of a pixel at the
