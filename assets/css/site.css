@@ -115,6 +115,14 @@
     --bar: 13px;
     --scrollbar: 26px;
 
+    /* How much larger than the mark its ink is drawn, on the free side and
+       both ends. A clip can only ever take away, so a stroke that has to swell
+       as well as cut must start bigger than it looks and be trimmed back. Read
+       by the script as well: the stylesheet sizes the ink and the script draws
+       inside it, and the two cannot be allowed to disagree. Comfortably over
+       the widest strain -- 19.5px of cant, 11.7px of swell. */
+    --strain-pad: 24px;
+
 
     /* Floor margins, used once the viewport is too small for the canon. */
     --m-min: 24px;
@@ -569,6 +577,11 @@ img {
     its text to shift depending on that. Drawing it also lets the bar sit hard
     on the screen edge at twice a rule's width, which a native bar cannot do.
     It is draggable, and a click on the track jumps to that position.
+
+    Grabbed, it leans: a stroke pinned along the screen edge and pulled at the
+    free one cants rather than staying square. The angle is set frame by frame
+    from a spring in the script, since it answers to a hand and not to a
+    schedule -- what the stylesheet owns is the pivot.
 ---------------------------------------------------------------------------*/
 
 .scrollrail {
@@ -590,11 +603,54 @@ img {
     position: absolute;
     left: 0;
     width: 100%;
-    background: var(--sea);
+    /* The green is in the ink layer below, not here: this box stays the
+       mark's true rectangle, which is what the drag arithmetic measures and
+       what the pointer has to hit. */
     cursor: grab;
     /* The thumb can be narrow at long scroll lengths; this keeps it grabbable
        without making it look thicker. */
     touch-action: none;
+}
+
+/*  THE INK.
+
+    Both marks are drawn by this, and neither is drawn by anything else. The
+    box above is the mark's true rectangle; this is the stroke that lives in
+    it, and the stroke is allowed to leave.
+
+    It has to be, because the strain both cuts and swells. The free edge
+    narrows where the hand closes and widens toward the ends -- that is the
+    half of the effect which can be seen, since a cant alone only ever bends
+    the two end caps and those are nothing on a mark 24 times longer than it is
+    wide. A clip cannot add ink, so the layer starts a --strain-pad larger on
+    the free side and both ends, and is cut back to the mark exactly.
+
+    None of that exists at rest. The growth and the clip are both properties
+    the script sets while it is straining and takes off when it stops, so an
+    untouched mark is a plain green rectangle at inset 0 with no clip on it --
+    which is what it always was, and what the page transition needs to find
+    when it snapshots this bar to morph it between the views.
+
+    Left is 0 whatever happens: the two corners on the screen edge never move,
+    however far the other side is being pulled.  */
+.scrollrail-thumb::before,
+.edge-rule::before {
+    content: "";
+    position: absolute;
+    /* Grown only while the script is actually straining the mark, and by
+       exactly the --strain-pad it draws inside. Unset -- which is every moment
+       nobody is touching it -- these are zero, the layer is the mark's own
+       rectangle, and there is no clip at all. */
+    top: calc(-1 * var(--strain-grow, 0px));
+    right: calc(-1 * var(--strain-grow, 0px));
+    bottom: calc(-1 * var(--strain-grow, 0px));
+    left: 0;
+    background: var(--sea);
+    /* NOT --ink. That name is already this page's ink COLOUR on :root, and an
+       inherited #0e1f17 substituted here would make the whole declaration
+       invalid at computed-value time -- which does not fall back, it drops the
+       clip entirely and leaves the layer sitting proud of the mark. */
+    clip-path: var(--strain-cut, none);
 }
 
 .scrollrail.is-dragging .scrollrail-thumb {
@@ -604,6 +660,19 @@ img {
 .scrollrail.is-dragging {
     /* Stops the drag from selecting the text it passes over. */
     user-select: none;
+}
+
+/* The script declines to run the strain under reduced motion, so this is the
+   belt to that pair of braces. Worth having twice: the last guard in this file
+   spent three commits being silently discarded, and a mark left leaning by a
+   loop that stopped mid-swing would be a resting state nobody asked for. */
+@media (prefers-reduced-motion: reduce) {
+
+    .scrollrail-thumb::before,
+    .edge-rule::before {
+        inset: 0 !important;
+        clip-path: none !important;
+    }
 }
 
 /*---------------------------------------------------------------------------
@@ -650,7 +719,38 @@ img {
    its extent is those two rows exactly and it never reaches the blocks. */
 .edge-rule {
     display: none;
-    background: var(--sea);
+    /* THE INK IS IN THE PSEUDO BELOW, AND THIS BOX IS A CLIP.
+
+       Not tidiness: a transform counts toward the scrollable overflow of the
+       document, and this page is fitted to the window to the pixel by
+       fitPage(). Lean the rule where its foot is near the bottom of the
+       composition and the page grows by the cant -- 13px on a desktop, six on
+       a phone -- which tips it into scrolling. On a phone that collapses the
+       address bar, which resizes the window, which runs fitPage() again while
+       the rule is still leaning: the figure is cropped to buy back room that
+       was never really needed, the rule comes square, and the page is left
+       short. Whitespace at the foot, ratcheting with every flick. Measured at
+       exactly 13px of growth per full cant, and it is the very fault the drawn
+       rail was taken off this page to cure.
+
+       overflow: clip keeps the pseudo's overhang out of the layout entirely,
+       and the clip margin lets it paint anyway. So the mark leans its full
+       amount and the document never hears about it. It is switched on by the
+       script alongside the strain and off again with it, so a rule at rest is
+       an ordinary un-clipped box -- which is what the page transition wants to
+       find when it snapshots this mark.
+
+       The margin is the bar's whole width where the ceiling is only half of
+       it, which is twice the headroom the cant can ever need -- and it is a
+       bare token on purpose. overflow-clip-margin does not take a calc() in
+       Chrome: CSS.supports() rejects `calc(26px / 2)` outright, and a var()
+       inside one passes support (var is resolved late) and then quietly
+       computes to zero. A clip margin of zero would shear the ink against a
+       hard edge and cut a triangle out of the top of the mark, which is a
+       corner lost rather than a stroke leaning. Confirmed against a live
+       parser: bare var() computes, calc() does not. */
+    overflow: var(--strain-clip, visible);
+    overflow-clip-margin: var(--scrollbar);
     /* How far the bar runs, read by the script.
 
        On a phone the text is the page, so the bar measures the text. Wider
@@ -669,6 +769,7 @@ img {
        jumps as you cross between the two pages. */
     view-transition-name: scroll-rail;
 }
+
 
 @media (min-width: 768px) {
     .edge-rule {
