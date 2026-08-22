@@ -10,6 +10,28 @@
     The wash lives in CSS; this only says which of the three states applies.
 -----------------------------------------------------------------------------*/
 
+/* THE CASCADE MUST NOT BE ABLE TO STRAND ANYTHING.
+
+   The register's rows arrive on a staggered animation that starts them at
+   opacity 0, with fill-mode both -- so the row is invisible until its turn
+   comes. That is fine while animations run, and it is a page of blank rows if
+   they ever do not: a tab opened in the background, a paint throttled on a
+   slow machine, a view transition that leaves the incoming document part way
+   through. Content that can only be seen if an animation completes is content
+   that can be lost, and no arrival effect is worth a page of nothing.
+
+   The longest row waits 676ms and then takes 380 more, so by two and a half
+   seconds every one of them is done and the class has no work left to do.
+   Taking it off then costs nothing when things went well and rescues the page
+   when they did not. */
+(function () {
+    "use strict";
+
+    setTimeout(function () {
+        document.documentElement.classList.remove("js-cascade");
+    }, 2500);
+})();
+
 (function () {
     "use strict";
 

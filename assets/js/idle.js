@@ -63,8 +63,20 @@
     function busy(mark) {
         // Mid-telling: the classes the stories run on are still present and
         // the part's resting transform is not where it is sitting.
-        return mark.classList.contains("anim")
-            && mark.dataset.settled !== "1";
+        if (mark.classList.contains("anim") && mark.dataset.settled !== "1") {
+            return true;
+        }
+        // And belt to that brace: if anything in the mark is actually running
+        // an animation right now, leave it alone. Reading a transform off a
+        // part in flight and then holding it for a second and a half is how a
+        // shape ends up stranded somewhere it was only passing through.
+        if (mark.getAnimations) {
+            var live = mark.getAnimations({ subtree: true });
+            for (var i = 0; i < live.length; i++) {
+                if (live[i].playState === "running") return true;
+            }
+        }
+        return false;
     }
 
     function onScreen(mark) {

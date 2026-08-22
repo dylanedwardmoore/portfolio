@@ -61,6 +61,15 @@
         // animation to the start again. Without it a mark asked to move while
         // it is already moving simply carries on with the old telling, which is
         // how you get a shape stranded half way out.
+        // A wiggle in flight holds its part with !important and would win
+        // against the story about to start, stranding that shape until the
+        // fidget's own timer got round to clearing it.
+        Array.prototype.forEach.call(mark.querySelectorAll("i"), function (p) {
+            p.classList.remove("wiggle-twitch", "wiggle-breathe", "wiggle-shrug",
+                "wiggle-shiver", "wiggle-lean");
+            p.style.removeProperty("--at");
+        });
+
         mark.classList.remove("anim");
         void mark.offsetWidth;
 
