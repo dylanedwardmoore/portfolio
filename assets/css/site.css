@@ -177,14 +177,24 @@ a {
    portfolio page. */
 .bio a,
 .prose a {
+    /* The same control the portfolio's entry links are: a rule at rest that
+       fills into a box on hover. The padding is pulled back out by an equal
+       negative margin, so the box has room to breathe without the link
+       taking any more space in the line than the words do. */
+    padding: 1px 5px;
+    margin: 0 -5px;
     box-shadow: inset 0 -1px 0 var(--sea);
+    transition: background-color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        color 150ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 @media (hover: hover) and (pointer: fine) {
 
     .bio a:hover,
     .prose a:hover {
-        box-shadow: inset 0 -2px 0 var(--sea);
+        background: var(--sea);
+        color: var(--ink);
+        box-shadow: none;
     }
 }
 
@@ -198,33 +208,6 @@ img {
     meeting in an L. Fixed to the viewport so they frame the page rather than
     the document. Desktop only.
 ---------------------------------------------------------------------------*/
-
-.frame-left,
-.frame-bottom {
-    display: none;
-    position: fixed;
-    background: var(--sea);
-    z-index: 10;
-}
-
-@media (min-width: 768px) {
-
-    .frame-left {
-        display: block;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: var(--bar);
-    }
-
-    .frame-bottom {
-        display: block;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: var(--bar);
-    }
-}
 
 /*---------------------------------------------------------------------------
     Page transitions.
@@ -240,21 +223,12 @@ img {
     quietest way to say "same thing, different face" without sliding the whole
     page around.
 
-    The frame and the rail carry their own names so they are held still rather
-    than cross-faded; they are the one fixed thing on both pages and should
-    read as continuous.
+    The rail carries its own name so it is held still rather than cross-faded;
+    it is the one fixed thing on both pages and should read as continuous.
 ---------------------------------------------------------------------------*/
 
 @view-transition {
     navigation: auto;
-}
-
-.frame-left {
-    view-transition-name: frame-left;
-}
-
-.frame-bottom {
-    view-transition-name: frame-bottom;
 }
 
 /* The portfolio's thumb and the landing page's static bar share one
@@ -321,26 +295,6 @@ img {
 
 ::view-transition-new(root) {
     animation: view-arrive 300ms cubic-bezier(0, 0, 0.2, 1) 220ms both;
-}
-
-/* The rules are the one constant across both pages, so the transition holds
-   them absolutely still: no group animation, and no cross-fade on the images
-   either. Naming the group alone is not enough -- the old and new snapshots
-   still carry the default fade, and on a flat colour that reads as the border
-   blinking. They are pinned at full opacity instead, so the frame simply
-   stays there while the pages change behind it. */
-::view-transition-group(frame-left),
-::view-transition-group(frame-bottom) {
-    animation: none;
-}
-
-::view-transition-old(frame-left),
-::view-transition-new(frame-left),
-::view-transition-old(frame-bottom),
-::view-transition-new(frame-bottom) {
-    animation: none;
-    opacity: 1;
-    mix-blend-mode: normal;
 }
 
 /* The bar does move between the pages -- that is the point -- so its group
@@ -496,13 +450,13 @@ img {
     Drawn rather than native: whether a native bar occupies layout width is not
     guaranteed -- overlay scrollbars take none -- and no page here can afford
     its text to shift depending on that. Drawing it also lets the bar sit hard
-    against the frame at twice its width, which a native bar cannot do. It is
-    draggable, and a click on the track jumps to that position.
+    on the screen edge at twice a rule's width, which a native bar cannot do.
+    It is draggable, and a click on the track jumps to that position.
 ---------------------------------------------------------------------------*/
 
 .scrollrail {
     position: fixed;
-    left: var(--bar);
+    left: 0;
     width: var(--scrollbar);
     /* Above every sticky header on either page. Those carry opaque grounds so
        rows do not show through them, and a header that outranks the rail
@@ -580,6 +534,16 @@ img {
 .edge-rule {
     display: none;
     background: var(--sea);
+    /* How far the bar runs, read by the script.
+
+       On a phone the text is the page, so the bar measures the text. Wider
+       than that the text is one column of a composition, and a bar cut to it
+       would be a stub against a lot of open paper -- so it measures the whole
+       block instead, the top line of the name down to the foot of the rules
+       under the links. That foot is a drawn line, which gives the bar
+       somewhere definite to stop: the two marks end level, and the eye closes
+       the corner the printed frame used to draw. */
+    --span: text;
     /* Carried by every variant of the rule, not just the desktop one. This is
        the landing page's half of the shared mark: whatever width the rule is
        drawn at, the browser pairs it with the portfolio's rail and moves one
@@ -589,7 +553,27 @@ img {
     view-transition-name: scroll-rail;
 }
 
-/* The portrait is set as a printed figure: floated to the outer edge with the
+@media (min-width: 768px) {
+    .edge-rule {
+        --span: sheet;
+    }
+}
+
+/* The figure is the composition's give.
+
+   Every other part of this page is incompressible -- the words are the words
+   -- so when a window is too short for all of it, the picture is what yields.
+   A fixed vh cap cannot do that job: it knows the window's height but not
+   what the rest of the page needs from it, so on a short window the figure
+   would still be claiming its third while the blurb ran off the bottom.
+   The script sets its height outright from the space actually left over,
+   and object-fit: cover crops to it rather than letterboxing. Outright, not
+   as a max-height: a max-height clips what gets painted but leaves the
+   figure still claiming its natural height when the row is measured, so the
+   row stayed 414px tall around a 230px picture and the page overflowed by
+   the difference. A height is what the row is sized from.
+
+   The portrait is set as a printed figure: floated to the outer edge with the
    text running around it. Its right edge stays on the type-area edge where it
    was; the growth is all leftward, from 3/12 of the measure to 46% of it.
    Text beside it therefore runs ~48 characters.
@@ -662,7 +646,7 @@ img {
     margin-top: calc(var(--u) * 1.2);
     margin-left: calc(-1 * var(--doclink-pad));
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: calc(var(--u) * 0.55);
     /* Content height, not whatever height is going spare.
 
@@ -748,7 +732,7 @@ img {
     occasions there is any.
 ---------------------------------------------------------------------------*/
 
-@media (min-height: 440px) {
+@media all {
 
     /* The head margin is a fixed unit, not a share of the leftover height.
 
@@ -807,7 +791,32 @@ img {
     }
 }
 
-@media (min-width: 1080px) and (min-height: 440px) {
+/* Between the two: at 1080x560 the blurb is already taller than the figure
+   beside it, so cropping the picture buys nothing -- the row is the text's
+   height either way. Only the rhythm and the type can give here. */
+@media (min-width: 768px) and (max-height: 620px) {
+    :root {
+        --u: 14px;
+        --t-body: 15.5px;
+        --t-lead: 18px;
+        --t-name: 30px;
+        --rule-control: 5px;
+    }
+}
+
+/* Dragged down to a strip. The figure has already gone by this point, so the
+   rhythm and the type are the only things left that can give. */
+@media (min-width: 768px) and (max-height: 520px) {
+    :root {
+        --u: 14px;
+        --t-body: 15.5px;
+        --t-lead: 17px;
+        --t-name: 28px;
+        --rule-control: 4px;
+    }
+}
+
+@media (min-width: 1080px) {
 
     .sheet {
         display: grid;
@@ -865,12 +874,10 @@ img {
         grid-row: 2;
     }
 
-    /* On a desktop the rule becomes the bar: the rail's own width, in the
-       rail's own lane beside the frame, running the height of the text --
-       the top line of the name to the last line of the blurb, the leading
-       trimmed off both ends. The portrait is not part of its measure.
-       Nothing scrolls here, so it does not move; it is the same mark the
-       portfolio's rail makes, standing still.
+    /* On a desktop the rule becomes the bar: twice the width, hard on the
+       screen edge, running the height of the whole composition. Nothing
+       scrolls here, so it does not move; it is the same mark the portfolio's
+       rail makes, standing still.
 
        The top and bottom below are the fallback extent, replaced with the
        measured one as soon as the script runs. */
@@ -881,7 +888,7 @@ img {
         grid-row: 1 / 3;
         top: 0;
         bottom: 0;
-        left: calc(-1 * var(--uh) * 1.5);
+        left: calc(-1 * var(--gutter-l));
         width: var(--scrollbar);
     }
 
@@ -893,9 +900,9 @@ img {
         margin-top: calc(var(--u) * 0.6);
     }
 
-    /* Twice the rule, hard against it. */
+    /* Hard on the edge, the same place the landing page's bar stands. */
     .scrollrail {
-        left: var(--bar);
+        left: 0;
     }
 }
 
@@ -952,7 +959,7 @@ img {
     }
 }
 
-@media (max-width: 1079px) and (min-height: 440px) {
+@media (max-width: 1079px) {
 
     .sheet {
         position: relative;
@@ -1002,7 +1009,7 @@ img {
     }
 
     .scrollrail {
-        left: var(--bar);
+        left: 0;
     }
 }
 
@@ -1034,7 +1041,7 @@ img {
         grid-row: 1 / 3;
         top: 0;
         bottom: 0;
-        left: calc(-1 * var(--m-min));
+        left: calc(-1 * var(--gutter-l));
         width: var(--scrollbar);
     }
 }
@@ -1056,6 +1063,41 @@ img {
 }
 
 
+/* Short and narrow: the links go back into a row.
+
+   Stacked, the three of them take a third of a 600px window on their own,
+   and no amount of cropping the figure buys that back. Side by side they
+   cost one row, which is what makes the rest fit without the type having to
+   shrink to get there. */
+@media (max-width: 1079px) and (max-height: 620px) {
+
+    :root {
+        --u: 22px;
+        --t-body: 15.5px;
+        --t-lead: 18px;
+        --t-name: 30px;
+    }
+
+    .doclinks {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: calc(var(--u) * 0.5);
+        margin-top: calc(var(--u) * 0.7);
+    }
+}
+
+/* The same strip, narrow. Below this the window is smaller than any phone
+   sold, but the page should still hold together rather than start scrolling
+   at some arbitrary point on the way down. */
+@media (max-width: 1079px) and (max-height: 460px) {
+    :root {
+        --u: 13px;
+        --t-body: 14px;
+        --t-lead: 16px;
+        --t-name: 24px;
+        --rule-control: 4px;
+    }
+}
+
 /*---------------------------------------------------------------------------
     Landscape on a phone.
 
@@ -1071,7 +1113,13 @@ img {
     is the whole thing on one screen, which is the point of the landing page.
 ---------------------------------------------------------------------------*/
 
-@media (orientation: landscape) and (max-height: 460px) and (max-width: 1000px) {
+/* A phone held sideways. The lower bound matters as much as the upper one:
+   this layout puts the figure in a 26% column beside the text, and on a
+   window narrower than about 560px that column is a vertical slot too thin
+   to hold a person -- 89px across and 198 tall at 390x320. Below it the
+   wrapped layout is the better answer even in landscape. */
+@media (orientation: landscape) and (max-height: 460px)
+    and (min-width: 560px) and (max-width: 1000px) {
 
     :root {
         --u: 15px;
@@ -1098,7 +1146,16 @@ img {
     .sheet {
         display: grid;
         grid-template-columns: minmax(0, 1fr) 26%;
-        grid-template-rows: auto auto auto;
+        /* The sheet is stretched to fill the window here, and stretched auto
+           rows hand their spare height to every row alike -- which put 60px
+           of it between the name and the first line of the blurb.
+
+           The blurb's row takes all of it instead, and the picture, which
+           spans the name's row and the blurb's, grows into it: that turns a
+           207x136 band into a proper portrait and leaves no hole anywhere,
+           because the space the text does not want is the space the figure
+           wanted all along. The blurb itself stays at the top of its row. */
+        grid-template-rows: auto 1fr auto;
         column-gap: calc(var(--uh) * 1.1);
         row-gap: calc(var(--u) * 0.4);
         min-height: 0;
@@ -1117,32 +1174,35 @@ img {
         display: none;
     }
 
+    /* Taken out of flow, into the grid area it occupies.
+
+       In flow it spanned the name's row and the blurb's, and it was taller
+       than the two of them together -- so the grid handed the excess back to
+       those rows, and the name's row came out 103px deep for one 26px line.
+       That was the hole between the name and the first paragraph.
+
+       Out of flow it contributes no height at all: the rows are the text's
+       own, and the picture fills whatever they come to and crops to it. */
     .portrait--column {
         display: block;
         float: none;
-        position: static;
+        position: absolute;
         grid-column: 2;
-        grid-row: 1 / span 2;
-        align-self: start;
+        grid-row: 1 / 3;
+        inset: 0;
         width: 100%;
         height: 100%;
-        max-height: 62vh;
+        max-height: none;
+        object-fit: cover;
         margin: 0;
     }
 
     .bio {
         grid-column: 1;
         grid-row: 2;
+        align-self: start;
         margin: 0;
         padding: 0;
-    }
-
-    /* No full frame here. At this height the bottom rule alone takes a
-       twentieth of the window, and the whole thing reads as boxed in; the
-       edge rule says the same thing without closing the page. */
-    .frame-left,
-    .frame-bottom {
-        display: none;
     }
 
     .edge-rule {
@@ -1171,7 +1231,8 @@ img {
     .doclinks {
         grid-column: 1 / -1;
         grid-row: 3;
-        grid-template-columns: repeat(3, 1fr);
+        align-self: end;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: calc(var(--u) * 0.7);
         margin-top: calc(var(--u) * 0.5);
     }
@@ -1182,41 +1243,3 @@ img {
     }
 }
 
-/*---------------------------------------------------------------------------
-    Interior page chrome (portfolio)
----------------------------------------------------------------------------*/
-
-.page-head {
-    padding: calc(var(--u) * 1.2) var(--m-min) 0 var(--gutter-l);
-}
-
-.page-head h1 {
-    margin: 0;
-    font-size: clamp(1.85rem, 4.6vw, 2.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.028em;
-}
-
-.page-head .backlink {
-    display: inline-block;
-    margin-top: calc(var(--u) * 0.4);
-    font-size: var(--t-small);
-    color: var(--ink);
-    text-decoration: none;
-    box-shadow: inset 0 -2px 0 var(--sea);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .page-head .backlink:hover {
-        background: var(--sea);
-    }
-}
-
-@media (min-width: 768px) {
-    .page-head {
-        /* Same left inset the canon gives the landing page, plus bootstrap's
-           15px column padding so the head lines up with the first card. */
-        padding: calc(var(--u) * 1.6) calc(var(--u) * 1.4 + 15px) 0
-            calc(var(--bar) + var(--u) * 1.4 + 15px);
-    }
-}

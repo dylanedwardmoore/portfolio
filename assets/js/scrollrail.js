@@ -55,22 +55,10 @@
             return t ? Math.max(0, t.offsetHeight) : 0;
         }
 
-        // The frame's bottom rule is a fixed band across the foot of the
-        // window. A full-height track runs underneath it, so the thumb
-        // collides with the rule whenever it reaches the end. The track stops
-        // one rule-width short instead, which also leaves the two greens
-        // reading as separate marks rather than one smear.
-        function railFoot() {
-            if (!isWindow) return 0;
-            var frame = document.querySelector(".frame-bottom");
-            if (!frame || getComputedStyle(frame).display === "none") return 0;
-            return frame.getBoundingClientRect().height + 6;
-        }
-
         function metrics() {
             var start = isWindow ? railTop() : 0;
             var box = isWindow
-                ? { top: start, height: window.innerHeight - start - railFoot() }
+                ? { top: start, height: window.innerHeight - start }
                 : el.getBoundingClientRect();
             var over = Math.max(0, el.scrollHeight - viewport());
             var pos = isWindow ? (window.scrollY || el.scrollTop) : el.scrollTop;
@@ -202,13 +190,23 @@
         var body = document.querySelector(".bio");
         var host = rule.offsetParent;
         if (!head || !body || !host) return;
-        if (getComputedStyle(rule).display === "none") return;
+        var style = getComputedStyle(rule);
+        if (style.display === "none") return;
 
-        var first = lineRects(head)[0];
-        var lines = lineRects(body);
-        var last = lines[lines.length - 1];
-        var top = first.top + halfLeading(head);
-        var foot = last.bottom - halfLeading(body);
+        var top = lineRects(head)[0].top + halfLeading(head);
+
+        // How far it runs is the stylesheet's decision, not this script's --
+        // it is a question about the layout, and the layout is over there.
+        var foot;
+        var links = document.querySelector(".doclinks");
+        if (style.getPropertyValue("--span").trim() === "sheet" && links) {
+            // To the foot of the rules under the links, so the vertical mark
+            // and the horizontal ones end on one line.
+            foot = links.getBoundingClientRect().bottom;
+        } else {
+            var lines = lineRects(body);
+            foot = lines[lines.length - 1].bottom - halfLeading(body);
+        }
         if (!(foot > top)) return;
 
         var origin = host.getBoundingClientRect().top;
@@ -217,9 +215,118 @@
         rule.style.height = (foot - top) + "px";
     }
 
-    window.addEventListener("resize", syncEdgeRule);
-    window.addEventListener("orientationchange", syncEdgeRule);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncEdgeRule);
+    /* The landing page fits, whatever the window does.
+
+       Every part of this composition is incompressible except the figure:
+       the words are the words, and the three links are the three links. So
+       when the page comes out taller than the window, the figure gives back
+       exactly the difference and object-fit crops it. When the window grows
+       again the cap is released first, so the picture returns to its full
+       size rather than staying wherever a smaller window left it.
+
+       It takes more than one pass, because on a narrow screen the figure is
+       floated: changing its height changes how many lines wrap beside it,
+       which changes the height of the text, which changes the answer. Each
+       pass is a correction of the last and it converges quickly.
+
+       There is a floor, and it is an aspect rather than a height. The crop
+       is anchored on the face, so as the box loses height the picture stays
+       a picture of someone for a surprisingly long way -- a 2.4:1 band is
+       still head and shoulders. Past that it is a letterbox slot with an eye
+       in it, worth less than the room it costs, so it goes entirely and the
+       page gets the whole of its height back. */
+    var PHOTO_FLOOR = 96;
+    var PHOTO_WIDEST = 2.4;
+    var PHOTO_TALLEST = 1.8;
+
+    // Whichever copy of the figure this layout uses -- the floated one or the
+    // column. Any inline hide from a previous, smaller window is cleared
+    // first: otherwise the hidden copy reads as "not the one on display",
+    // this returns null, and the picture never comes back when the window is
+    // opened out again.
+    function portrait() {
+        var all = document.querySelectorAll(".portrait");
+        var i;
+        for (i = 0; i < all.length; i++) {
+            all[i].style.removeProperty("display");
+            all[i].style.removeProperty("height");
+        }
+        for (i = 0; i < all.length; i++) {
+            if (getComputedStyle(all[i]).display !== "none") return all[i];
+        }
+        return null;
+    }
+
+    function overflow() {
+        var doc = document.documentElement;
+        return doc.scrollHeight - window.innerHeight;
+    }
+
+    function fitPage() {
+        var img = portrait();
+        if (!img) return;
+
+        // Four passes rather than two. Each one is a correction of the last,
+        // and on a wide short window the float rewraps enough that two were
+        // leaving a few dozen pixels on the table.
+        var last = Infinity;
+        for (var pass = 0; pass < 4; pass++) {
+            var over = overflow();
+            if (over <= 0) break;
+
+            // Beside a blurb taller than itself the figure is not what makes
+            // the row, and cropping it buys nothing: the page comes out the
+            // same height and the picture is smaller for no reason. If a pass
+            // fails to win anything back, put it back and leave it alone --
+            // what is too tall here is the text, and the type steps handle it.
+            if (over >= last) {
+                img.style.removeProperty("height");
+                break;
+            }
+            last = over;
+
+            var box = img.getBoundingClientRect();
+            var want = box.height - over;
+            if (want < PHOTO_FLOOR || want * PHOTO_WIDEST < box.width) {
+                img.style.removeProperty("height");
+                img.style.display = "none";
+                break;
+            }
+            img.style.height = want + "px";
+        }
+
+        // A ceiling on the shape as well as a floor. Where the figure fills a
+        // column it can end up taller than it is wide by any amount the window
+        // cares to give it -- 144 across and 363 down on a 600x440 landscape,
+        // which is a letterbox stood on its end. Nothing forces this in CSS,
+        // because the aspect follows two lengths that are decided separately.
+        var shape = img.getBoundingClientRect();
+        if (shape.width && shape.height > shape.width * PHOTO_TALLEST) {
+            img.style.height = (shape.width * PHOTO_TALLEST) + "px";
+        }
+    }
+
+    // Resize fires in bursts while a window is dragged, and each call reads
+    // layout back. One per frame is plenty and keeps the drag smooth.
+    var queued = false;
+
+    function refit() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(function () {
+            queued = false;
+            fitPage();
+            syncEdgeRule();
+        });
+    }
+
+    window.addEventListener("resize", refit);
+    window.addEventListener("orientationchange", refit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+    Array.prototype.forEach.call(document.images, function (im) {
+        if (!im.complete) im.addEventListener("load", refit);
+    });
+    fitPage();
     syncEdgeRule();
 
     // The sticky section labels have to start exactly where the bar ends, or

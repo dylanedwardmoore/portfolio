@@ -19,7 +19,7 @@ IMG = "../assets/img/portfolio/"
 
 # (year, title, blurb, image-or-None, [(url, label), ...])
 SECTIONS = [
-    ("Ventures", "sea", "Companies I have built and run.", [
+    ("Ventures", "sea", "Companies I have helped build.", [
         ("2023 – present", "Memcara",
          "Co-founder and Chief AI Officer of Memcara, working on building AI-enabled "
          "tools for caregiving in long-term care facilities. I joined Memcara as a "
@@ -32,7 +32,7 @@ SECTIONS = [
              (None, "CareWare: Caregiver Smart Glasses (CHI 2026 submission)"),
          ]),
         ("2025–26", "Companion IQ",
-         "Founder and Chief AI Officer of Companion IQ, a startup that builds AI "
+         "Cofounder and Chief AI Officer of Companion IQ, a startup that builds AI "
          "tools to support person-centered dementia care. Our first product is an "
          "AI-powered dashboard for long-term care staff that provides insights into "
          "the needs and experiences of residents with dementia. We are currently "
@@ -384,7 +384,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260822s"
+V = "v=20260823k"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -446,8 +446,6 @@ HEAD = """<!doctype html>
 <body class="portfolio no-js">
     <script>document.body.classList.remove('no-js');</script>
 
-    <div class="frame-left" aria-hidden="true"></div>
-    <div class="frame-bottom" aria-hidden="true"></div>
     <div class="scrollrail" data-scroll="window" data-rail-top=".topbar"
         aria-hidden="true" hidden>
         <div class="scrollrail-thumb"></div>

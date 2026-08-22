@@ -56,7 +56,6 @@
    so it takes no pointer events and just reports position. */
 @media (max-width: 767px) {
     .portfolio .scrollrail {
-        left: 0;
         width: var(--bar);
         pointer-events: none;
     }
@@ -128,18 +127,6 @@
     z-index: 20;
     background: var(--paper);
     padding: calc(var(--u) * 0.25) var(--m-min) calc(var(--u) * 0.5) var(--gutter-l);
-}
-
-/* Wherever the frame is drawn, the bar's opaque ground has to start after the
-   rule or it paints straight over it -- that was the white notch through the
-   green at the top left. The margin moves the ground clear; the padding then
-   gives back exactly what the margin took, so the Back link still starts on
-   the same line as the title above it rather than 13px to its right. */
-@media (min-width: 768px) {
-    .topbar {
-        margin-left: var(--bar);
-        padding-left: calc(var(--gutter-l) - var(--bar));
-    }
 }
 
 .backlink {
@@ -413,12 +400,10 @@
        depending on the window. Restating the formula was the mistake; there is
        one gutter, and both pages ask for it by name. */
     .topbar {
-        /* Starts after the frame so its ground never paints over that rule.
-           It may run under the rail's lane, because the rail now outranks it
-           and draws on top. */
-        margin-left: var(--bar);
+        /* Runs the full width and under the rail's lane, because the rail
+           outranks it and draws on top. */
         padding: calc(var(--u) * 0.25) calc(var(--u) * 1.4) calc(var(--u) * 0.55)
-            calc(var(--gutter-l) - var(--bar));
+            var(--gutter-l);
     }
 
     .masthead {
