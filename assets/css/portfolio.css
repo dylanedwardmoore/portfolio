@@ -258,18 +258,238 @@
    widths are not chosen either -- each is the shape's own proportion at this
    height, so nothing is stretched to fit a box. */
 .section-index {
+    position: relative;
     display: block;
     height: 16px;
     width: var(--mark-w, 16px);
-    background: var(--tone);
-    -webkit-mask: var(--mark) no-repeat center / 100% 100%;
-    mask: var(--mark) no-repeat center / 100% 100%;
     margin-bottom: calc(var(--u) * 0.3);
-    /* The index digits are for the document, not the page; the mark is the
-       signal. Sized in px, not em, so it cannot collapse. */
+}
+
+/* The index digits are for the document, not the page; the mark is the signal.
+   Taken out of sight rather than out of the document -- the register is a
+   numbered list and should still read as one. */
+.section-index-n {
+    position: absolute;
+    width: 1px;
+    height: 1px;
     overflow: hidden;
-    text-indent: 110%;
+    clip-path: inset(50%);
     white-space: nowrap;
+}
+
+/* ONE ELEMENT PER SHAPE.
+
+   The mark used to be a single span with the whole composition masked out of
+   the tone in one piece. One piece cannot come apart. Each shape now has its
+   own box -- placed by build-shapes.py, in per cent of the mark's own box, so
+   the arrangement survives any width the mark is drawn at -- and is masked out
+   of the tone by its own file from the library. The colour is still the
+   section's one entry and still arrives by mask, so nothing about the palette
+   has changed; there are simply three or four of them now instead of one.
+
+   THE MARK IS GATHERED BY DEFAULT and opens when its label reaches the top.
+   That way round because the mark should be at its plainest while its section
+   is still ahead of you, and should open out at the moment the label stops
+   being a thing you scroll past and starts being the header for what you are
+   reading.
+
+   The gathered state is not a drawing of a merged shape. Every part of a mark
+   is the SAME colour, so parts laid over one another have no seam between them
+   -- the silhouette really is one shape, and the mark really does come apart
+   into the pieces it was made of. That is why this is done with transforms and
+   not by tweening outlines: at sixteen pixels tall no one can read the
+   difference between one path and another, and everyone can read a thing
+   moving.
+
+   Parts that sit back are given their alpha only when open. Gathered, they
+   come up to full strength and join the body, which is what stops the overlap
+   showing as a darker patch and reads as the faint one falling in with the
+   rest. */
+.section-index i {
+    position: absolute;
+    background: var(--tone);
+    /* Longhands, because the image itself arrives from the style attribute
+       and a shorthand here would reset it. */
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    transform: var(--gather, none);
+    transition: transform var(--mt, 440ms) var(--me, ease) var(--md, 0ms),
+        opacity var(--mt, 440ms) linear var(--md, 0ms);
+}
+
+.section-index.is-open i {
+    transform: none;
+    opacity: var(--a, 1);
+    transition-delay: var(--mo, 0ms);
+}
+
+/* THE SIX, AND WHY EACH MOVES AS IT DOES.
+
+   Every one is taken from what its shapes already are in build-shapes.py
+   rather than assigned to taste. The gathered offsets are measured off the
+   geometry that file records, which is why they are odd numbers.
+
+   VENTURES -- a thin start, something solid, then the largest thing. The big
+   plane simply slides left over the other two and they are inside it; opening,
+   it draws off to the right and they step out from under it in turn, which is
+   a thing being assembled rather than a thing appearing.
+
+   RESEARCH -- the comb, the one device in these paintings that is plainly a
+   list of separate things. It fans. The rules close up onto the pillar and
+   deal out again left to right, the faint one last and a beat behind the rest,
+   because there is always one more than is finished.
+
+   INDUSTRY -- a large plane machined down one edge and the offcut beside it.
+   The offcut goes back into the notch it was cut from, which is the one pair
+   here that genuinely interlocks. It moves fast and on the blade curve the
+   controls' rules already use: out at once, then crawling the last of it.
+
+   TEACHING -- a form and the horizon it is handed across. The cap slides out
+   from under the quarter and lies down flat, turning the last three degrees as
+   it settles, the way something set down finds its level.
+
+   RECOGNITION -- a seal and the plate it is pressed onto. Gathered, the seal
+   is pressed: a little shorter, sitting down on the plate. Opening, it springs
+   back to full height and the plate slides out from under it. The curve
+   overshoots, so it lifts before it settles.
+
+   EARLIER WORK -- three fragments, each smaller than the last, and the back
+   matter takes the quietest mark. They drift apart, the smallest travelling
+   furthest, over the longest time of any of them and with no overshoot at all.
+   It is the only one that does not do anything sharp. */
+
+[data-mark="ventures"] {
+    --mt: 460ms;
+    --me: cubic-bezier(0.2, 0.9, 0.3, 1.22);
+}
+
+[data-mark="ventures"] i:nth-of-type(1) {
+    --gather: translateX(9px) scale(0.88);
+    --md: 0ms;
+    --mo: 130ms;
+}
+
+[data-mark="ventures"] i:nth-of-type(2) {
+    --gather: translateX(5px);
+    --md: 60ms;
+    --mo: 70ms;
+}
+
+[data-mark="ventures"] i:nth-of-type(3) {
+    --gather: translateX(-15.3px);
+    --md: 120ms;
+    --mo: 0ms;
+}
+
+[data-mark="research"] {
+    --mt: 520ms;
+    --me: cubic-bezier(0.25, 1, 0.3, 1);
+}
+
+[data-mark="research"] i:nth-of-type(2) {
+    --gather: translateX(-8px);
+    --md: 120ms;
+    --mo: 60ms;
+}
+
+[data-mark="research"] i:nth-of-type(3) {
+    --gather: translateX(-11.2px);
+    --md: 60ms;
+    --mo: 120ms;
+}
+
+[data-mark="research"] i:nth-of-type(4) {
+    --gather: translateX(-16px);
+    --md: 0ms;
+    --mo: 190ms;
+}
+
+[data-mark="industry"] {
+    --mt: 280ms;
+    --me: cubic-bezier(0.16, 0.84, 0.3, 1);
+}
+
+[data-mark="industry"] i:nth-of-type(2) {
+    /* Into the notch, but a fifth of a pixel clear of the plane's own edge.
+       Sat exactly on it the offcut's outline showed as a tab hanging off the
+       left side, which is the one thing a merged silhouette must not do. */
+    --gather: translate(-21.6px, -9.3px);
+}
+
+[data-mark="teaching"] {
+    --mt: 400ms;
+    --me: cubic-bezier(0.3, 0.8, 0.35, 1.12);
+}
+
+[data-mark="teaching"] i:nth-of-type(2) {
+    /* The cap does not tuck under the quarter at the foot, because the arc
+       has taken the quarter away down there -- boxes overlapping is not the
+       same as ink overlapping, and every offset along the bottom left a lip
+       hanging out. It goes UP into the body of the quarter instead, where
+       there is ink to hide in, and comes down as it slides out. Which is the
+       better gesture anyway: a thing handed across is set down, not pushed. */
+    --gather: translate(-17.6px, -10px) rotate(-2deg);
+    transform-origin: 50% 50%;
+    --mo: 40ms;
+}
+
+[data-mark="recognition"] {
+    --mt: 440ms;
+    --me: cubic-bezier(0.2, 1.38, 0.35, 1);
+}
+
+[data-mark="recognition"] i:nth-of-type(1) {
+    /* Pressed: sitting down on the plate, and a little shorter for it. */
+    --gather: translateY(0.7px) scaleY(0.95);
+    transform-origin: 50% 100%;
+}
+
+[data-mark="recognition"] i:nth-of-type(2) {
+    /* The plate is only half a pixel narrower than the seal, so the window it
+       can hide in runs -11.28 to -10.75 and nowhere else. */
+    --gather: translateX(-11px);
+    --mo: 90ms;
+}
+
+[data-mark="earlier"] {
+    --mt: 620ms;
+    --me: cubic-bezier(0.25, 0.9, 0.3, 1);
+}
+
+[data-mark="earlier"] i:nth-of-type(2) {
+    --gather: translateX(-10px);
+    --md: 60ms;
+    --mo: 90ms;
+}
+
+[data-mark="earlier"] i:nth-of-type(3) {
+    --gather: translateX(-16px);
+    --md: 0ms;
+    --mo: 170ms;
+}
+
+/* With no script the marks would never open, and a page that cannot run this
+   must still show the composition the register was built with. The body
+   carries no-js until a script takes it off, which is the one signal that can
+   report a script's ABSENCE -- a class added by the script itself can only
+   ever report its presence, which is the wrong way round for a fallback. */
+.no-js .section-index i {
+    transform: none;
+    opacity: var(--a, 1);
+    transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .section-index i {
+        transform: none !important;
+        opacity: var(--a, 1) !important;
+        transition: none !important;
+    }
 }
 
 .section-label p {

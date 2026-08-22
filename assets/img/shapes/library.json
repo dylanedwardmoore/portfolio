@@ -1,8 +1,38 @@
 {
   "marks": {
     "earlier": {
+      "box": [
+        20.789,
+        16
+      ],
       "height": 16,
       "note": "Three fragments and the ground between them, each smaller than the last. The back matter takes the quietest mark, as it already takes no colour.",
+      "parts": [
+        {
+          "alpha": 1,
+          "h": 14.4,
+          "shape": "sliver",
+          "w": 7.954,
+          "x": 0.0,
+          "y": 1.6
+        },
+        {
+          "alpha": 1,
+          "h": 8.0,
+          "shape": "chip",
+          "w": 4.116,
+          "x": 11.954,
+          "y": 8.0
+        },
+        {
+          "alpha": 0.55,
+          "h": 9.92,
+          "shape": "rule",
+          "w": 1.519,
+          "x": 19.27,
+          "y": 6.08
+        }
+      ],
       "shapes": [
         "sliver",
         "chip",
@@ -12,8 +42,30 @@
       "width": 21
     },
     "industry": {
+      "box": [
+        29.485,
+        16
+      ],
       "height": 16,
       "note": "A large plane machined down one edge to fit what was already there, and the offcut set beside it.",
+      "parts": [
+        {
+          "alpha": 1,
+          "h": 16.0,
+          "shape": "arc-corner",
+          "w": 18.368,
+          "x": 0.0,
+          "y": 0.0
+        },
+        {
+          "alpha": 0.45,
+          "h": 6.72,
+          "shape": "corner-piece",
+          "w": 7.277,
+          "x": 22.208,
+          "y": 9.28
+        }
+      ],
       "shapes": [
         "arc-corner",
         "corner-piece"
@@ -22,8 +74,30 @@
       "width": 30
     },
     "recognition": {
+      "box": [
+        17.877,
+        16
+      ],
       "height": 16,
       "note": "A seal -- round on three sides, flat where it is presented -- and the plate it is pressed onto.",
+      "parts": [
+        {
+          "alpha": 1,
+          "h": 16.0,
+          "shape": "lens",
+          "w": 7.123,
+          "x": 0.0,
+          "y": 0.0
+        },
+        {
+          "alpha": 0.45,
+          "h": 4.8,
+          "shape": "plank",
+          "w": 6.594,
+          "x": 11.283,
+          "y": 11.2
+        }
+      ],
       "shapes": [
         "lens",
         "plank"
@@ -32,8 +106,46 @@
       "width": 18
     },
     "research": {
+      "box": [
+        21.486,
+        16
+      ],
       "height": 16,
       "note": "Rules of no two equal widths or lengths, ruled off side by side: the comb, which is the one device in these paintings that is plainly a list of separate things. The last is set back, because there is always one more than is finished.",
+      "parts": [
+        {
+          "alpha": 1,
+          "h": 16.0,
+          "shape": "pillar",
+          "w": 6.029,
+          "x": 0.0,
+          "y": 0.0
+        },
+        {
+          "alpha": 1,
+          "h": 11.52,
+          "shape": "rule",
+          "w": 1.764,
+          "x": 10.189,
+          "y": 4.48
+        },
+        {
+          "alpha": 1,
+          "h": 8.32,
+          "shape": "rule-short",
+          "w": 1.303,
+          "x": 14.833,
+          "y": 7.68
+        },
+        {
+          "alpha": 0.45,
+          "h": 13.76,
+          "shape": "rule-wide",
+          "w": 1.19,
+          "x": 20.296,
+          "y": 2.24
+        }
+      ],
       "shapes": [
         "pillar",
         "rule",
@@ -44,8 +156,30 @@
       "width": 22
     },
     "teaching": {
+      "box": [
+        31.108,
+        16
+      ],
       "height": 16,
       "note": "A form, and the horizon it is handed across: a quarter circle, then a shallow cap lying flat and well back from it.",
+      "parts": [
+        {
+          "alpha": 1,
+          "h": 14.72,
+          "shape": "arc-quarter",
+          "w": 15.463,
+          "x": 0.0,
+          "y": 1.28
+        },
+        {
+          "alpha": 0.5,
+          "h": 3.2,
+          "shape": "cap-wide",
+          "w": 12.444,
+          "x": 18.663,
+          "y": 12.8
+        }
+      ],
       "shapes": [
         "arc-quarter",
         "cap-wide"
@@ -54,8 +188,38 @@
       "width": 32
     },
     "ventures": {
+      "box": [
+        33.694,
+        16
+      ],
       "height": 16,
       "note": "Companies built, and what building one looks like: a thin start, something solid after it, and then the largest thing in the mark, which has had a corner machined off it and is still the largest thing.",
+      "parts": [
+        {
+          "alpha": 1,
+          "h": 7.2,
+          "shape": "pillar",
+          "w": 2.713,
+          "x": 0.0,
+          "y": 8.8
+        },
+        {
+          "alpha": 1,
+          "h": 11.52,
+          "shape": "block",
+          "w": 7.173,
+          "x": 5.273,
+          "y": 4.48
+        },
+        {
+          "alpha": 1,
+          "h": 16.0,
+          "shape": "arc-corner",
+          "w": 18.368,
+          "x": 15.326,
+          "y": 0.0
+        }
+      ],
       "shapes": [
         "pillar",
         "block",

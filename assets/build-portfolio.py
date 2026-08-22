@@ -14,8 +14,54 @@ filled square by the section label, and a wash behind a row on hover.
 import html
 import io
 import json
+import os
 
 IMG = "../assets/img/portfolio/"
+SHAPES = "../assets/img/shapes/library/"
+
+# Which mark belongs to which section, by the tone the section already carries.
+# The tone is the only thing the register knows about a section's identity, and
+# the marks were built against the same six.
+MARK_OF = {"sea": "ventures", "dusky": "research", "red": "industry",
+           "yellow": "teaching", "blue": "recognition", None: "earlier"}
+
+_LIB = json.load(io.open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      "img", "shapes", "library.json"),
+                         encoding="utf-8"))
+
+
+def mark_parts(tone):
+    """The section's mark, as one element per shape.
+
+    It used to be a single span with the whole mark masked out of the tone in
+    one piece. One piece cannot come apart, and the register now wants it to:
+    the mark gathers into a single silhouette while its section is still ahead
+    of you and opens out when the label reaches the top and becomes the header
+    for what you are reading. So each shape gets its own box, placed where
+    build-shapes.py laid it, masked by its own file out of the library.
+
+    Everything is a percentage of the mark's box, so the whole thing scales
+    with --mark-w and 16px rather than being pinned to either.
+    """
+    mark = _LIB["marks"][MARK_OF.get(tone, "earlier")]
+    bw, bh = mark["box"]
+    out = []
+    for i, q in enumerate(mark["parts"]):
+        # The image goes in the style attribute rather than through a custom
+        # property. A relative url() inside a var() is resolved against the
+        # stylesheet that uses it, not the document -- so ../assets/... read
+        # from assets/css/ came out as /assets/assets/... and every mask was a
+        # 404. In a style attribute it is the document's own base, which is
+        # what the path is written against.
+        style = ("-webkit-mask-image:url(%s%s.svg);mask-image:url(%s%s.svg);"
+                 "left:%.3f%%;top:%.3f%%;width:%.3f%%;height:%.3f%%"
+                 % (SHAPES, q["shape"], SHAPES, q["shape"],
+                    100.0 * q["x"] / bw, 100.0 * q["y"] / bh,
+                    100.0 * q["w"] / bw, 100.0 * q["h"] / bh))
+        if q["alpha"] < 1:
+            style += ";--a:%g" % q["alpha"]
+        out.append('<i style="%s"></i>' % style)
+    return "".join(out)
 
 # (year, title, blurb, image-or-None, [(url, label), ...])
 SECTIONS = [
@@ -362,7 +408,9 @@ def build():
         cls = ' data-tone="%s"' % tone if tone else ""
         parts.append('    <section class="section" id="s%d"%s>' % (idx, cls))
         parts.append('        <div class="section-label" style="--d:%d">' % nxt())
-        parts.append('            <span class="section-index">%02d</span>' % idx)
+        parts.append('            <span class="section-index" data-mark="%s">'
+                     '<span class="section-index-n">%02d</span>%s</span>'
+                     % (MARK_OF.get(tone, "earlier"), idx, mark_parts(tone)))
         parts.append('            <h2>%s</h2>' % esc(name))
         parts.append('            <p>%s</p>' % esc(standfirst))
         parts.append('        </div>')
@@ -375,7 +423,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260823t"
+V = "v=20260823v"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -457,6 +505,7 @@ TAIL = """    </main>
 
     <script src="../assets/js/scrollrail.js?{V}"></script>
     <script src="../assets/js/figures.js?{V}"></script>
+    <script src="../assets/js/marks.js?{V}"></script>
 </body>
 
 </html>

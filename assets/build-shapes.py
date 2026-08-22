@@ -449,27 +449,36 @@ def emit_library(regions):
 
 
 def compose(regions, index, parts):
-    """Lay parts out left to right and return (svg body, width).
+    """Lay parts out left to right and return (svg body, width, geometry).
+
+    The geometry is that same layout written as plain numbers -- where each
+    part sits in the mark's box, in the mark's own units. The flat SVG says
+    what the mark looks like; this says what it is made of, and the register
+    needs both, because one part per element is the only way a part can move
+    on its own.
 
     Each part is drawn at its own proportion -- the height is given and the
     width follows -- so nothing is ever stretched to fill a box. Intervals are
     fractions of the mark's height, which keeps a composition's spacing the
     same shape whatever height the marks are drawn at.
     """
-    body, x = [], 0.0
+    body, geom, x = [], [], 0.0
     for p in parts:
         spec = index[p["shape"]]
         d, (x0, y0, w, h) = assemble(regions, spec["regions"], spec["solid"])
         s = (p["h"] * MARK_H) / h
         x += p.get("gap", 0) * MARK_H
         y = (1 - p.get("base", 0)) * MARK_H - h * s
+        geom.append(dict(shape=p["shape"], x=round(x, 3), y=round(y, 3),
+                         w=round(w * s, 3), h=round(h * s, 3),
+                         alpha=round(p.get("alpha", 1), 3)))
         body.append('  <g transform="translate(%s %s) scale(%s)">\n'
                     '    <path d="%s" fill="#000"%s fill-rule="evenodd"/>\n  </g>'
                     % (f(x - x0 * s), f(y - y0 * s), f(s), d,
                        "" if p.get("alpha", 1) >= 1
                        else ' fill-opacity="%s"' % f(p["alpha"])))
         x += w * s
-    return "\n".join(body), x
+    return "\n".join(body), x, geom
 
 
 def emit_marks(regions, index):
@@ -478,10 +487,12 @@ def emit_marks(regions, index):
         for p in parts:
             if p["shape"] not in index:
                 raise SystemExit("mark %s wants missing shape %s" % (name, p["shape"]))
-        body, width = compose(regions, index, parts)
+        body, width, geom = compose(regions, index, parts)
         write("%s/marks/%s.svg" % (OUT, name), svg(width, MARK_H, body))
         marks[name] = dict(tone=tone, height=MARK_H, width=int(math.ceil(width)),
-                           shapes=[p["shape"] for p in parts], note=note)
+                           box=[round(width, 3), MARK_H],
+                           shapes=[p["shape"] for p in parts],
+                           parts=geom, note=note)
     return marks
 
 
