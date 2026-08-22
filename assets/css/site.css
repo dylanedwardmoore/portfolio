@@ -1824,6 +1824,96 @@ body.landing {
     }
 }
 
+/*  THE HELD STATE IS NOT A STILL ONE.
+
+    Once a mark is fully out it stays out for as long as the pointer does, and
+    a composition that then freezes reads as a picture rather than a thing. So
+    the pieces breathe: three gestures, none of them more than a pixel or a
+    degree, on periods that do not divide into one another and with offsets
+    that make sure no two are ever in step.
+
+    Three periods and three offsets rather than one of each, because anything
+    that syncs stops being alive and becomes a pulse. 3.1s, 3.7s and 4.3s share
+    no useful factor, so the pattern they make between them does not repeat
+    inside the time anyone holds a pointer still.
+
+    --rest is the transform the piece is already holding when it is open. Most
+    of them hold none; the two outer strokes of the M hold their splay. Without
+    it, breathing would begin by standing them upright.  */
+
+.doclink-mark.is-settled i {
+    animation-iteration-count: infinite !important;
+    animation-timing-function: ease-in-out !important;
+    animation-fill-mode: none !important;
+}
+
+.doclink-mark.is-settled i:nth-of-type(3n + 1) {
+    animation-name: dm-idle-rise !important;
+    animation-duration: 3.1s !important;
+    animation-delay: 0s !important;
+}
+
+.doclink-mark.is-settled i:nth-of-type(3n + 2) {
+    animation-name: dm-idle-tilt !important;
+    animation-duration: 3.7s !important;
+    animation-delay: 0.62s !important;
+}
+
+.doclink-mark.is-settled i:nth-of-type(3n) {
+    animation-name: dm-idle-swell !important;
+    animation-duration: 4.3s !important;
+    animation-delay: 1.24s !important;
+}
+
+/* The two outer strokes of the M keep their splay while they breathe. */
+.doclink-mark--name .mk-blue1 {
+    --rest: rotate(-9deg);
+}
+
+.doclink-mark--name .mk-blue3 {
+    --rest: rotate(9deg);
+}
+
+@keyframes dm-idle-rise {
+    0%,
+    100% {
+        transform: var(--rest, none);
+    }
+
+    50% {
+        transform: var(--rest, none) translateY(-0.8px);
+    }
+}
+
+@keyframes dm-idle-tilt {
+    0%,
+    100% {
+        transform: var(--rest, none);
+    }
+
+    50% {
+        transform: var(--rest, none) rotate(0.9deg);
+    }
+}
+
+@keyframes dm-idle-swell {
+    0%,
+    100% {
+        transform: var(--rest, none);
+    }
+
+    50% {
+        transform: var(--rest, none) scale(1.035, 0.975);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .doclink-mark.is-settled i {
+        animation: none !important;
+    }
+}
+
 /*  GOING HOME.
 
     All three marks end the same way -- everything they are made of turns the

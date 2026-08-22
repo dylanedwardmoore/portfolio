@@ -108,7 +108,15 @@
         function findFloor() {
             var deep = parseFloat(getComputedStyle(link)
                 .getPropertyValue("--rule-control")) || 6;
-            var floor = link.getBoundingClientRect().bottom - deep;
+            /* INTO THE RULE, NOT ONTO IT.
+               The first version aimed at the top edge of the rule at its full
+               weight -- but the rule is thin the whole time the mark is out,
+               two pixels of the six, so its ink was four pixels BELOW where
+               everything was landing and the pieces dissolved in clear white
+               with the bar under them. Aim at the middle of the full rule
+               instead: whatever thickness it has got back to by the time the
+               ink arrives, the ink is inside it. */
+            var floor = link.getBoundingClientRect().bottom - deep * 0.45;
             Array.prototype.forEach.call(mark.querySelectorAll("i"),
                 function (part) {
                     var r = part.getBoundingClientRect();
@@ -124,7 +132,7 @@
             state = "idle";
             clear();
             phase(null);
-            mark.classList.remove("is-live", "is-open", "anim");
+            mark.classList.remove("is-live", "is-open", "anim", "is-settled");
             Array.prototype.forEach.call(mark.querySelectorAll("i"),
                 function (part) { part.style.removeProperty("--fall"); });
             mark.style.removeProperty("--drop");
@@ -135,6 +143,9 @@
         /* Hand the mass back while the ink is still on its way down, so the
            rule is thickening as it arrives rather than after it. */
         function giveBack(inMs, doneMs) {
+            // Early enough that the rule is already fattening while the ink is
+            // still falling. A bar that thickens after everything has landed
+            // has been handed nothing; it has just got bigger on its own.
             at(inMs, function () { link.classList.remove("mark-live"); });
             at(doneMs, rest);
         }
@@ -142,13 +153,14 @@
         function shut() {
             state = "closing";
             clear();
+            mark.classList.remove("is-settled");
             findFloor();
             mark.classList.add("anim");
 
             if (mark.classList.contains("doclink-mark--name")) {
                 // Each piece for itself, from where it stands.
                 phase("is-falling");
-                giveBack(FALL * 0.55, FALL);
+                giveBack(FALL * 0.34, FALL);
                 return;
             }
 
@@ -158,7 +170,7 @@
                 phase("is-greening");
                 at(GREEN, function () {
                     phase("is-falling");
-                    giveBack(FALL * 0.55, FALL);
+                    giveBack(FALL * 0.34, FALL);
                 });
                 return;
             }
@@ -170,7 +182,7 @@
                 phase("is-spinning");
                 at(SPIN, function () {
                     phase("is-puddling");
-                    giveBack(PUDDLE * 0.55, PUDDLE);
+                    giveBack(PUDDLE * 0.3, PUDDLE);
                 });
             });
         }
@@ -192,6 +204,9 @@
                 mark.classList.add("is-open");
                 at(telling, function () {
                     state = "open";
+                    // Fully out and standing still: from here the pieces are
+                    // allowed to breathe. See .is-settled in the stylesheet.
+                    mark.classList.add("is-settled");
                     if (!want) shut();
                 });
             });
