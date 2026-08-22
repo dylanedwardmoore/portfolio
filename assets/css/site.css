@@ -115,11 +115,9 @@
     --bar: 13px;
     --scrollbar: 26px;
 
-    /* How far the title travels, and how far it is indented as it arrives.
-       Small on purpose: enough to read as a move and to say which way it
-       went, not enough to draw attention to itself. */
-    --title-shift: 11px;
-    --title-indent: 5px;
+    /* One full row of the wheel: a little more than the title's own height,
+       so the outgoing word clears the slot as the incoming one enters. */
+    --title-step: 58px;
 
     /* Floor margins, used once the viewport is too small for the canon. */
     --m-min: 24px;
@@ -252,82 +250,85 @@ img {
     view-transition-name: frame-bottom;
 }
 
-.scrollrail {
+/* The portfolio's rail and the landing page's static bar share one
+   transition name, so the browser treats them as the same object and morphs
+   one into the other across the navigation: the bar that marks the text
+   block on the landing page becomes the thing you can drag on the portfolio,
+   and back again. Only one of them is ever rendered at a time. */
+.portfolio .scrollrail {
     view-transition-name: scroll-rail;
 }
 
-/* The titles step through a slot.
+/* The titles turn on a wheel.
 
-   Adapted from CodeFronts' rotating word wheel (MIT), which is served at
-   .../css-elastic-bounce-text-animation/. Two things are borrowed: the masked
-   window, where a gradient softens the top and bottom edges so a line
-   dissolves into the opening rather than being clipped by it, and the easing,
-   cubic-bezier(.6,-0.2,.35,1.2) -- negative on the way out and past one on
-   the way in, which gives the small anticipation and overshoot that make the
-   step feel sprung rather than slid.
+   This is CodeFronts' masked word wheel (MIT), the demo served at
+   .../css-elastic-bounce-text-animation/, applied to a page transition
+   instead of a loop. Its three parts are all here:
 
-   The mask goes on the transition group rather than on the heading, so it
-   exists only while the transition runs and the settled title is never
-   faded at its edges.
+     the window   a slot with a gradient mask top and bottom, so a word
+                  dissolves into the opening rather than being cut by it
+     the step     a full row of travel -- the outgoing word leaves the slot
+                  completely as the incoming one arrives, which is what makes
+                  it read as one wheel turning rather than two words fading
+     the easing   cubic-bezier(.6,-0.2,.35,1.2): negative on the way out and
+                  past one on the way in, the anticipation and overshoot that
+                  give it the sprung, elastic snap
+
+   The mask sits on the transition group rather than the heading, so the slot
+   exists only while the wheel is turning and the settled title is never faded
+   at its edges.
 
    HIERARCHY. Portfolio is a subpage -- the control that leaves it says
-   "Back" -- so the two directions are not mirror images of one motion, they
-   say which way you went:
-
-     going in   the line steps UP through the slot, and the arriving title
-                enters from below and slightly INDENTED, settling leftward
-                into place, the way a nested thing resolves out of its parent
-     coming out the line steps DOWN, and the arriving title enters from above
-                and slightly OUTDENTED, settling rightward: back out a level
-
-   The indent is five pixels. It is meant to be felt rather than seen.
+   "Back" -- so the wheel turns one way going in and the other coming out:
+   in, the row steps up and the next title rises into the slot from below;
+   out, it steps down and the title arrives from above. Which way the wheel
+   turned is the whole cue, so there is nothing else layered on top of it.
 ---------------------------------------------------------------------------*/
 
 @keyframes title-out-up {
     to {
-        transform: translateY(calc(-1 * var(--title-shift)));
+        transform: translateY(calc(-1 * var(--title-step)));
         opacity: 0;
     }
 }
 
 @keyframes title-in-up {
     from {
-        transform: translateY(var(--title-shift)) translateX(var(--title-indent));
+        transform: translateY(var(--title-step));
         opacity: 0;
     }
 }
 
 @keyframes title-out-down {
     to {
-        transform: translateY(var(--title-shift));
+        transform: translateY(var(--title-step));
         opacity: 0;
     }
 }
 
 @keyframes title-in-down {
     from {
-        transform: translateY(calc(-1 * var(--title-shift)))
-            translateX(calc(-1 * var(--title-indent)));
+        transform: translateY(calc(-1 * var(--title-step)));
         opacity: 0;
     }
 }
 
-/* The slot. Soft only at the very edges: the travel is eleven pixels, so a
-   deeper fade would read as the title being cut rather than passing through. */
+/* The slot. */
 ::view-transition-group(page-title) {
     -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
     mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
 }
 
 ::view-transition-old(page-title) {
-    animation: title-out-up 320ms cubic-bezier(0.6, -0.2, 0.35, 1) both;
+    animation: title-out-up 220ms cubic-bezier(0.6, -0.2, 0.35, 1.2) both;
 }
 
+/* Turns in as the new view arrives, not while the old one is still leaving. */
 ::view-transition-new(page-title) {
-    animation: title-in-up 520ms cubic-bezier(0.6, -0.2, 0.35, 1.2) 60ms both;
+    animation: title-in-up 300ms cubic-bezier(0.6, -0.2, 0.35, 1.2) 220ms both;
 }
 
-/* Coming back out of the subpage: the same step, the other way. */
+/* Coming back out of the subpage: the wheel turns the other way. */
 html:active-view-transition-type(go-out)::view-transition-old(page-title) {
     animation-name: title-out-down;
 }
@@ -336,20 +337,44 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
     animation-name: title-in-down;
 }
 
-/* The body of the page cross-fades. Coming back out it leaves a little
-   faster than it arrived -- the reverse of the cascade that assembles it on
-   the way in, so a return feels like undoing rather than a second entrance. */
-::view-transition-old(root),
+/* THE ORDER OF THE WHOLE THING.
+
+   Nothing overlaps. The two views do not cross-fade -- one leaves completely,
+   then the other arrives, because a cross-fade holds both on screen at half
+   strength and that reads as a smear rather than a change of scene. The
+   incoming animation is delayed by exactly the outgoing one's duration.
+
+       0      leaving view fades out              220ms
+     220      arriving view fades in, title wheel turns   300ms
+     520      the bar moves to its new place       360ms
+     880      done
+
+   The bar goes last on purpose. It is the one thing on screen that belongs to
+   both pages, so it should not be travelling while the pages themselves are
+   still changing -- it waits until the new view has settled and then moves,
+   which reads as the page re-anchoring rather than as one more thing in
+   flight. Unhurried, but 360ms is still a beat, not a journey.
+
+   The rules never take part at all: they have their own names, so they are
+   outside the root snapshot and are pinned besides. */
+@keyframes view-leave {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes view-arrive {
+    from {
+        opacity: 0;
+    }
+}
+
+::view-transition-old(root) {
+    animation: view-leave 220ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
 ::view-transition-new(root) {
-    animation-duration: 240ms;
-}
-
-html:active-view-transition-type(go-out)::view-transition-old(root) {
-    animation-duration: 170ms;
-}
-
-html:active-view-transition-type(go-out)::view-transition-new(root) {
-    animation-duration: 300ms;
+    animation: view-arrive 300ms cubic-bezier(0, 0, 0.2, 1) 220ms both;
 }
 
 /* The rules are the one constant across both pages, so the transition holds
@@ -359,15 +384,31 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
    blinking. They are pinned at full opacity instead, so the frame simply
    stays there while the pages change behind it. */
 ::view-transition-group(frame-left),
-::view-transition-group(frame-bottom),
-::view-transition-group(scroll-rail) {
+::view-transition-group(frame-bottom) {
     animation: none;
 }
 
 ::view-transition-old(frame-left),
 ::view-transition-new(frame-left),
 ::view-transition-old(frame-bottom),
-::view-transition-new(frame-bottom),
+::view-transition-new(frame-bottom) {
+    animation: none;
+    opacity: 1;
+    mix-blend-mode: normal;
+}
+
+/* The bar does move between the pages -- that is the point -- so its group
+   keeps the default morph, on the same curve as the title so the two read as
+   one gesture. Its two snapshots are flat colour, so cross-fading them would
+   only shimmer; they are held opaque and the group's transform does the
+   work. */
+::view-transition-group(scroll-rail) {
+    animation-delay: 520ms;
+    animation-duration: 360ms;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.2, 1);
+    animation-fill-mode: both;
+}
+
 ::view-transition-old(scroll-rail),
 ::view-transition-new(scroll-rail) {
     animation: none;
@@ -566,6 +607,23 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
 .sheet {
     grid-column: 2;
     grid-row: 2;
+    position: relative;
+}
+
+/* The edge rule.
+
+   Where the window is too small for the printed frame, the page loses its
+   green entirely and the left edge goes slack. This puts a single rule back:
+   the same width as the frame's, flush to the screen edge, running only
+   beside the text and the figure -- top of the name to the foot of the blurb
+   -- rather than the full height. It says the same thing the frame says
+   without pretending there is room for a frame.
+
+   Placed into the sheet's grid rows 1-2 as an absolutely positioned child, so
+   its extent is those two rows exactly and it never reaches the blocks. */
+.edge-rule {
+    display: none;
+    background: var(--sea);
 }
 
 /* The portrait is set as a printed figure: floated to the outer edge with the
@@ -682,36 +740,24 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
     and the text must not shift depending on it. Without JavaScript the blurb
     still scrolls, just unmarked.
 
-    Gated on height: on a short window there is nothing left for the blurb
-    once the fixed parts are placed, so the page reverts to scrolling.
+    The blurb is not a scroller any more. A scroll region inside an otherwise
+    static page is a strange thing to hand someone: a box of text that moves
+    while everything around it stays put. The layout is sized so the whole
+    page fits instead, and on a window too small for that the page itself
+    scrolls -- the ordinary thing, which needs no explaining. What is left
+    here is the rail and its cue, reporting the page's own scroll on the rare
+    occasions there is any.
 ---------------------------------------------------------------------------*/
 
 @media (min-height: 440px) {
 
     .page {
-        height: 100vh;
-        height: 100dvh;
-        overflow: hidden;
+        min-height: 100vh;
+        min-height: 100dvh;
         grid-template-rows:
             minmax(var(--u), 1fr)
-            minmax(0, auto)
+            auto
             minmax(calc(var(--u) + var(--bar)), 2fr);
-    }
-
-    .sheet {
-        min-height: 0;
-        max-height: 100%;
-    }
-
-    .bio {
-        min-height: 0;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        scrollbar-width: none;
-    }
-
-    .bio::-webkit-scrollbar {
-        display: none;
     }
 
     /* Shown only before the first scroll, and only when there is something
@@ -792,6 +838,13 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
     }
 }
 
+@media (min-width: 768px) and (max-height: 700px) {
+    :root {
+        --u: 21px;
+        --t-name: 45.2px;
+    }
+}
+
 @media (min-width: 1080px) and (min-height: 440px) {
 
     .sheet {
@@ -803,7 +856,7 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
            readable band; this holds it either side of sixty, nearer the 66
            that Bringhurst calls ideal. */
         grid-template-columns: minmax(0, 1fr) min(40%, 430px);
-        grid-template-rows: auto minmax(0, 1fr) auto;
+        grid-template-rows: auto auto auto;
         column-gap: calc(var(--uh) * 1.5);
         /* Carried on the grid rather than on .bio, so the figure and the
            first line of body text share a top edge. */
@@ -848,13 +901,23 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
     .bio {
         grid-column: 1;
         grid-row: 2;
+    }
 
-        /* Reach back past the type-area margin so the rail lane starts at the
-           frame; the padding puts the text back on the line it was on. */
-        margin-left: calc(-1 * var(--uh) * 1.5);
-        padding-left: calc(var(--uh) * 1.5);
-        padding-right: calc(var(--u) * 0.6);
-        margin-right: calc(var(--u) * -0.6);
+    /* On a desktop the rule becomes the bar: the rail's own width, in the
+       rail's own lane beside the frame, running the height of the text and
+       the figure together -- the top of the name to the foot of whichever of
+       the two ends lower. Nothing scrolls here, so it does not move; it is
+       the same mark the portfolio's rail makes, standing still. */
+    .edge-rule {
+        display: block;
+        position: absolute;
+        grid-column: 1;
+        grid-row: 1 / 3;
+        top: 0;
+        bottom: 0;
+        left: calc(-1 * var(--uh) * 1.5);
+        width: var(--scrollbar);
+        view-transition-name: scroll-rail;
     }
 
     /* The row gap already separates this from the blurb; the block's own
@@ -899,8 +962,7 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
         --t-body: 17px;
         --t-lead: 20.2px;
         --t-name: 38px;
-        --title-shift: 8px;
-        --title-indent: 4px;
+        --title-step: 42px;
     }
 
     .page {
@@ -934,7 +996,7 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
     .sheet {
         position: relative;
         display: grid;
-        grid-template-rows: auto minmax(0, 1fr) auto;
+        grid-template-rows: auto auto auto;
         row-gap: calc(var(--u) * 0.6);
     }
 
@@ -979,7 +1041,7 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
     }
 
     .scrollrail {
-        left: 0;
+        left: var(--bar);
     }
 }
 
@@ -993,6 +1055,22 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
             calc(var(--bar) + var(--m-min))
             minmax(0, 1fr)
             var(--m-min);
+    }
+}
+
+/* Only where there is no frame to speak for the edge. Between 768 and 1080
+   the frame is drawn, and a rule as well would be two marks for one job. */
+@media (max-width: 767px) {
+
+    .edge-rule {
+        display: block;
+        position: absolute;
+        grid-column: 1;
+        grid-row: 1 / 3;
+        top: 0;
+        bottom: 0;
+        left: calc(-1 * var(--m-min));
+        width: var(--bar);
     }
 }
 
@@ -1033,8 +1111,7 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
         --t-body: 13.5px;
         --t-lead: 14.5px;
         --t-name: 26px;
-        --title-shift: 6px;
-        --title-indent: 3px;
+        --title-step: 30px;
     }
 
     .page {
@@ -1052,7 +1129,7 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
     .sheet {
         display: grid;
         grid-template-columns: minmax(0, 1fr) 26%;
-        grid-template-rows: auto minmax(0, 1fr) auto;
+        grid-template-rows: auto auto auto;
         column-gap: calc(var(--uh) * 1.1);
         row-gap: calc(var(--u) * 0.4);
         min-height: 0;
@@ -1087,10 +1164,31 @@ html:active-view-transition-type(go-out)::view-transition-new(root) {
     .bio {
         grid-column: 1;
         grid-row: 2;
-        min-height: 0;
-        overflow-y: auto;
         margin: 0;
         padding: 0;
+    }
+
+    /* No full frame here. At this height the bottom rule alone takes a
+       twentieth of the window, and the whole thing reads as boxed in; the
+       edge rule says the same thing without closing the page. */
+    .frame-left,
+    .frame-bottom {
+        display: none;
+    }
+
+    .edge-rule {
+        display: block;
+        position: absolute;
+        grid-column: 1;
+        grid-row: 1 / 3;
+        top: 0;
+        bottom: 0;
+        left: calc(-1 * (var(--bar) + var(--uh)));
+        width: var(--bar);
+    }
+
+    .scrollrail {
+        left: var(--bar);
     }
 
     .doclinks {
