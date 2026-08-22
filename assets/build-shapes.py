@@ -306,10 +306,21 @@ MARKS = [
       dict(shape="rule-wide", h=0.86, base=0, gap=0.26, alpha=0.45)]),
 
     ("industry", "red",
-     "A large plane machined down one edge to fit what was already there, and "
-     "the offcut set beside it.",
-     [dict(shape="arc-corner", h=1.00, base=0),
-      dict(shape="corner-piece", h=0.42, base=0, gap=0.24, alpha=0.45)]),
+     "A block with a corner machined off it, the piece that came off turned "
+     "round to face the corner it left, and a chip of what was lost making the "
+     "cut.\n\n"
+     "The shapes are the two the mark always had -- they are complementary by "
+     "construction, one being the scrap the other's circle leaves -- but "
+     "nothing in the arrangement said so. The block ran the full height and "
+     "took two thirds of the mark, which made it a slab; the offcut sat square "
+     "on the floor at the far end, which made it a crumb; and it faced the "
+     "same way as the block, so the one place the two obviously belong "
+     "together was hidden. It is smaller now, the offcut is mirrored so its "
+     "hollow looks back at the corner it came out of, and it is held off the "
+     "ground, because a part just cut is held and not dropped.",
+     [dict(shape="arc-corner", h=0.88, base=0),
+      dict(shape="corner-piece", h=0.52, base=0.30, gap=0.15, flipx=True),
+      dict(shape="chip", h=0.26, base=0, gap=0.12, alpha=0.5)]),
 
     ("teaching", "yellow",
      "A hand-off. The giver, the thing held up between them, and the bowl "

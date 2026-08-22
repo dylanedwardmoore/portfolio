@@ -43,35 +43,44 @@
     },
     "industry": {
       "box": [
-        29.485,
+        31.634,
         16
       ],
       "height": 16,
-      "note": "A large plane machined down one edge to fit what was already there, and the offcut set beside it.",
+      "note": "A block with a corner machined off it, the piece that came off turned round to face the corner it left, and a chip of what was lost making the cut.\n\nThe shapes are the two the mark always had -- they are complementary by construction, one being the scrap the other's circle leaves -- but nothing in the arrangement said so. The block ran the full height and took two thirds of the mark, which made it a slab; the offcut sat square on the floor at the far end, which made it a crumb; and it faced the same way as the block, so the one place the two obviously belong together was hidden. It is smaller now, the offcut is mirrored so its hollow looks back at the corner it came out of, and it is held off the ground, because a part just cut is held and not dropped.",
       "parts": [
         {
           "alpha": 1,
-          "h": 16.0,
+          "h": 14.08,
           "shape": "arc-corner",
-          "w": 18.368,
+          "w": 16.164,
           "x": 0.0,
-          "y": 0.0
+          "y": 1.92
         },
         {
-          "alpha": 0.45,
-          "h": 6.72,
+          "alpha": 1,
+          "h": 8.32,
           "shape": "corner-piece",
-          "w": 7.277,
-          "x": 22.208,
-          "y": 9.28
+          "w": 9.01,
+          "x": 18.564,
+          "y": 2.88
+        },
+        {
+          "alpha": 0.5,
+          "h": 4.16,
+          "shape": "chip",
+          "w": 2.141,
+          "x": 29.494,
+          "y": 11.84
         }
       ],
       "shapes": [
         "arc-corner",
-        "corner-piece"
+        "corner-piece",
+        "chip"
       ],
       "tone": "red",
-      "width": 30
+      "width": 32
     },
     "recognition": {
       "box": [

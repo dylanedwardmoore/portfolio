@@ -463,76 +463,69 @@
     }
 }
 
-/* INDUSTRY ROLLS.
+/* INDUSTRY IS MACHINERY, AND MACHINERY REPEATS.
 
-   It is the one mark with only two parts in it, so there is nothing else on
-   screen to look at while the offcut leaves -- and a body that only deflates,
-   next to a piece that travels, is read as the body having launched it however
-   carefully the piece is timed. Two parts cannot share the attention; one of
-   them has to be doing something of its own.
+   It is the only mark that ignores the five stories and does the same thing
+   every single time, which is the character rather than a shortcut: the other
+   five are hands and this one is a press. A shop floor that improvised would
+   be a frightening shop floor.
 
-   So this one goes over its corner. It rocks back a little first, rolls right
-   up onto the edge, hangs there past the point where it should have fallen,
-   and drops back. It pivots on its bottom-left corner rather than its middle,
-   because that is where a heavy thing tipping actually turns, and it rolls
-   TOWARDS where the offcut went rather than away from it -- a body leaning
-   after the thing that left is not a body that threw it.
+   And it is the only one that moves in straight lines. Everything else here
+   arcs, eases, overshoots and settles, because everything else is alive. This
+   waits, releases, travels at one speed, and stops dead -- linear timing all
+   the way through, and the last quarter of every keyframe list is a hold at
+   the destination doing nothing at all. The stillness is what makes the moving
+   parts read as driven.
 
-   The offcut waits three tenths of the telling before it moves. By then the
-   roll is plainly under way and is plainly the cause of nothing, which is the
-   entire point of the exercise. */
-[data-mark="industry"] i[data-lead] {
-    transform-origin: 0 100%;
+   The block does almost nothing. It snaps to size at the start and is then
+   still, except for one kick at the moment the offcut shears away and a
+   flinch as each piece slams home on the way back. A machine bed does not
+   perform; it takes the load. */
+[data-mark="industry"] i {
+    transform-origin: 50% 100%;
+}
+
+.section-index.anim[data-mark="industry"] i {
+    /* Its own clock, not the telling's. */
+    animation-duration: 620ms;
+    animation-delay: calc(var(--i, 0) * 110ms);
+    animation-timing-function: linear;
 }
 
 .section-index.anim[data-mark="industry"] i[data-lead] {
-    animation-name: mark-roll-open;
+    animation-duration: 900ms;
+    animation-delay: 0ms;
+    animation-name: mark-block-open;
 }
 
 .section-index.anim[data-mark="industry"]:not(.is-open) i[data-lead] {
-    animation-name: mark-roll-shut;
+    animation-name: mark-block-shut;
 }
 
-.section-index.anim[data-mark="industry"] i:not([data-lead]) {
-    animation-delay: calc(var(--dur, 800ms) * 0.3 + var(--i, 0) * var(--stagger, 60ms));
+.section-index.anim[data-mark="industry"].is-open i:not([data-lead]) {
+    animation-name: mark-shear-open;
 }
 
-/* And the roll has to last long enough to still be there when the offcut it
-   waited for finally lands. The mark's span is worked out from how far its
-   pieces travel; this one also makes its piece wait three tenths of a telling
-   before it starts, so the body needs that back or it finishes first and the
-   answering beats play to an empty room. */
-.section-index.anim[data-mark="industry"] i[data-lead] {
-    animation-duration: calc(var(--dur, 800ms) * (var(--span, 1.45) + 0.34));
+.section-index.anim[data-mark="industry"]:not(.is-open) i:not([data-lead]) {
+    animation-name: mark-shear-shut;
 }
 
-@keyframes mark-roll-open {
-    0% {
+@keyframes mark-shear-open {
+    0%,
+    20% {
+        /* Waits. The cut has not been made yet. */
         transform: translate(var(--gx), var(--gy)) scale(var(--gs));
     }
 
-    13% {
-        /* Rocks back. Nothing rolls without first going the other way. */
-        transform: scale(calc(var(--gs) * 1.01)) rotate(-5deg);
+    27% {
+        /* The release: one jolt as it comes free, and no more expression than
+           that. */
+        transform: translate(calc(var(--gx) * 0.93), calc(var(--gy) * 0.93)) scale(calc(var(--gs) * 1.05));
     }
 
-    42% {
-        transform: scale(1.03) rotate(9deg) translateX(1px);
-        animation-timing-function: cubic-bezier(0.5, 0, 0.3, 1);
-    }
-
-    64% {
-        /* Up on the edge, and held there a beat longer than gravity allows.
-           That hang is the whole personality of it. */
-        transform: rotate(11.5deg) translateX(1.6px);
-    }
-
-    85% {
-        transform: rotate(-3deg);
-    }
-
-    94% {
-        transform: rotate(1.2deg);
+    72% {
+        /* Straight there at one speed. */
+        transform: none;
     }
 
     100% {
@@ -540,20 +533,85 @@
     }
 }
 
-/* TEACHING LEANS. The mark is a hand-off, so the giver does what anybody
-   handing something over does: draws back a little, then leans after it and
-   holds the reach a beat too long before straightening. Turned on its foot,
-   because a body leaning is hinged where it stands. */
-[data-mark="teaching"] i[data-lead] {
-    transform-origin: 0 100%;
+@keyframes mark-shear-shut {
+    0%,
+    12% {
+        transform: none;
+    }
+
+    64% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    71% {
+        /* Home, hard. */
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.95));
+    }
+
+    80% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    100% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
 }
 
-.section-index.anim[data-mark="teaching"] i[data-lead] {
-    animation-name: mark-lean-open;
+@keyframes mark-block-open {
+    0% {
+        transform: scale(var(--gs));
+    }
+
+    13% {
+        /* Snaps to size and is then still for a third of a second. */
+        transform: none;
+    }
+
+    29% {
+        transform: none;
+    }
+
+    /* The kick, timed to the moment the first piece shears off. */
+    33% {
+        transform: scale(1.04, 0.96);
+    }
+
+    39% {
+        transform: scale(0.99, 1.01);
+    }
+
+    45%,
+    100% {
+        transform: none;
+    }
 }
 
-.section-index.anim[data-mark="teaching"]:not(.is-open) i[data-lead] {
-    animation-name: mark-lean-shut;
+@keyframes mark-block-shut {
+    0%,
+    56% {
+        transform: none;
+    }
+
+    /* Each arrival lands on the bed and the bed takes it. */
+    62% {
+        transform: scale(1.035, 0.965);
+    }
+
+    69% {
+        transform: none;
+    }
+
+    76% {
+        transform: scale(1.03, 0.97);
+    }
+
+    84% {
+        transform: scale(calc(var(--gs) * 0.97));
+    }
+
+    100% {
+        transform: scale(var(--gs));
+    }
 }
 
 @keyframes mark-lean-open {
@@ -671,32 +729,6 @@
     }
 }
 
-@keyframes mark-roll-shut {
-    0% {
-        transform: none;
-    }
-
-    17% {
-        transform: rotate(4deg);
-    }
-
-    46% {
-        transform: scale(1.03) rotate(-10deg) translateX(-1px);
-        animation-timing-function: cubic-bezier(0.5, 0, 0.3, 1);
-    }
-
-    69% {
-        transform: scale(calc(var(--gs) * 0.98)) rotate(-12.5deg) translateX(-1.6px);
-    }
-
-    89% {
-        transform: scale(calc(var(--gs) * 1.03)) rotate(3deg);
-    }
-
-    100% {
-        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
-    }
-}
 
 /* UNROLL -- curls tighter into the body, then unwinds its way out. */
 [data-story="unroll"] i {
