@@ -28,10 +28,8 @@
 (function () {
     "use strict";
 
-    var link = document.querySelector(".doclink--marked");
-    if (!link) return;
-    var mark = link.querySelector(".doclink-mark");
-    if (!mark) return;
+    var links = document.querySelectorAll(".doclink--marked");
+    if (!links.length) return;
 
     var fine = window.matchMedia
         && window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -39,18 +37,21 @@
 
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    function open(on) {
+    function open(mark, on) {
         if (reduced.matches) return;
         if (mark.classList.contains("is-open") === on) return;
         mark.classList.add("anim");
         mark.classList.toggle("is-open", on);
     }
 
-    link.addEventListener("pointerenter", function () { open(true); });
-    link.addEventListener("pointerleave", function () { open(false); });
-
-    // A block reached by keyboard should show what a block reached by pointer
-    // shows. It is the same block and the same intent.
-    link.addEventListener("focus", function () { open(true); });
-    link.addEventListener("blur", function () { open(false); });
+    Array.prototype.forEach.call(links, function (link) {
+        var mark = link.querySelector(".doclink-mark");
+        if (!mark) return;
+        link.addEventListener("pointerenter", function () { open(mark, true); });
+        link.addEventListener("pointerleave", function () { open(mark, false); });
+        // A block reached by keyboard should show what a block reached by
+        // pointer shows. It is the same block and the same intent.
+        link.addEventListener("focus", function () { open(mark, true); });
+        link.addEventListener("blur", function () { open(mark, false); });
+    });
 })();

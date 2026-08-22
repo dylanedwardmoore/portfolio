@@ -1062,7 +1062,7 @@ body.landing {
     transition: width 520ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.doclink-mark.is-open {
+.doclink-mark--name.is-open {
     /* The spread. Two and a bit times its own height, which is what three
        letters need and no more. */
     width: 68px;
@@ -1411,6 +1411,287 @@ body.landing {
     100% {
         transform: translateY(-2px) scale(1.7333, 1.1818);
         border-radius: 0;
+    }
+}
+
+/*---------------------------------------------------------------------------
+    THE OTHER TWO BLOCKS.
+
+    Three documents, three gestures, and the point of them is that they are not
+    the same gesture. A set of buttons that all animate alike says only "these
+    animate"; a set where each moves the way its own contents move says
+    something about the contents.
+
+        Portfolio   scatters into letters -- many small things with their own
+                    minds, arriving at an arrangement. A register is a lot of
+                    separate work that adds up to a name.
+
+        Resume      stacks and locks. Bars arrive from the left, bottom to top,
+                    each one settling onto the one below and nudging it. No
+                    arcs, no wobble, even rhythm: it is a record, and records
+                    accumulate in order. This is the architectural one.
+
+        Dissertation  draws one long line. The square narrows to a spine, a
+                    rule extends out of it and keeps going, and three marks
+                    come down across it at uneven intervals. One work, one
+                    argument, sustained -- so one continuous gesture and the
+                    slowest of the three by half.
+
+    None of them uses the bright green, which cannot be seen once the block
+    fills with it. The Portfolio mark makes that its first beat; these two
+    simply never had it.
+---------------------------------------------------------------------------*/
+
+/*  RESUME -- THE STACK. */
+
+.doclink-mark--stack.is-open {
+    width: 44px;
+}
+
+.sk-field {
+    left: 0;
+    /* At the FOOT. It is the shelf everything else is stacked onto, and a
+       shelf at the top of the tile is a ceiling. */
+    top: 22.6px;
+    width: 40px;
+    height: 3.4px;
+    background: var(--link);
+    /* Turned on its own bottom-left corner, so folding it back up is one
+       scale and no translation: 40 x 3.4 grown by 0.65 and 7.647 about that
+       corner is exactly the 26px square, standing where the square stood. */
+    transform-origin: 0 100%;
+    --folded: scale(0.65, 7.647);
+}
+
+.sk-bar {
+    left: 0;
+    background: var(--link);
+    transform-origin: 0 50%;
+    /* At no length at all, and out to the left. Not a sliver: a sliver of red
+       and a sliver of yellow lying on the folded square is the dirty-mark
+       problem again, and this tile is meant to be one dark square until it is
+       reached for. */
+    --folded: translateX(-10px) scaleX(0);
+}
+
+.sk-bar1 {
+    top: 17px;
+    width: 31px;
+    height: 3px;
+    background: var(--red);
+}
+
+.sk-bar2 {
+    top: 11.4px;
+    width: 22px;
+    height: 2.6px;
+    background: var(--paper);
+}
+
+.sk-bar3 {
+    top: 5.8px;
+    width: 34px;
+    height: 3px;
+    background: var(--yellow);
+}
+
+.sk-bar4 {
+    top: 0.4px;
+    width: 17px;
+    height: 2.6px;
+    background: var(--blue);
+}
+
+.doclink-mark--stack.is-open i {
+    transform: none;
+}
+
+/*  Bottom to top, evenly. The even rhythm is the character: four things
+    arriving on the beat is a record being kept, and any swing in it would make
+    it a performance instead. */
+.doclink-mark--stack.anim.is-open .sk-field {
+    animation: sk-lay 340ms cubic-bezier(0.32, 0, 0.2, 1) both;
+}
+
+.doclink-mark--stack.anim.is-open .sk-bar1 {
+    animation: sk-shelve 360ms cubic-bezier(0.3, 0, 0.18, 1) 240ms both;
+}
+
+.doclink-mark--stack.anim.is-open .sk-bar2 {
+    animation: sk-shelve 360ms cubic-bezier(0.3, 0, 0.18, 1) 380ms both;
+}
+
+.doclink-mark--stack.anim.is-open .sk-bar3 {
+    animation: sk-shelve 360ms cubic-bezier(0.3, 0, 0.18, 1) 520ms both;
+}
+
+.doclink-mark--stack.anim.is-open .sk-bar4 {
+    animation: sk-shelve 360ms cubic-bezier(0.3, 0, 0.18, 1) 660ms both;
+}
+
+.doclink-mark--stack.anim:not(.is-open) i {
+    animation: mk-fold 360ms cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+@keyframes sk-lay {
+    0% {
+        transform: scale(0.65, 7.647);
+    }
+
+    /* Comes down and squares off. One movement, no bounce -- everything after
+       it is going to land on top of this. */
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes sk-shelve {
+    0% {
+        transform: translateX(-10px) scaleX(0);
+    }
+
+    /* In from the left at length, then a short push past and back: the nudge
+       of something being pushed into a row until it sits flush. */
+    72% {
+        transform: translateX(1.4px) scaleX(1.04);
+    }
+
+    88% {
+        transform: translateX(-0.5px) scaleX(0.99);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+/*  DISSERTATION -- THE LINE. */
+
+.doclink-mark--line.is-open {
+    width: 56px;
+}
+
+.ln-spine {
+    left: 0;
+    top: 0;
+    width: 4.6px;
+    height: 26px;
+    background: var(--link);
+    transform-origin: 0 50%;
+    --folded: scaleX(5.652);
+}
+
+.ln-rule {
+    left: 4.6px;
+    top: 11.8px;
+    width: 51.4px;
+    height: 2.2px;
+    background: var(--link);
+    transform-origin: 0 50%;
+    /* Drawn, not moved: it comes out of the spine at no length at all. */
+    --folded: scaleX(0);
+}
+
+.ln-tick {
+    top: 0;
+    width: 2.4px;
+    background: var(--link);
+    transform-origin: 50% 0;
+    --folded: scaleY(0);
+}
+
+.ln-tick1 {
+    left: 15px;
+    top: 6.4px;
+    height: 12px;
+    background: var(--yellow);
+}
+
+.ln-tick2 {
+    left: 29.5px;
+    top: 4.2px;
+    height: 16.5px;
+    background: var(--red);
+}
+
+.ln-tick3 {
+    left: 43.5px;
+    top: 8.6px;
+    height: 9.5px;
+    background: var(--blue);
+}
+
+.doclink-mark--line.is-open i {
+    transform: none;
+}
+
+/*  The slowest of the three, and deliberately one thing after another rather
+    than several at once. A long argument is not a lot of things happening
+    together. */
+.doclink-mark--line.anim.is-open .ln-spine {
+    animation: ln-narrow 420ms cubic-bezier(0.36, 0, 0.22, 1) both;
+}
+
+.doclink-mark--line.anim.is-open .ln-rule {
+    animation: ln-draw 760ms cubic-bezier(0.22, 0.6, 0.24, 1) 300ms both;
+}
+
+.doclink-mark--line.anim.is-open .ln-tick1 {
+    animation: ln-drop 300ms cubic-bezier(0.3, 0.85, 0.35, 1.1) 720ms both;
+}
+
+.doclink-mark--line.anim.is-open .ln-tick2 {
+    animation: ln-drop 300ms cubic-bezier(0.3, 0.85, 0.35, 1.1) 860ms both;
+}
+
+.doclink-mark--line.anim.is-open .ln-tick3 {
+    animation: ln-drop 300ms cubic-bezier(0.3, 0.85, 0.35, 1.1) 990ms both;
+}
+
+.doclink-mark--line.anim:not(.is-open) i {
+    animation: mk-fold 380ms cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+@keyframes ln-narrow {
+    0% {
+        transform: scaleX(5.652);
+    }
+
+    /* Squeezes past the spine's width and comes back to it, which is the only
+       give in this whole mark. */
+    78% {
+        transform: scaleX(0.88);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes ln-draw {
+    0% {
+        transform: scaleX(0);
+    }
+
+    /* Out fast and then slower and slower, the way a line is actually drawn --
+       and it never quite stops hurrying, which is what makes it read as
+       length rather than as a bar appearing. */
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes ln-drop {
+    0% {
+        transform: scaleY(0);
+    }
+
+    76% {
+        transform: scaleY(1.14);
+    }
+
+    100% {
+        transform: none;
     }
 }
 
