@@ -306,21 +306,20 @@ MARKS = [
       dict(shape="rule-wide", h=0.86, base=0, gap=0.26, alpha=0.45)]),
 
     ("industry", "red",
-     "A block with a corner machined off it, the piece that came off turned "
-     "round to face the corner it left, and a chip of what was lost making the "
-     "cut.\n\n"
-     "The shapes are the two the mark always had -- they are complementary by "
-     "construction, one being the scrap the other's circle leaves -- but "
-     "nothing in the arrangement said so. The block ran the full height and "
-     "took two thirds of the mark, which made it a slab; the offcut sat square "
-     "on the floor at the far end, which made it a crumb; and it faced the "
-     "same way as the block, so the one place the two obviously belong "
-     "together was hidden. It is smaller now, the offcut is mirrored so its "
-     "hollow looks back at the corner it came out of, and it is held off the "
-     "ground, because a part just cut is held and not dropped.",
+     "A block with a corner machined off it, and a plain upright standing "
+     "beside it in a lighter red.\n\n"
+     "The lighter red is the same red. A part that wants to sit back is given "
+     "alpha rather than a second colour, which through a mask renders as the "
+     "one hue at less strength -- so the mark still spends exactly one entry "
+     "of the register's palette, and a shape can be made to recede without "
+     "anybody having to choose a tint for it.\n\n"
+     "Two parts, not three. The offcut and the swarf told a story about "
+     "machining that nothing at sixteen pixels could actually carry, and a "
+     "third small thing was one more than the composition wanted. A worked "
+     "block and a plain upright is a simpler pairing and a truer one: the "
+     "thing that has been cut, and the stock it was cut from.",
      [dict(shape="arc-corner", h=0.88, base=0),
-      dict(shape="corner-piece", h=0.52, base=0.30, gap=0.15, flipx=True),
-      dict(shape="chip", h=0.26, base=0, gap=0.12, alpha=0.5)]),
+      dict(shape="block", h=0.82, base=0, gap=0.17, alpha=0.55)]),
 
     ("teaching", "yellow",
      "A hand-off. The giver, the thing held up between them, and the bowl "

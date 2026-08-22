@@ -463,93 +463,133 @@
     }
 }
 
-/* INDUSTRY IS MACHINERY, AND MACHINERY REPEATS.
+/* INDUSTRY SHIVERS.
 
-   It is the only mark that ignores the five stories and does the same thing
-   every single time, which is the character rather than a shortcut: the other
-   five are hands and this one is a press. A shop floor that improvised would
-   be a frightening shop floor.
+   Two parts: a worked block, and a plain upright standing beside it in the
+   same red at less strength. The block is the anchor and does almost nothing
+   -- it settles once and then holds, because something has to be still or
+   there is nothing for the other to be moving against.
 
-   And it is the only one that moves in straight lines. Everything else here
-   arcs, eases, overshoots and settles, because everything else is alive. This
-   waits, releases, travels at one speed, and stops dead -- linear timing all
-   the way through, and the last quarter of every keyframe list is a hold at
-   the destination doing nothing at all. The stillness is what makes the moving
-   parts read as driven.
+   The upright does not travel, it VIBRATES ACROSS. Ten small steps, each
+   advancing a little and shaking a little, and the shake decaying as it goes
+   -- 0.62 of a pixel at the start and 0.07 at the end -- so it arrives by
+   running out of tremble rather than by braking. Linear all the way, because
+   an eased shiver is a wobble and a wobble is comic.
 
-   The block does almost nothing. It snaps to size at the start and is then
-   still, except for one kick at the moment the offcut shears away and a
-   flinch as each piece slams home on the way back. A machine bed does not
-   perform; it takes the load. */
+   Going back the figure is read the other way round: it starts calm and the
+   tremble grows as it nears the block.
+
+   Deliberately the quietest gesture in the register. The others lean, press,
+   deal and drift; this one is a thing that will not quite hold still, and that
+   only reads if nothing else in the mark competes with it. It is still the one
+   mark that ignores the five stories and does the same thing every time. */
 [data-mark="industry"] i {
     transform-origin: 50% 100%;
 }
 
 .section-index.anim[data-mark="industry"] i {
-    /* Its own clock, not the telling's. */
-    animation-duration: 620ms;
-    animation-delay: calc(var(--i, 0) * 110ms);
+    animation-duration: 900ms;
+    animation-delay: 0ms;
     animation-timing-function: linear;
 }
 
 .section-index.anim[data-mark="industry"] i[data-lead] {
-    animation-duration: 900ms;
-    animation-delay: 0ms;
-    animation-name: mark-block-open;
+    animation-name: mark-anchor-open;
 }
 
 .section-index.anim[data-mark="industry"]:not(.is-open) i[data-lead] {
-    animation-name: mark-block-shut;
+    animation-name: mark-anchor-shut;
 }
 
 .section-index.anim[data-mark="industry"].is-open i:not([data-lead]) {
-    animation-name: mark-shear-open;
+    animation-name: mark-shiver-open;
 }
 
 .section-index.anim[data-mark="industry"]:not(.is-open) i:not([data-lead]) {
-    animation-name: mark-shear-shut;
+    animation-name: mark-shiver-shut;
 }
 
-@keyframes mark-shear-open {
-    0%,
-    20% {
-        /* Waits. The cut has not been made yet. */
+@keyframes mark-shiver-open {
+    0% {
         transform: translate(var(--gx), var(--gy)) scale(var(--gs));
     }
 
-    27% {
-        /* The release: one jolt as it comes free, and no more expression than
-           that. */
-        transform: translate(calc(var(--gx) * 0.93), calc(var(--gy) * 0.93)) scale(calc(var(--gs) * 1.05));
+    10% {
+        transform: translate(calc(var(--gx) * 0.93 + 0.62px), var(--gy)) scale(calc(var(--gs) * 0.99));
+    }
+
+    20% {
+        transform: translate(calc(var(--gx) * 0.84 - 0.54px), var(--gy));
+    }
+
+    31% {
+        transform: translate(calc(var(--gx) * 0.72 + 0.52px), calc(var(--gy) * 0.9));
+    }
+
+    43% {
+        transform: translate(calc(var(--gx) * 0.58 - 0.44px), calc(var(--gy) * 0.72));
+    }
+
+    55% {
+        transform: translate(calc(var(--gx) * 0.43 + 0.38px), calc(var(--gy) * 0.54));
+    }
+
+    67% {
+        transform: translate(calc(var(--gx) * 0.29 - 0.29px), calc(var(--gy) * 0.36));
+    }
+
+    78% {
+        transform: translate(calc(var(--gx) * 0.17 + 0.21px), calc(var(--gy) * 0.2));
+    }
+
+    88% {
+        transform: translate(calc(var(--gx) * 0.08 - 0.13px), calc(var(--gy) * 0.09));
+    }
+
+    95% {
+        transform: translate(0.07px, 0);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mark-shiver-shut {
+    0% {
+        transform: none;
+    }
+
+    9% {
+        transform: translate(calc(var(--gx) * 0.06 - 0.08px), 0);
+    }
+
+    21% {
+        transform: translate(calc(var(--gx) * 0.17 + 0.16px), calc(var(--gy) * 0.13));
+    }
+
+    33% {
+        transform: translate(calc(var(--gx) * 0.32 - 0.26px), calc(var(--gy) * 0.28));
+    }
+
+    46% {
+        transform: translate(calc(var(--gx) * 0.48 + 0.34px), calc(var(--gy) * 0.45));
+    }
+
+    59% {
+        transform: translate(calc(var(--gx) * 0.64 - 0.42px), calc(var(--gy) * 0.62));
     }
 
     72% {
-        /* Straight there at one speed. */
-        transform: none;
+        transform: translate(calc(var(--gx) * 0.79 + 0.5px), calc(var(--gy) * 0.79));
     }
 
-    100% {
-        transform: none;
-    }
-}
-
-@keyframes mark-shear-shut {
-    0%,
-    12% {
-        transform: none;
+    85% {
+        transform: translate(calc(var(--gx) * 0.91 - 0.56px), calc(var(--gy) * 0.92)) scale(calc(var(--gs) * 0.99));
     }
 
-    64% {
-        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
-    }
-
-    71% {
-        /* Home, hard. */
-        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.95));
-    }
-
-    80% {
-        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    94% {
+        transform: translate(calc(var(--gx) + 0.6px), var(--gy)) scale(var(--gs));
     }
 
     100% {
@@ -557,61 +597,63 @@
     }
 }
 
-@keyframes mark-block-open {
+/* The anchor. It settles once and then holds -- something has to be still. */
+@keyframes mark-anchor-open {
     0% {
         transform: scale(var(--gs));
     }
 
-    13% {
-        /* Snaps to size and is then still for a third of a second. */
-        transform: none;
+    22% {
+        transform: scale(calc(var(--gs) * 0.97));
     }
 
-    29% {
-        transform: none;
-    }
-
-    /* The kick, timed to the moment the first piece shears off. */
-    33% {
-        transform: scale(1.04, 0.96);
-    }
-
-    39% {
-        transform: scale(0.99, 1.01);
-    }
-
-    45%,
+    46%,
     100% {
         transform: none;
     }
 }
 
-@keyframes mark-block-shut {
+@keyframes mark-anchor-shut {
     0%,
-    56% {
+    54% {
         transform: none;
     }
 
-    /* Each arrival lands on the bed and the bed takes it. */
-    62% {
-        transform: scale(1.035, 0.965);
+    /* One small give as the upright comes back alongside it. */
+    72% {
+        transform: scale(1.02, 0.98);
     }
 
-    69% {
-        transform: none;
-    }
-
-    76% {
-        transform: scale(1.03, 0.97);
-    }
-
-    84% {
-        transform: scale(calc(var(--gs) * 0.97));
+    88% {
+        transform: scale(calc(var(--gs) * 0.98));
     }
 
     100% {
         transform: scale(var(--gs));
     }
+}
+
+/* TEACHING LEANS. The mark is a hand-off, so the giver does what anybody
+   handing something over does: draws back a little, then leans after it and
+   holds the reach a beat too long before straightening. Turned on its foot,
+   because a body leaning is hinged where it stands.
+
+   These four rules went missing under an earlier edit of this file and took
+   the lean with them: the keyframes below survived and nothing referred to
+   them, so Teaching quietly fell back to the generic body animation and the
+   gesture it was given simply never ran. A keyframe list with no selector
+   pointing at it is invisible in every way -- it does not warn, it does not
+   fail, it just does not happen. */
+[data-mark="teaching"] i[data-lead] {
+    transform-origin: 0 100%;
+}
+
+.section-index.anim[data-mark="teaching"] i[data-lead] {
+    animation-name: mark-lean-open;
+}
+
+.section-index.anim[data-mark="teaching"]:not(.is-open) i[data-lead] {
+    animation-name: mark-lean-shut;
 }
 
 @keyframes mark-lean-open {

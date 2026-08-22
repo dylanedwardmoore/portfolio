@@ -43,11 +43,11 @@
     },
     "industry": {
       "box": [
-        31.634,
+        27.053,
         16
       ],
       "height": 16,
-      "note": "A block with a corner machined off it, the piece that came off turned round to face the corner it left, and a chip of what was lost making the cut.\n\nThe shapes are the two the mark always had -- they are complementary by construction, one being the scrap the other's circle leaves -- but nothing in the arrangement said so. The block ran the full height and took two thirds of the mark, which made it a slab; the offcut sat square on the floor at the far end, which made it a crumb; and it faced the same way as the block, so the one place the two obviously belong together was hidden. It is smaller now, the offcut is mirrored so its hollow looks back at the corner it came out of, and it is held off the ground, because a part just cut is held and not dropped.",
+      "note": "A block with a corner machined off it, and a plain upright standing beside it in a lighter red.\n\nThe lighter red is the same red. A part that wants to sit back is given alpha rather than a second colour, which through a mask renders as the one hue at less strength -- so the mark still spends exactly one entry of the register's palette, and a shape can be made to recede without anybody having to choose a tint for it.\n\nTwo parts, not three. The offcut and the swarf told a story about machining that nothing at sixteen pixels could actually carry, and a third small thing was one more than the composition wanted. A worked block and a plain upright is a simpler pairing and a truer one: the thing that has been cut, and the stock it was cut from.",
       "parts": [
         {
           "alpha": 1,
@@ -58,29 +58,20 @@
           "y": 1.92
         },
         {
-          "alpha": 1,
-          "h": 8.32,
-          "shape": "corner-piece",
-          "w": 9.01,
-          "x": 18.564,
+          "alpha": 0.55,
+          "h": 13.12,
+          "shape": "block",
+          "w": 8.169,
+          "x": 18.884,
           "y": 2.88
-        },
-        {
-          "alpha": 0.5,
-          "h": 4.16,
-          "shape": "chip",
-          "w": 2.141,
-          "x": 29.494,
-          "y": 11.84
         }
       ],
       "shapes": [
         "arc-corner",
-        "corner-piece",
-        "chip"
+        "block"
       ],
       "tone": "red",
-      "width": 32
+      "width": 28
     },
     "recognition": {
       "box": [
