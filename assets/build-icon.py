@@ -5,121 +5,168 @@
 
 WHAT IT IS
 
-A Neo-Plastic composition after Ilya Bolotowsky, in this site's colours.
+A section mark, written for a square.
 
-The layout is taken from a 1956 Bolotowsky, measured off the painting rather
-than guessed at: a band across the head, a narrow bar down the left, a broad
-field filling the rest, a band down the right, and a chip of another colour
-at the top right where the two bands meet. Its proportions are kept --
+The register marks each of its six sections with a small composition -- two or
+three shapes from the traced library, set side by side with the intervals
+chosen rather than defaulted, in the manner the paintings themselves use. That
+is the site's visual language, and it did not exist when the previous icon was
+drawn. This one is made out of it: the same library, the same grammar, the same
+palette, arranged for a tile instead of a strip.
 
-    head band   0.1875 of the height    (3/16)
-    left bar    0.1667 of the width     (1/6)
-    right band  0.125  of the width     (1/8)
-    the chip    from 0.70 to the right band, in the head band
+    bar          Sea Green      the binding edge, full height, bled top and
+                                foot -- the one mark both pages carry, and the
+                                only thing on this site that is always green
+    disc-panel   Dusky Green     "flat where it was placed, round where it ran
+                                out" -- one machined shoulder, which is the
+                                gesture that separates the register's marks
+                                from the flat planes of everything else
+    chip         Apricot Yellow  the small saturated note, cropped by the right
+                                edge so the tile reads as part of something
+                                larger
 
--- and everything else about it is changed. The paint is gone: these are flat
-colours with hard edges, which is what this site is made of and what a
-photograph of a canvas is not.
+WHY THESE THREE AND NOT SIX
 
-WHY IT SUITS THE PAGE
+The register has six tones and the obvious idea is to put all six in. It was
+tried and it is mud: at sixteen pixels six hues come to two or three pixels
+each and the tile turns to grey noise. The mark is not a census of the sections.
+It is written in their hand, which is the thing that actually generalises --
+shapes from their library, ground left between them, and no two measures in the
+drawing alike.
 
-Neo-Plasticism divides a field; it does not draw on a ground. That is already
-how this site is built. The landing page is not a picture with a margin round
-it -- it is a composition set flush against a binding edge with, in the
-stylesheet's own words, "everything surplus collect[ing] on the right", which
-is the same crop Bolotowsky paints: bands running off the edge, the frame
-implied rather than drawn. The page and the painting were asking the same
-question before either was put next to the other.
+WHAT IS KEPT FROM THE PAINTINGS
 
-What is kept is the discipline, not the look:
-
-  * FULL BLEED. The bar and the field run off the bottom. The tile is a crop
-    of something larger, not a vignette.
-  * UNEQUAL INTERVALS. No two measures in the drawing are the same and
-    nothing is centred or halved.
-  * STRICTLY ORTHOGONAL. Bolotowsky never cuts a diagonal, and neither does
-    this -- which is why the rake the controls' rules now carry stays off the
-    tile. At sixteen pixels it would be the loudest thing in a drawing made of
-    planes, and it is meant to be the quietest thing on the page.
+  * REAL SHAPES. These are the traced outlines themselves, loaded from
+    img/shapes/library and rasterised, not rectangles standing in for them.
+    Nothing is stretched: each is scaled by height and takes whatever width its
+    own proportion gives it, exactly as the register's marks do. A traced plane
+    squashed to fit is a plane about which something has been decided twice.
+  * UNEQUAL EVERYTHING. Heights 1.00, 0.92, 0.54. Widths 0.20, 0.29, 0.28.
+    Intervals 0.078 and 0.170. Nothing is centred, halved, or repeated.
+  * A COMMON FOOT. All three stand on the bottom edge and run off it, which is
+    what the marks do and what stops the tile being a vignette.
   * ONE SMALL SATURATED NOTE against several quiet ones.
 
-THE COLOURS, AND WHICH PLANE TOOK WHICH
-
-Every one is already in the stylesheets; nothing was mixed for this.
-
-    left bar     Sea Green      #33ff7d   the accent, and the binding edge
-    head + right Neutral Gray   #b5d1cc   Wada's pairing with Sea Green (340)
-    the field    Paper          #ffffff   the page is white; so is this
-    the chip     Apricot Yellow #ffe600   Wada's pairing with Sea Green (284)
-
-The bar is green because on the page the bar IS green -- it is the one mark
-the landing page carries, flush to the screen edge, and it lands in this
-composition exactly where the painting put its narrowest colour.
-
-The chip is yellow, and that is the one deliberate inversion. Yellow is the
-plane that dominates the painting; here it is the smallest thing in the tile.
-It is also the only saturated note that is not green, which gives the eye
-somewhere to go in a composition that is otherwise pale, and it holds at
-sixteen pixels where a subtler colour would silt up.
-
-Both supporting colours are Sanzo Wada pairings of Sea Green in the book the
-palette is drawn from, so the three-colour scheme is one the source already
-makes rather than one assembled to taste.
+The ground is Paper because the page is Paper. On a dark tab strip the tile
+reads as a white card with a green edge, which is what the site looks like.
 """
 
+import os
+import re
 import struct
 from io import BytesIO
 
 from PIL import Image, ImageDraw
 
-SEA = (0x33, 0xFF, 0x7D, 0xFF)     # the bar
-GREY = (0xB5, 0xD1, 0xCC, 0xFF)    # head and right bands
-PAPER = (0xFF, 0xFF, 0xFF, 0xFF)   # the field
-YELLOW = (0xFF, 0xE6, 0x00, 0xFF)  # the chip
+HERE = os.path.dirname(os.path.abspath(__file__))
+LIB = os.path.join(HERE, "img", "shapes", "library")
 
-# The painting's proportions, as fractions of the square.
-HEAD = 0.1875   # depth of the band across the top
-BAR = 1 / 6.0   # width of the left bar
-RIGHT = 0.875   # where the right band begins
-CHIP = 0.70     # where the chip begins, inside the head band
+SEA = (0x33, 0xFF, 0x7D, 0xFF)
+DUSKY = (0x00, 0x59, 0x2E, 0xFF)
+YELLOW = (0xFF, 0xE6, 0x00, 0xFF)
+PAPER = (0xFF, 0xFF, 0xFF, 0xFF)
 
-# A hairline of paper wherever two planes meet, which is Bolotowsky's own
-# departure from Mondrian: he stopped drawing the black lattice and let light
-# lines do the dividing. Against the white field it is invisible and does no
-# harm; against the bar and the chip it is what keeps the joins crisp.
-HAIR = 0.008
+# shape, colour, height as a fraction of the tile, and the interval BEFORE it.
+# The chip's interval is more than twice the first, which is what leaves the
+# open ground on the right for it to be cropped against.
+PARTS = [
+    ("bar", SEA, 1.00, 0.000),
+    ("disc-panel", DUSKY, 0.92, 0.078),
+    ("chip", YELLOW, 0.54, 0.170),
+]
 
-# Supersample, then come down. Every edge here lands on a fraction of a pixel
-# at the sizes that matter, and the hairline is thinner than one; drawing large
-# and resampling is what keeps the bands from stepping.
+# Supersample, then come down. Every edge lands on a fraction of a pixel at the
+# sizes that matter; drawing large and resampling is what keeps the curve from
+# stepping and the bar from shimmering.
 SS = 12
 
-# The sizes an .ico is actually asked for: tab and address bar, retina tab,
-# Windows shortcut, and the larger ones a browser reaches for when it wants a
-# tile rather than a favicon.
 SIZES = (16, 32, 48, 64, 128, 256)
 
+
+# --------------------------------------------------------------- the library
+
+def _nums(s):
+    return [float(t) for t in re.findall(r"-?\d*\.?\d+(?:e-?\d+)?", s)]
+
+
+def _bezier(p0, p1, p2, p3, n=24):
+    """A cubic, flattened. PIL fills polygons and knows nothing about curves,
+    so every C in the path becomes twenty-four segments -- far finer than the
+    supersampled grid can resolve, which is the point."""
+    out = []
+    for i in range(1, n + 1):
+        t = i / n
+        u = 1 - t
+        out.append((u*u*u*p0[0] + 3*u*u*t*p1[0] + 3*u*t*t*p2[0] + t*t*t*p3[0],
+                    u*u*u*p0[1] + 3*u*u*t*p1[1] + 3*u*t*t*p2[1] + t*t*t*p3[1]))
+    return out
+
+
+def load(name):
+    """One traced shape, as polygons in its own units, with its box."""
+    with open(os.path.join(LIB, name + ".svg")) as fh:
+        src = fh.read()
+    box = _nums(re.search(r'viewBox="([^"]+)"', src).group(1))
+    tx = ty = 0.0
+    m = re.search(r'transform="translate\(([^)]+)\)"', src)
+    if m:
+        t = _nums(m.group(1))
+        tx, ty = t[0], (t[1] if len(t) > 1 else 0.0)
+
+    polys = []
+    for d in re.findall(r'\sd="([^"]+)"', src):
+        cur, pt, start = [], (0.0, 0.0), None
+        for cmd, args in re.findall(r"([MCLZmclz])([^MCLZmclz]*)", d):
+            a = _nums(args)
+            if cmd in "Mm":
+                if cur:
+                    polys.append(cur)
+                pt = (a[0], a[1])
+                start, cur = pt, [pt]
+                for i in range(2, len(a), 2):
+                    pt = (a[i], a[i + 1])
+                    cur.append(pt)
+            elif cmd in "Ll":
+                for i in range(0, len(a), 2):
+                    pt = (a[i], a[i + 1])
+                    cur.append(pt)
+            elif cmd in "Cc":
+                for i in range(0, len(a), 6):
+                    p3 = (a[i + 4], a[i + 5])
+                    cur.extend(_bezier(pt, (a[i], a[i + 1]),
+                                       (a[i + 2], a[i + 3]), p3))
+                    pt = p3
+            elif cmd in "Zz":
+                if cur:
+                    polys.append(cur)
+                cur = []
+                if start:
+                    pt = start
+        if cur:
+            polys.append(cur)
+
+    return [[(x + tx, y + ty) for x, y in p] for p in polys], box[2], box[3]
+
+
+# ------------------------------------------------------------------ the mark
 
 def draw(size):
     """The mark, at one size, drawn on a supersampled canvas."""
     s = size * SS
-    h = HAIR * s
-
-    # The bands are the ground: the field and the bar are laid into them, so
-    # the head and right bands need no rectangles of their own and cannot
-    # leave a seam at the corner where they meet.
-    img = Image.new("RGBA", (s, s), GREY)
+    img = Image.new("RGBA", (s, s), PAPER)
     d = ImageDraw.Draw(img)
 
-    # The field, running off the bottom edge.
-    d.rectangle([BAR * s + h, HEAD * s + h, RIGHT * s - h, s], fill=PAPER)
-
-    # The bar, starting under the head band and running off the bottom too --
-    # the head band crosses above it, as it does in the painting.
-    d.rectangle([0, HEAD * s + h, BAR * s - h, s], fill=SEA)
-
-    # The chip, at the right-hand end of the head band.
-    d.rectangle([CHIP * s + h, 0, RIGHT * s - h, HEAD * s - h], fill=YELLOW)
+    x = 0.0
+    for name, colour, h, gap in PARTS:
+        polys, w0, h0 = load(name)
+        x += gap
+        w = h * (w0 / h0)          # its own proportion, never forced
+        k = (h * s) / h0           # one scale for both axes
+        top = (1.0 - h) * s        # every part stands on the foot
+        for poly in polys:
+            d.polygon([(x * s + a * k, top + b * k) for a, b in poly],
+                      fill=colour)
+        x += w
 
     return img.resize((size, size), Image.LANCZOS)
 
@@ -140,7 +187,7 @@ def ico(images):
         payloads.append(buf.getvalue())
 
     out = BytesIO()
-    out.write(struct.pack("<HHH", 0, 1, len(images)))  # reserved, type=icon, count
+    out.write(struct.pack("<HHH", 0, 1, len(images)))
     offset = 6 + 16 * len(images)
     for im, data in zip(images, payloads):
         # 0 means 256 in these fields, which is why they are only a byte wide.
@@ -155,7 +202,8 @@ def ico(images):
 
 def main():
     images = [draw(n) for n in SIZES]
-    with open("assets/img/icon/dem_mark.ico", "wb") as fh:
+    path = os.path.join(HERE, "img", "icon", "dem_mark.ico")
+    with open(path, "wb") as fh:
         fh.write(ico(images))
     print("wrote assets/img/icon/dem_mark.ico (%s)"
           % ", ".join(str(n) for n in SIZES))
