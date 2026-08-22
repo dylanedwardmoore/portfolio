@@ -1053,13 +1053,12 @@ body.landing {
     --red: #ff3319;
     --yellow: #ffe600;
     --blue: #0057ba;
+    /* How far the puddle has to fall to reach the rule. */
+    --drop: calc(var(--rule-control) + var(--u) * 0.25 + 2px);
     position: relative;
     display: inline-block;
     vertical-align: -0.18em;
-    margin-left: calc(var(--u) * 0.42);
-    width: var(--mark-size);
     height: var(--mark-size);
-    transition: width 520ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .doclink-mark--name.is-open {
@@ -1695,10 +1694,179 @@ body.landing {
     }
 }
 
+/*---------------------------------------------------------------------------
+    THE MARK IS MADE OF THE RULE, AND GOES BACK INTO IT.
+
+    At rest there is no tile at all -- no width, no ink, nothing beside the
+    word. The blocks are as quiet as they ever were until one is reached for.
+
+    Then a whole life happens:
+
+        emerge   a dark square condenses out of the green the block has just
+                 filled with. It arrives very wide and very flat -- the width
+                 of the block rather than of a tile -- and draws itself in,
+                 which reads as mass being pulled out of the field rather than
+                 as a square fading up
+        tell     the mark's own storyboard, whichever of the three it is
+        fold     back into the square
+        spin     once, all the way round, and a little smaller in the middle
+        puddle   it flattens, drops to the foot of the block, spreads, and
+                 turns from the dark green to the bright one as it goes
+        thicken  and the rule takes the mass back
+
+    THE RULE IS THINNER THE WHOLE TIME THE MARK IS OUT. That is the idea the
+    rest of it hangs on: the ink is conserved. A block whose mark is away has
+    lent it out, and the rule under the word is visibly lighter for it until
+    the puddle comes home. Its full weight is its resting state, which is what
+    it looks like on a page nobody is touching.
+
+    AN OPEN TELLING IS NEVER CUT SHORT. Leaving before it has finished does not
+    stop it -- the close is queued for the moment the telling ends. A gesture
+    interrupted half way is worse than no gesture, and a pointer that has moved
+    on is not watching anyway.
+---------------------------------------------------------------------------*/
+
+.doclink-mark {
+    /* Nothing at rest. Not hidden -- absent: no width, so the word has no gap
+       after it until there is something to put there. */
+    width: 0;
+    margin-left: 0;
+    opacity: 0;
+    transition: width 480ms cubic-bezier(0.4, 0, 0.2, 1),
+        margin-left 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doclink-mark.is-live {
+    width: var(--mark-size);
+    margin-left: calc(var(--u) * 0.42);
+    opacity: 1;
+}
+
+/* THE RULE LENDS ITS MASS OUT. Thin while the mark is away, and back to its
+   full weight as the puddle arrives. The thickening is slower than the
+   thinning: taking is quick, giving back is not. */
+.doclink--marked::after {
+    transition: clip-path var(--notch-in) var(--notch-ease),
+        height 420ms cubic-bezier(0.3, 0, 0.2, 1);
+}
+
+.doclink--marked.mark-live::after {
+    height: 2px;
+    transition: clip-path var(--notch-in) var(--notch-ease),
+        height 200ms cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.doclink-mark.is-emerging {
+    animation: dm-emerge 300ms cubic-bezier(0.32, 0.7, 0.28, 1) both;
+}
+
+.doclink-mark.is-spinning {
+    animation: dm-spin 360ms cubic-bezier(0.42, 0, 0.3, 1) both;
+}
+
+.doclink-mark.is-puddling {
+    animation: dm-puddle 460ms cubic-bezier(0.5, 0, 0.4, 1) both;
+}
+
+/* Going home it stops being the dark green and becomes the bright one, because
+   what it is joining is bright. */
+.doclink-mark.is-puddling .mk-body,
+.doclink-mark.is-puddling .sk-field,
+.doclink-mark.is-puddling .ln-spine {
+    animation: dm-thaw 460ms cubic-bezier(0.5, 0, 0.4, 1) both;
+}
+
+@keyframes dm-emerge {
+    0% {
+        /* Four times as wide as the tile and almost no height: the mass is
+           still spread through the field it is about to come out of. */
+        transform: scaleX(4.2) scaleY(0.08);
+        opacity: 0;
+    }
+
+    38% {
+        transform: scaleX(2.1) scaleY(0.44);
+        opacity: 0.6;
+    }
+
+    72% {
+        transform: scaleX(0.84) scaleY(1.16);
+        opacity: 1;
+    }
+
+    88% {
+        transform: scaleX(1.07) scaleY(0.93);
+    }
+
+    100% {
+        transform: none;
+        opacity: 1;
+    }
+}
+
+@keyframes dm-spin {
+    0% {
+        transform: none;
+    }
+
+    /* Tucks in through the turn, the way anything spinning on its own axis
+       does, and comes back out of it square. */
+    45% {
+        transform: rotate(196deg) scale(0.86);
+    }
+
+    78% {
+        transform: rotate(318deg) scale(0.97);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dm-puddle {
+    0% {
+        transform: none;
+        opacity: 1;
+    }
+
+    /* Loses its footing first. */
+    26% {
+        transform: translateY(3px) scale(1.08, 0.82);
+    }
+
+    /* Then falls, spreading as it goes. */
+    64% {
+        transform: translateY(calc(var(--drop, 16px) * 0.72)) scale(1.7, 0.34);
+        opacity: 0.92;
+    }
+
+    88% {
+        transform: translateY(var(--drop, 16px)) scale(2.7, 0.12);
+        opacity: 0.55;
+    }
+
+    100% {
+        transform: translateY(var(--drop, 16px)) scale(3.4, 0.05);
+        opacity: 0;
+    }
+}
+
+@keyframes dm-thaw {
+    0% {
+        background: var(--link);
+    }
+
+    100% {
+        background: var(--sea);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
 
     .doclink-mark,
-    .doclink-mark i {
+    .doclink-mark i,
+    .doclink--marked::after {
         animation: none !important;
         transition: none !important;
     }
