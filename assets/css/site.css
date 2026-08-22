@@ -1732,8 +1732,12 @@ body.landing {
     width: 0;
     margin-left: 0;
     opacity: 0;
-    transition: width 480ms cubic-bezier(0.4, 0, 0.2, 1),
-        margin-left 220ms cubic-bezier(0.4, 0, 0.2, 1);
+    /* The room opens quickly and the square takes its time appearing in it,
+       which is what makes the arrival read as a fade rather than a growth. If
+       the box is still widening while the ink comes up, the two together look
+       like something being pushed into place. */
+    transition: width 200ms cubic-bezier(0.33, 0, 0.2, 1),
+        margin-left 200ms cubic-bezier(0.33, 0, 0.2, 1);
 }
 
 .doclink-mark.is-live {
@@ -1757,7 +1761,7 @@ body.landing {
 }
 
 .doclink-mark.is-emerging {
-    animation: dm-emerge 300ms cubic-bezier(0.32, 0.7, 0.28, 1) both;
+    animation: dm-emerge 400ms cubic-bezier(0.25, 0.55, 0.3, 1) both;
 }
 
 .doclink-mark.is-spinning {
@@ -1776,31 +1780,25 @@ body.landing {
     animation: dm-thaw 460ms cubic-bezier(0.5, 0, 0.4, 1) both;
 }
 
+/* Just appearing. It used to arrive four times too wide and almost flat and
+   draw itself in, on the idea that this read as mass being pulled out of the
+   field -- and at the size this actually is, it read as something flying in
+   and slamming to a stop. The block has only just turned green; the square
+   should come up out of that green quietly, not make an entrance.
+
+   So: a fade, and eight per cent of scale underneath it so the shape has some
+   substance as it arrives rather than being a rectangle whose alpha is being
+   turned up. That is the whole of it. Everything expressive in this mark
+   belongs to the expansion, which starts the moment this is done. */
 @keyframes dm-emerge {
     0% {
-        /* Four times as wide as the tile and almost no height: the mass is
-           still spread through the field it is about to come out of. */
-        transform: scaleX(4.2) scaleY(0.08);
         opacity: 0;
-    }
-
-    38% {
-        transform: scaleX(2.1) scaleY(0.44);
-        opacity: 0.6;
-    }
-
-    72% {
-        transform: scaleX(0.84) scaleY(1.16);
-        opacity: 1;
-    }
-
-    88% {
-        transform: scaleX(1.07) scaleY(0.93);
+        transform: scale(0.92);
     }
 
     100% {
-        transform: none;
         opacity: 1;
+        transform: none;
     }
 }
 
