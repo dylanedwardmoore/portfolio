@@ -126,6 +126,36 @@
        the only primary navigation on the page -- get this. Half the frame
        rule, rounded to a whole pixel so it never lands on a half. */
     --rule-control: 6px;
+    --rule-back: 4px;
+
+    /* The pen's rake.
+
+       A control's rule is a stroke, not a ruled line, and a stroke made by
+       an instrument does not end square. In shodo a horizontal stroke enters
+       blunt and leaves tapered -- the exit is a harai, a sweep -- and a
+       humanist punchcutter cuts a terminal at an angle rather than rounding
+       it. So the rules that rank as controls have their far top corner cut
+       back: square where the stroke starts, raked where it leaves, in the
+       direction of reading.
+
+       A radius was the other way to soften a corner and it is the wrong one
+       here. This page is flat and hard-edged by construction, and a curve
+       reads as a different material -- something moulded rather than cut. A
+       chamfer is still a hard edge; it simply is not ninety degrees.
+
+       The rake is the rule's own weight times root 2, the ratio the type
+       scale and the paper are already built on, so it is measured in the
+       mark's own unit and follows --rule-control wherever that is restepped.
+       At 6px it comes to a shade over 8: two or three per cent of the rule's
+       length, which is enough to say the shape was drawn and not enough to
+       look at.
+
+       References keep their square ends. The 1px rule under a link in prose
+       is a ruled line, not a stroke, a 1.4px rake on it would be invisible
+       anyway, and those links wrap -- a shaped mark would have to be a box
+       of its own, and a box cannot follow a line break. The rank the page
+       already keeps decides who carries the pen. */
+    --nib: 1.414;
 
     /* The blocks hang left by exactly this, so their text keeps the margin
        while their rule starts a little before it. */
@@ -184,8 +214,13 @@ a {
     padding: 1px 5px;
     margin: 0 -5px;
     box-shadow: inset 0 -1px 0 var(--sea);
+    /* The rule fades rather than being cut. Dropping it outright at the
+       first frame left the bottom pixel blinking off and refilling while
+       the ground behind it was still arriving, since the two are the same
+       green; carried on the same 150ms it simply hands over. */
     transition: background-color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
-        color 150ms cubic-bezier(0.22, 0.61, 0.36, 1);
+        color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        box-shadow 150ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -194,7 +229,9 @@ a {
     .prose a:hover {
         background: var(--sea);
         color: var(--ink);
-        box-shadow: none;
+        /* Transparent rather than none: a shadow interpolates to another
+           shadow, and `none` is the one value it cannot always reach. */
+        box-shadow: inset 0 -1px 0 transparent;
     }
 }
 
@@ -336,14 +373,72 @@ img {
     opacity: 0;
 }
 
-::view-transition-new(scroll-rail) {
-    opacity: 1;
+/* THE RAKE.
+
+   The bar's two states are different lengths -- on the landing page it runs
+   the height of the whole composition, on the portfolio it is a thumb near
+   the top -- so crossing between them the mark is drawn in or paid out. It
+   is the one moment on this site where something is genuinely travelling,
+   and a rectangle travelling is just a rectangle somewhere else.
+
+   So the stroke takes an angle while it moves and loses it when it lands.
+   Its trailing corner cuts back on the pen's rake, swells to full at about
+   four tenths of the flight -- where the group's own curve is fastest -- and
+   is square again by the end. Squash and stretch, which is the oldest idea
+   in animation, but expressed as a shear rather than a scale: the raked edge
+   a loaded brush leaves when it is pulled, and the smear an animator draws
+   on the frame between two positions.
+
+   Bottom-right, so the tip stays hard against the screen edge where the bar
+   itself lives -- the same corner the controls' rules cut, turned a quarter
+   turn with the stroke.
+
+   It exists only in flight. Neither page is changed by it, so there is no
+   resting state anywhere that can look wrong, and a browser that declines
+   clip-path on a transition pseudo simply moves a rectangle, which is what
+   it did before. */
+@keyframes rail-rake {
+
+    0%,
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    42% {
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--rake)), 0 100%);
+    }
 }
 
-/* The colour half of the roll. A snapshot cannot animate its own colour, so
-   the settle runs on the live element once the new page is revealed. Gated on
-   the transition actually having happened, via .vt-in. */
-.vt-in .name,
+::view-transition-new(scroll-rail) {
+    opacity: 1;
+    /* The bar's own width times root 2, the same angle the controls' rules
+       are cut on. The stroke is vertical here, so its weight is the width
+       and the rake runs along the length.
+
+       Both tokens are given fallbacks. They are inherited from :root into
+       the transition's own pseudo tree, which is a place stylesheets do not
+       often have to reach, and an unresolved var() here would take the whole
+       clip-path down with it -- leaving a keyframe that animates nothing. The
+       fallbacks are the desktop values, so the worst case is a rake of the
+       right size rather than none at all. */
+    --rake: calc(var(--scrollbar, 26px) * var(--nib, 1.414));
+    /* In step with the group: it starts moving at 520 and stops at 880, and
+       the shear belongs to the move, not to either end of it. Symmetric
+       ease so the swell arrives and leaves at the same rate. Only clip-path
+       is animated -- opacity above still stands, and must, or the default
+       cross-fade comes back with it. */
+    animation: rail-rake 360ms cubic-bezier(0.4, 0, 0.6, 1) 520ms both;
+}
+
+/* Reduced motion: the pages still change, they just change at once.
+
+   This block spent three commits doing nothing. The titles used to take a
+   colour settle on arrival, and when that was dropped the rule's body went
+   but its selector did not -- leaving `.vt-in .name,` sitting immediately in
+   front of the at-rule. A selector list ending in a comma before an @ token
+   is invalid, and an invalid selector takes its whole block with it, so the
+   browser was discarding the guard along with the dead rule and reduced
+   motion was not being honoured on the transition at all. */
 @media (prefers-reduced-motion: reduce) {
 
     ::view-transition-group(*),
@@ -351,8 +446,7 @@ img {
     ::view-transition-new(*) {
         animation: none !important;
     }
-
-    .vt-in .name,}
+}
 
 /*---------------------------------------------------------------------------
     The cascade.
@@ -664,11 +758,10 @@ img {
     display: block;
     background: none;
     color: var(--ink);
-    /* Sat on the padding box, so it spans the block without taking part in
-       the layout -- the same way the prose links carry theirs. The bottom
-       padding is the rule plus a quarter unit, which is the gap that keeps
-       it reading as an underline rather than a detached bar. */
-    box-shadow: inset 0 calc(-1 * var(--rule-control)) 0 var(--sea);
+    /* Holds the rule below. It used to be an inset box-shadow, which sits on
+       the padding box for free; a shadow cannot be given a shape or moved on
+       its own, and this rule now needs both. */
+    position: relative;
     padding: calc(var(--u) * 0.34) var(--doclink-pad)
         calc(var(--rule-control) + var(--u) * 0.25);
     /* The word is the anchor's own text. It used to be wrapped in a span,
@@ -683,8 +776,53 @@ img {
     transition: background-color 170ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+/* The rule, drawn as a stroke.
+
+   Same place the inset shadow sat -- the foot of the padding box, the full
+   width of the block -- with the far top corner cut back on the pen's rake.
+   See --nib.
+
+   THE HANDOVER. At rest the mark is a rule; hovered, the block is a field of
+   the same green. Both states were already right and the crossing between
+   them was not: the shadow was dropped at the first frame while the ground
+   was still 170ms from arriving, so the bottom six pixels blinked off and
+   filled back in. Green does not leave green.
+
+   So the rule withdraws instead of vanishing. It pulls back from the raked
+   end by a few per cent -- the pen lifting off the exit, the tip retreating
+   the way it was drawn -- and only then fades, sixty milliseconds behind the
+   shrink, by which time the ground beneath it has covered the difference.
+   The dip is gone and what is left is a gesture rather than a cut.
+
+   Leaving is the same thing run backwards and slower. The transition
+   declared here is the LEAVING one, since it is the resting state's own:
+   the mark comes back promptly under a ground that is still green, then
+   draws itself back out to full length over 260ms, so the last thing the
+   eye catches as the block empties is the stroke being re-inked. Arriving
+   accelerates, leaving settles -- which is the way round motion usually
+   wants it. */
+.doclink::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--rule-control);
+    background: var(--sea);
+    clip-path: polygon(0 0,
+            calc(100% - (var(--rule-control) * var(--nib))) 0,
+            100% 100%,
+            0 100%);
+    /* Back towards the start of the stroke, never towards its middle. */
+    transform-origin: left center;
+    transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1) 40ms,
+        opacity 140ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .doclink {
+
+    .doclink,
+    .doclink::after {
         transition: none;
     }
 }
@@ -702,15 +840,27 @@ img {
 @media (hover: hover) and (pointer: fine) {
     .doclink:hover {
         background: var(--sea);
-        box-shadow: none;
         outline: none;
+    }
+
+    .doclink:hover::after {
+        transform: scaleX(0.96);
+        opacity: 0;
+        transition: transform 170ms cubic-bezier(0.22, 0.61, 0.36, 1),
+            opacity 110ms cubic-bezier(0.4, 0, 1, 1) 60ms;
     }
 }
 
 .doclink:focus-visible {
     background: var(--sea);
-    box-shadow: none;
     outline: none;
+}
+
+.doclink:focus-visible::after {
+    transform: scaleX(0.96);
+    opacity: 0;
+    transition: transform 170ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        opacity 110ms cubic-bezier(0.4, 0, 1, 1) 60ms;
 }
 
 /*---------------------------------------------------------------------------

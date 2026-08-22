@@ -137,15 +137,34 @@
     text-decoration: none;
     padding: 2px 5px;
     margin-left: -5px;
-    /* Double the rule the prose links carry, so it reads as a control rather
-       than as a reference. */
-    box-shadow: inset 0 -4px 0 var(--sea);
-    transition: background-color 170ms cubic-bezier(0.22, 0.61, 0.36, 1),
-        box-shadow 170ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    /* Holds the rule below, which used to be an inset shadow here. */
+    position: relative;
+    transition: background-color 170ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .backlink::before {
     content: "\2190\00a0";
+}
+
+/* A control, so it is a stroke and takes the pen's rake -- four times the
+   reference rule rather than the blocks' six, which is the rank this one
+   holds. Everything else about it, the shape and the handover both, is the
+   landing page's .doclink; see the note there. */
+.backlink::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--rule-back);
+    background: var(--sea);
+    clip-path: polygon(0 0,
+            calc(100% - (var(--rule-back) * var(--nib))) 0,
+            100% 100%,
+            0 100%);
+    transform-origin: left center;
+    transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1) 40ms,
+        opacity 140ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 /* The rule grows into the whole block: the same gesture as the buttons on the
@@ -154,7 +173,13 @@
 @media (hover: hover) and (pointer: fine) {
     .backlink:hover {
         background: var(--sea);
-        box-shadow: none;
+    }
+
+    .backlink:hover::after {
+        transform: scaleX(0.96);
+        opacity: 0;
+        transition: transform 170ms cubic-bezier(0.22, 0.61, 0.36, 1),
+            opacity 110ms cubic-bezier(0.4, 0, 1, 1) 60ms;
     }
 }
 
@@ -269,8 +294,11 @@
     padding: 1px 5px;
     margin: 0 -5px;
     box-shadow: inset 0 -1px 0 var(--tone);
+    /* The rule hands over rather than being cut; see the prose links in
+       site.css, where the same pixel was blinking. */
     transition: background-color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
-        color 150ms cubic-bezier(0.22, 0.61, 0.36, 1);
+        color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        box-shadow 150ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 /* The row washes, and the link you are actually on fills solid, so the
@@ -281,7 +309,7 @@
     .entry-links a:hover {
         background: var(--tone);
         color: var(--tone-ink);
-        box-shadow: none;
+        box-shadow: inset 0 -1px 0 transparent;
     }
 }
 
@@ -380,7 +408,8 @@
     .entry-figure::after,
     .entry-figure img,
     .entry-links a,
-    .backlink {
+    .backlink,
+    .backlink::after {
         transition: none;
     }
 }

@@ -384,7 +384,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260823k"
+V = "v=20260823l"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -394,7 +394,7 @@ HEAD = """<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Portfolio &mdash; Dylan Edward Moore</title>
     <meta name="description" content="Ventures, research, industry work, teaching, and awards by Dylan Edward Moore.">
-    <link rel="shortcut icon" type="image/png" href="../assets/img/icon/DEM_logo.ico">
+    <link rel="icon" type="image/x-icon" href="../assets/img/icon/dem_mark.ico?{V}">
     <link rel="preload" as="font" type="font/woff" href="../assets/fonts/fff/fff-Regular.woff?{V}" crossorigin>
     <link rel="stylesheet" href="../assets/css/site.css?{V}">
     <link rel="stylesheet" href="../assets/css/portfolio.css?{V}">
