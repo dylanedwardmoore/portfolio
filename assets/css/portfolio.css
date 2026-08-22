@@ -202,8 +202,16 @@
     Sections
 ---------------------------------------------------------------------------*/
 
+/* No foot at all on a phone. The register is a long document and its end
+   should be the end of the last thing in it -- a margin under the final entry
+   is paper you can scroll onto and find nothing on, which on a small screen
+   reads as the page having quietly stopped before it ran out. The entry keeps
+   its own padding, so the last line is not jammed against the edge; there is
+   simply nothing after it. The wider layout below restores a proper foot,
+   where the same margin is a small share of the screen rather than a tenth of
+   it. */
 .register {
-    padding: 0 var(--m-min) calc(var(--u) * 2) var(--gutter-l);
+    padding: 0 var(--m-min) 0 var(--gutter-l);
 }
 
 .section {
