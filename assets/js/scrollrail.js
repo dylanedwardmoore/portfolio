@@ -479,23 +479,24 @@
            bar floating at the top left with nothing to explain it, which is
            exactly what it looked like.
 
-           Following the bar's real position was tried and is wrong: the track
-           then shortens from the top as the bar pins, and the thumb -- pinned
-           to the top of a track whose top is rising faster than the thumb
-           descends -- travels 68 pixels UPWARD on the first scroll down. A
-           scroll indicator that runs backwards is a worse fault than the one
-           being fixed.
+           On the portfolio the bar is not the first thing on the page, so at
+           the top of the page it has not pinned and the thumb lands beside
+           the masthead rather than under the bar. Two fixes for that were
+           tried and both were worse than the thing they fixed:
 
-           So the track stays where it was, fixed from the first pixel, and
-           the masthead and the bar are given opaque grounds that outrank it
-           instead. They cover the thumb for exactly as long as they are over
-           it and uncover it as they leave, which is what two opaque things
-           passing each other should do. The stylesheet carries the other half
-           of this; see .masthead there.
+           Following the bar's real position shortens the track from the top
+           as it pins, and the thumb -- held at the top of a track whose top
+           is rising faster than the thumb descends -- travels 68 pixels
+           UPWARD on the first scroll down. An indicator that runs backwards
+           is worse than one sitting higher than expected.
 
-           The section labels are NOT raised with them. The rail outranks
-           those on purpose -- it has to cross a label in every section, and a
-           thumb that blinked out at each one would be unreadable. */
+           Giving the masthead and the bar opaque grounds that outrank the
+           rail covers the thumb -- entirely, as it turns out, since at the
+           top of the page the whole thumb is inside that region. The bar then
+           disappears exactly when the page is at the top.
+
+           So: the height, from the first pixel, and the thumb is allowed to
+           be seen. It sits in the gutter, which is empty. */
         var topSel = rail.getAttribute("data-rail-top");
 
         function railTop() {
