@@ -10,7 +10,6 @@
     Each rail declares what it scrolls:
         data-scroll="window"   the document
         data-scroll="<sel>"    an element (the landing page's blurb)
-    and optionally data-cue="1" to show the chevron affordance.
 
     With no JavaScript both pages still scroll; they just scroll unmarked.
 -----------------------------------------------------------------------------*/
@@ -26,9 +25,6 @@
         if (!el) return;
 
         var thumb = rail.querySelector(".scrollrail-thumb");
-        var cue = rail.getAttribute("data-cue")
-            ? document.querySelector(".scrollcue") : null;
-        var everScrolled = false;
         var dragging = false;
 
         function viewport() {
@@ -87,16 +83,13 @@
         function draw() {
             if (!live()) {
                 rail.hidden = true;
-                if (cue) cue.hidden = true;
                 return;
             }
             var m = metrics();
             if (m.over <= 1) {
                 rail.hidden = true;
-                if (cue) cue.hidden = true;
                 return;
             }
-            if (m.pos > 4) everScrolled = true;
 
             rail.hidden = false;
             rail.style.top = m.box.top + "px";
@@ -109,17 +102,6 @@
             thumb.style.top = Math.max(0, Math.min(travel,
                 (m.pos / m.over) * travel)) + "px";
 
-            // The cue answers one question -- does this move -- and only
-            // while that question is open.
-            if (cue) {
-                if (everScrolled) {
-                    cue.hidden = true;
-                } else {
-                    cue.hidden = false;
-                    cue.style.left = getComputedStyle(rail).left;
-                    cue.style.top = (m.box.top + m.box.height + 7) + "px";
-                }
-            }
         }
 
         function scrollTo(pos) {
@@ -143,7 +125,6 @@
         thumb.addEventListener("pointerdown", function (e) {
             e.preventDefault();
             dragging = true;
-            everScrolled = true;
             var grab = e.clientY - thumb.getBoundingClientRect().top;
             thumb.setPointerCapture(e.pointerId);
             rail.classList.add("is-dragging");
@@ -165,41 +146,11 @@
             thumb.addEventListener("pointercancel", up);
         });
 
-        // Clicking the cue glides on by roughly a screenful. Hand-run rather
-        // than `behavior: "smooth"`, so the curve matches the rest of the site
-        // (ease-in-out, same duration family as the hover states) instead of
-        // whatever the browser picks.
-        function glide(delta) {
-            var m = metrics();
-            var from = m.pos;
-            var to = Math.max(0, Math.min(m.over, from + delta));
-            if (to === from) return;
-            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-                scrollTo(to);
-                return;
-            }
-            var start = performance.now(), dur = 520;
-            (function frame(now) {
-                var t = Math.min(1, (now - start) / dur);
-                // ease-in-out cubic: settles rather than stopping dead
-                var e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-                scrollTo(from + (to - from) * e);
-                if (t < 1) requestAnimationFrame(frame);
-            })(start);
-        }
 
-        if (cue) {
-            cue.addEventListener("click", function () {
-                everScrolled = true;
-                glide(viewport() * 0.85);
-                draw();
-            });
-        }
 
         // A click on the empty track jumps the thumb's centre to the pointer.
         rail.addEventListener("pointerdown", function (e) {
             if (e.target === thumb) return;
-            everScrolled = true;
             var h = thumb.getBoundingClientRect().height;
             scrollTo(positionFromPointer(e.clientY, h / 2));
         });

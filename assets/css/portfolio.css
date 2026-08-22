@@ -162,10 +162,13 @@
 }
 
 /* The rule grows into the whole block: the same gesture as the buttons on the
-   landing page, which fill rather than invert. */
-.backlink:hover {
-    background: var(--sea);
-    box-shadow: none;
+   landing page, which fill rather than invert. Pointer only -- see the note
+   on .doclink in site.css. */
+@media (hover: hover) and (pointer: fine) {
+    .backlink:hover {
+        background: var(--sea);
+        box-shadow: none;
+    }
 }
 
 .masthead h1 {
@@ -284,11 +287,15 @@
 }
 
 /* The row washes, and the link you are actually on fills solid, so the
-   destination is never ambiguous when a row carries several. */
-.entry-links a:hover {
-    background: var(--tone);
-    color: var(--tone-ink);
-    box-shadow: none;
+   destination is never ambiguous when a row carries several. Pointer only:
+   a finger scrolling down the register would otherwise light up every link
+   it passed over. */
+@media (hover: hover) and (pointer: fine) {
+    .entry-links a:hover {
+        background: var(--tone);
+        color: var(--tone-ink);
+        box-shadow: none;
+    }
 }
 
 /* An entry with nothing to link to reads as plain text. */
@@ -349,14 +356,26 @@
     filter: saturate(0.5) contrast(0.95) brightness(1.03);
 }
 
-.entry-figure.is-in::after,
-.entry:hover .entry-figure::after {
+.entry-figure.is-in::after {
     opacity: 0;
 }
 
-.entry-figure.is-in img,
-.entry:hover .entry-figure img {
+.entry-figure.is-in img {
     filter: none;
+}
+
+/* Hover clears the wash as well, for a pointer. On a touch screen the finger
+   is scrolling, and clearing the wash under it would fight the observer that
+   is already deciding what is in focus. */
+@media (hover: hover) and (pointer: fine) {
+
+    .entry:hover .entry-figure::after {
+        opacity: 0;
+    }
+
+    .entry:hover .entry-figure img {
+        filter: none;
+    }
 }
 
 /* Without the script every figure is simply itself; the wash is an
