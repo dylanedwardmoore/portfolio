@@ -706,6 +706,31 @@ img {
     position: relative;
 }
 
+/* THE LANDING PAGE DOES NOT SCROLL.
+
+   It never wanted to. The composition is one screenful by construction and
+   fitPage() gives the figure back to the window until it fits, so scrolling
+   here was only ever the failure mode -- and on a phone it is a bad one. The
+   address bar collapses the moment the page can scroll, which resizes the
+   window, which re-runs the fit against a viewport that has just changed
+   under it; you get a strip of empty paper below the composition and a page
+   that slides over it.
+
+   min-height: 100dvh alone cannot prevent that, because it is a floor and not
+   a ceiling: anything the content does above it simply makes the page taller.
+   So the body is given the viewport as its height outright and told not to
+   overflow it. Overflow on the body propagates to the viewport while the root
+   is visible, which is what actually stops the document scrolling.
+
+   The register is untouched -- it is a long document and scrolling is the
+   whole point of it. This is the landing page only, which is why it is on a
+   class rather than on the element. */
+body.landing {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+}
+
 /* The edge rule.
 
    Where the window is too small for the printed frame, the page loses its
