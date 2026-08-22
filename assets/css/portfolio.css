@@ -212,6 +212,16 @@
     margin-bottom: calc(var(--u) * 1.6);
 }
 
+/* The last one keeps none of it. That margin is a separator -- it holds one
+   band off the next -- and under the last band there is no next to be held
+   off, so it was simply being added to the register's own foot margin. The two
+   together ran to 176px on a desktop and a sixth of a phone screen, which
+   reads as the page having stopped some while before it ended. What is left is
+   the foot margin the canon actually asks for, and nothing on top of it. */
+.section:last-child {
+    margin-bottom: 0;
+}
+
 .section-label h2 {
     margin: 0;
     font-size: var(--t-lead);
