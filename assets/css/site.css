@@ -1013,6 +1013,389 @@ body.landing {
 }
 
 /*---------------------------------------------------------------------------
+    THE PORTFOLIO BLOCK CARRIES THE SITE'S MARK.
+
+    The same composition as the icon: a dusky field, the bright green bar with
+    its one curve, a yellow block with a stripe of paper and a stripe of red
+    under it, and a blue chip at the foot. Only the one block has it, because
+    the register is the only one of the three documents that has a mark.
+
+    EVERYTHING HAPPENS ON THE TILE'S OWN GROUND, and that is a constraint
+    rather than a preference. Hovering fills this block with Sea Green, so a
+    bright green shape that stepped off the tile would step onto its own colour
+    and disappear; the paper stripe would do the same against the block at rest.
+    So the tile brings its own dark field with it and nothing ever leaves.
+
+    AT REST IT IS A PLAIN DARK SQUARE. Everything is folded into it -- the bar
+    hidden in the middle at a third of its size, the chips at nothing at all --
+    which is what makes the block quiet until it is reached for. There is no
+    version of this where a little coloured composition sits permanently beside
+    one of three links and the page stays calm.
+---------------------------------------------------------------------------*/
+
+.doclink--marked {
+    /* Twice the rule, which is what the bar is -- but stated in --bar rather
+       than taken from --scrollbar, because that one halves below 1080px to
+       follow the drawn bar and this tile has no reason to. Declared on the
+       block so both the block's padding and the tile inside it can read it. */
+    --mark-size: calc(var(--bar) * 2);
+    /* Room at the end for the tile, so the word never runs under it. */
+    padding-right: calc(var(--doclink-pad) + var(--mark-size) + var(--u) * 0.5);
+}
+
+.doclink-mark {
+    /* The register's other three tones. They live on the portfolio's own
+       stylesheet, which this page does not load, and they are wanted here for
+       one composition rather than for the page at large -- so they are declared
+       on the mark and go no further. Same values, same book: Eugenia Red and
+       Apricot Yellow are Wada's pairings of Sea Green in combination 284, and
+       Helvetia Blue is its partner in 347. */
+    --red: #ff3319;
+    --yellow: #ffe600;
+    --blue: #0057ba;
+    position: absolute;
+    right: var(--doclink-pad);
+    top: 50%;
+    width: var(--mark-size);
+    height: var(--mark-size);
+    margin-top: calc(var(--rule-control) / -2 - var(--mark-size) / 2);
+    /* Nothing leaves the tile. See above. */
+    overflow: hidden;
+}
+
+.doclink-mark i {
+    position: absolute;
+    display: block;
+}
+
+/* The field. A plain rectangle rather than a traced shape, because the one
+   thing it has to be able to do is stop being a rectangle: border-radius is
+   the only way a shape can melt into another shape and have the browser draw
+   every frame in between. */
+.mk-body {
+    inset: 0;
+    background: var(--link);
+    border-radius: 0;
+    z-index: 0;
+}
+
+.mk-sea {
+    left: 0;
+    top: 0;
+    width: 30%;
+    height: 100%;
+    background: var(--sea);
+    /* Relative to THIS FILE, not to the page: a url() in a stylesheet is
+       resolved against the stylesheet, and written page-relative it came out
+       as /assets/css/assets/img/... and fetched nothing. */
+    -webkit-mask: url("../img/shapes/library/disc-panel.svg") no-repeat center / 100% 100%;
+    mask: url("../img/shapes/library/disc-panel.svg") no-repeat center / 100% 100%;
+    z-index: 1;
+}
+
+.mk-yellow {
+    left: 76%;
+    top: 0;
+    width: 24%;
+    height: 21%;
+    background: var(--yellow);
+    z-index: 2;
+}
+
+.mk-white {
+    left: 80%;
+    top: 21%;
+    width: 10%;
+    height: 7%;
+    background: var(--paper);
+    z-index: 2;
+}
+
+.mk-red {
+    left: 90%;
+    top: 21%;
+    width: 10%;
+    height: 7%;
+    background: var(--red);
+    z-index: 2;
+}
+
+.mk-blue {
+    left: 52%;
+    top: 92%;
+    width: 10%;
+    height: 8%;
+    background: var(--blue);
+    z-index: 2;
+}
+
+/* FOLDED: where everything sits when nobody is looking.
+
+   The chips go to nothing at all, not to a fifth of themselves. A fifth of a
+   six-pixel chip is still a pixel, and four coloured pixels scattered over a
+   dark square is not a quiet mark, it is a dirty one. At zero they are gone,
+   and the tile is what it should be while nobody is pointing at it: one dark
+   square with a seam of green in it.
+
+   The bar keeps a sliver, because it is the thing that walks and a walk needs
+   somewhere to start from. */
+.doclink-mark .mk-sea {
+    --folded: translateX(115%) scaleX(0.34);
+    transform: var(--folded);
+}
+
+.doclink-mark .mk-yellow {
+    --folded: translate(-120%, 180%) scale(0);
+    transform: var(--folded);
+}
+
+.doclink-mark .mk-white {
+    --folded: translate(-180%, 90%) scale(0);
+    transform: var(--folded);
+}
+
+.doclink-mark .mk-red {
+    --folded: translate(-380%, 90%) scale(0);
+    transform: var(--folded);
+}
+
+.doclink-mark .mk-blue {
+    --folded: translate(80%, -260%) scale(0);
+    transform: var(--folded);
+}
+
+/* OPENED. */
+.doclink-mark.is-open i {
+    transform: none;
+}
+
+.doclink-mark.is-open .mk-body {
+    /* The melt. A half circle turned out of the right-hand side, which is the
+       same curve the bar carries and the same one the icon is built on. */
+    border-radius: 0 50% 50% 0;
+}
+
+/*  THE STORYBOARD.
+
+    One beat at a time, and the whole thing runs a second and a third, which is
+    long for this site and is the point: it is a small piece of theatre on a
+    page that otherwise has none, and it is only ever seen by someone who has
+    stopped and pointed at the thing.
+
+        0     the bar walks out of the field to the left, in two steps, with a
+              bob between them, because two steps is a walk and one is a slide
+        340   the field wiggles once -- a small thing noticing it is lighter
+        460   it wiggles harder and the three top chips come off it
+        700   it rolls over, and the blue chip crawls out from under the lift
+        980   it melts: the right side turns into a half circle and settles
+
+    Each shape carries its own clock rather than sharing one, which is why the
+    numbers below are durations and delays instead of percentages of a whole.
+    They are meant to overlap untidily. A storyboard where every beat begins as
+    the last one ends is a list, not a performance. */
+
+.doclink-mark.anim.is-open .mk-sea {
+    animation: mk-sea-out 460ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.doclink-mark.anim.is-open .mk-body {
+    animation: mk-body-out 1320ms linear both;
+}
+
+.doclink-mark.anim.is-open .mk-yellow {
+    animation: mk-top-out 380ms cubic-bezier(0.3, 0.9, 0.3, 1.2) 500ms both;
+}
+
+.doclink-mark.anim.is-open .mk-white {
+    animation: mk-top-out 380ms cubic-bezier(0.3, 0.9, 0.3, 1.2) 560ms both;
+}
+
+.doclink-mark.anim.is-open .mk-red {
+    animation: mk-top-out 380ms cubic-bezier(0.3, 0.9, 0.3, 1.2) 610ms both;
+}
+
+.doclink-mark.anim.is-open .mk-blue {
+    animation: mk-blue-out 520ms cubic-bezier(0.35, 0.6, 0.3, 1) 760ms both;
+}
+
+/* Folding back is quicker and plainer. Nobody watches a thing leave, and a
+   long exit on a pointer that has already moved on is a page arguing with its
+   reader. */
+.doclink-mark.anim:not(.is-open) i {
+    animation: mk-fold 420ms cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+.doclink-mark.anim:not(.is-open) .mk-body {
+    animation: mk-body-fold 480ms cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+@keyframes mk-sea-out {
+    0% {
+        transform: translateX(115%) scaleX(0.34);
+    }
+
+    /* The first step, and a small lift off the back foot with it. */
+    34% {
+        transform: translateX(70%) scaleX(0.55) translateY(-6%);
+    }
+
+    52% {
+        transform: translateX(58%) scaleX(0.62) translateY(0);
+    }
+
+    /* The second, longer stride. */
+    82% {
+        transform: translateX(-6%) scaleX(1.04) translateY(-3%);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mk-body-out {
+    0%,
+    24% {
+        transform: rotate(0deg);
+        border-radius: 0;
+    }
+
+    /* One wiggle. */
+    29% {
+        transform: rotate(-2.6deg);
+    }
+
+    34% {
+        transform: rotate(1.8deg);
+    }
+
+    38% {
+        transform: rotate(0deg);
+    }
+
+    /* And a harder one, which is what shakes the chips loose. */
+    43% {
+        transform: rotate(4.4deg);
+    }
+
+    48% {
+        transform: rotate(-3.6deg);
+    }
+
+    53% {
+        transform: rotate(1.4deg);
+        border-radius: 0;
+    }
+
+    /* The roll. Over onto one side, held there, and back -- the hold is what
+       gives the blue chip somewhere to crawl out from. */
+    62% {
+        transform: rotate(-11deg) translateX(2%);
+        animation-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+    }
+
+    72% {
+        transform: rotate(-12.5deg) translateX(2.6%);
+    }
+
+    80% {
+        transform: rotate(2deg) translateX(0);
+        border-radius: 0;
+    }
+
+    /* The melt. */
+    92% {
+        transform: rotate(-0.8deg) scale(1.03, 0.96);
+        border-radius: 0 60% 60% 0;
+    }
+
+    100% {
+        transform: none;
+        border-radius: 0 50% 50% 0;
+    }
+}
+
+@keyframes mk-top-out {
+    0% {
+        transform: var(--folded);
+    }
+
+    /* Thrown clear, then falling into place -- these are shaken off, so they
+       are the only parts here that do not decide anything for themselves. */
+    58% {
+        transform: translate(6%, -14%) scale(1.12) rotate(8deg);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mk-blue-out {
+    0% {
+        transform: var(--folded);
+    }
+
+    /* Crawling: two lurches and a rest, low to the ground, nothing thrown. */
+    26% {
+        transform: translate(52%, -170%) scale(0.5);
+    }
+
+    46% {
+        transform: translate(46%, -150%) scale(0.6);
+    }
+
+    74% {
+        transform: translate(14%, -44%) scale(0.9);
+    }
+
+    88% {
+        transform: translate(2%, -6%) scale(1.06);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+/* One set of keyframes folds every part, because each one already knows where
+   it goes: --folded is declared beside the resting transform it belongs to, so
+   the animation only has to say "from open, back to wherever you live". */
+@keyframes mk-fold {
+    0% {
+        transform: none;
+    }
+
+    100% {
+        transform: var(--folded, none);
+    }
+}
+
+@keyframes mk-body-fold {
+    0% {
+        border-radius: 0 50% 50% 0;
+    }
+
+    46% {
+        transform: rotate(3deg) scale(0.97);
+        border-radius: 0 40% 40% 0;
+    }
+
+    100% {
+        transform: none;
+        border-radius: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .doclink-mark i {
+        animation: none !important;
+    }
+}
+
+
+/*---------------------------------------------------------------------------
     Scrolling.
 
     Above a usable height the page itself stops scrolling: the name, the
