@@ -312,16 +312,26 @@ MARKS = [
       dict(shape="corner-piece", h=0.42, base=0, gap=0.24, alpha=0.45)]),
 
     ("teaching", "yellow",
-     "A form, and the horizon it is handed across: a quarter circle, then a "
-     "shallow cap lying flat and well back from it.",
-     [dict(shape="arc-quarter", h=0.92, base=0),
-      dict(shape="cap-wide", h=0.20, base=0, gap=0.20, alpha=0.5)]),
+     "A hand-off. The giver, the thing held up between them, and the bowl "
+     "waiting for it -- which is the same shallow cap as before, turned over. "
+     "As a cap it was a lid lying well back from everything; upside down it is "
+     "something open, and teaching is not a lid.",
+     [dict(shape="arc-quarter", h=0.90, base=0),
+      dict(shape="chip", h=0.30, base=0.36, gap=0.20),
+      dict(shape="cap-wide", h=0.21, base=0, gap=0.18, alpha=0.5, flipy=True)]),
 
     ("recognition", "blue",
-     "A seal -- round on three sides, flat where it is presented -- and the "
-     "plate it is pressed onto.",
-     [dict(shape="lens", h=1.00, base=0),
-      dict(shape="plank", h=0.30, base=0, gap=0.26, alpha=0.45)]),
+     "Raised up on something. A raked plinth lying at the foot, the thing "
+     "itself standing on it and leaning as anything set down by hand leans, "
+     "and one smaller mark up and away to the side.\n\n"
+     "It was a seal beside a plate, which is a blob beside a brick, and the "
+     "impression that was tried on top of the plate could not be seen at all: "
+     "every part of a mark is one colour, so a dent in a shape is invisible by "
+     "construction. What CAN be shown is height. Recognition is being raised, "
+     "so the arrangement is vertical now rather than a row.",
+     [dict(shape="rake-trapezoid", h=0.20, base=0),
+      dict(shape="lens", h=0.86, base=0.19, gap=-0.42, rot=-8),
+      dict(shape="chip", h=0.26, base=0.52, gap=0.14, alpha=0.5)]),
 
     ("earlier", "grey",
      "Three fragments and the ground between them, each smaller than the last. "
@@ -472,9 +482,29 @@ def compose(regions, index, parts):
         geom.append(dict(shape=p["shape"], x=round(x, 3), y=round(y, 3),
                          w=round(w * s, 3), h=round(h * s, 3),
                          alpha=round(p.get("alpha", 1), 3)))
-        body.append('  <g transform="translate(%s %s) scale(%s)">\n'
+        # ORIENTATION.
+        #
+        # A traced shape arrives in whatever attitude the painting left it in,
+        # and for a long time that was the only attitude it could be used in --
+        # so a composition could only ever re-order its parts, never turn one
+        # to face another. Two of the six marks were the worse for it.
+        #
+        # Mirroring is a negative scale with the box's far edge for an origin,
+        # so the shape lands in exactly the same box the right way round. A
+        # turn is taken about the box's own centre, and does not change the
+        # advance: the part still occupies the width its trace has, which keeps
+        # small turns from shuffling everything after them along the row.
+        sx = -s if p.get("flipx") else s
+        sy = -s if p.get("flipy") else s
+        tx = x + (x0 + w) * s if p.get("flipx") else x - x0 * s
+        ty = y + (y0 + h) * s if p.get("flipy") else y - y0 * s
+        turn = ""
+        if p.get("rot"):
+            turn = " rotate(%s %s %s)" % (f(p["rot"]), f(x0 + w / 2.0),
+                                          f(y0 + h / 2.0))
+        body.append('  <g transform="translate(%s %s) scale(%s %s)%s">\n'
                     '    <path d="%s" fill="#000"%s fill-rule="evenodd"/>\n  </g>'
-                    % (f(x - x0 * s), f(y - y0 * s), f(s), d,
+                    % (f(tx), f(ty), f(sx), f(sy), turn, d,
                        "" if p.get("alpha", 1) >= 1
                        else ' fill-opacity="%s"' % f(p["alpha"])))
         x += w * s

@@ -87,6 +87,16 @@
             Math.round(s.stagger * jitter) + "ms");
         mark.classList.add("anim");
         mark.classList.toggle("is-open", open);
+
+        // Say when the telling is over. The .anim class has to stay on -- it
+        // is what holds the fill-mode that keeps the parts where they landed
+        // -- so it cannot be the signal that a mark is quiet again. idle.js
+        // waits for this before it stirs anything.
+        delete mark.dataset.settled;
+        clearTimeout(mark._settle);
+        mark._settle = setTimeout(function () {
+            mark.dataset.settled = "1";
+        }, Math.round((open ? s.open : s.shut) * jitter) * 2 + 400);
     }
 
     // Everything before the observer's first answer is a starting position

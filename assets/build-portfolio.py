@@ -52,6 +52,12 @@ def mark_parts(tone):
     """
     mark = _LIB["marks"][MARK_OF.get(tone, "earlier")]
     bw, bh = mark["box"]
+    # The box's own width, carried through to the element that holds the
+    # parts. It used to be restated by hand in the stylesheet, one value per
+    # tone, and the moment a mark was recomposed the two disagreed -- the parts
+    # are placed in per cent of the box, so a container of the wrong width does
+    # not clip anything, it stretches every traced shape in the mark sideways
+    # and nothing looks obviously broken. Emitted, it cannot drift.
     qs = mark["parts"]
 
 
@@ -134,7 +140,7 @@ def mark_parts(tone):
         # custom property, so it has to be said in an attribute.
         out.append('<i%s style="%s"></i>'
                    % (" data-lead" if q is lead else "", style))
-    return "".join(out), span
+    return "".join(out), span, bw
 
 
 SECTIONS = [
@@ -481,11 +487,11 @@ def build():
         cls = ' data-tone="%s"' % tone if tone else ""
         parts.append('    <section class="section" id="s%d"%s>' % (idx, cls))
         parts.append('        <div class="section-label" style="--d:%d">' % nxt())
-        body, span = mark_parts(tone)
+        body, span, markw = mark_parts(tone)
         parts.append('            <span class="section-index" data-mark="%s" '
-                     'style="--span:%.3f">'
+                     'style="--span:%.3f;--mark-w:%.2fpx">'
                      '<span class="section-index-n">%02d</span>%s</span>'
-                     % (MARK_OF.get(tone, "earlier"), span, idx, body))
+                     % (MARK_OF.get(tone, "earlier"), span, markw, idx, body))
         parts.append('            <h2>%s</h2>' % esc(name))
         parts.append('            <p>%s</p>' % esc(standfirst))
         parts.append('        </div>')
@@ -498,7 +504,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260824h"
+V = "v=20260824i"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -581,6 +587,7 @@ TAIL = """    </main>
     <script src="../assets/js/scrollrail.js?{V}"></script>
     <script src="../assets/js/figures.js?{V}"></script>
     <script src="../assets/js/marks.js?{V}"></script>
+    <script src="../assets/js/idle.js?{V}"></script>
 </body>
 
 </html>

@@ -540,6 +540,137 @@
     }
 }
 
+/* TEACHING LEANS. The mark is a hand-off, so the giver does what anybody
+   handing something over does: draws back a little, then leans after it and
+   holds the reach a beat too long before straightening. Turned on its foot,
+   because a body leaning is hinged where it stands. */
+[data-mark="teaching"] i[data-lead] {
+    transform-origin: 0 100%;
+}
+
+.section-index.anim[data-mark="teaching"] i[data-lead] {
+    animation-name: mark-lean-open;
+}
+
+.section-index.anim[data-mark="teaching"]:not(.is-open) i[data-lead] {
+    animation-name: mark-lean-shut;
+}
+
+@keyframes mark-lean-open {
+    0% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    22% {
+        transform: scale(calc(var(--gs) * 1.01)) rotate(-4.5deg);
+    }
+
+    50% {
+        transform: scale(1.02) rotate(8.5deg);
+        animation-timing-function: cubic-bezier(0.4, 0, 0.3, 1);
+    }
+
+    72% {
+        /* The reach, held. */
+        transform: rotate(10.5deg);
+    }
+
+    89% {
+        transform: rotate(-2deg);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mark-lean-shut {
+    0% {
+        transform: none;
+    }
+
+    24% {
+        transform: rotate(7deg);
+    }
+
+    62% {
+        transform: rotate(-6deg) scale(0.98);
+    }
+
+    86% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.97)) rotate(3deg);
+    }
+
+    100% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+}
+
+/* RECOGNITION PRESSES. It stands on a plinth, so it works up and down rather
+   than side to side: it bears down once, comes off, and settles. Hinged at its
+   own foot, which is where it meets the thing it is standing on. */
+[data-mark="recognition"] i[data-lead] {
+    transform-origin: 50% 100%;
+}
+
+.section-index.anim[data-mark="recognition"] i[data-lead] {
+    animation-name: mark-press-open;
+}
+
+.section-index.anim[data-mark="recognition"]:not(.is-open) i[data-lead] {
+    animation-name: mark-press-shut;
+}
+
+@keyframes mark-press-open {
+    0% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    21% {
+        /* Bears down before it comes up. */
+        transform: scale(calc(var(--gs) * 1.04), calc(var(--gs) * 0.94));
+    }
+
+    52% {
+        transform: translateY(-2.4px) scale(0.97, 1.05);
+        animation-timing-function: cubic-bezier(0.35, 0, 0.3, 1);
+    }
+
+    76% {
+        transform: translateY(0.7px) scale(1.03, 0.96);
+    }
+
+    90% {
+        transform: translateY(-0.7px) scale(0.99, 1.02);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mark-press-shut {
+    0% {
+        transform: none;
+    }
+
+    26% {
+        transform: translateY(-2px) scale(0.98, 1.04);
+    }
+
+    64% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.05), calc(var(--gs) * 0.93));
+    }
+
+    84% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.97), calc(var(--gs) * 1.04));
+    }
+
+    100% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+}
+
 @keyframes mark-roll-shut {
     0% {
         transform: none;
@@ -1306,5 +1437,157 @@
 
     .entry-year:empty {
         display: none;
+    }
+}
+
+/*  IDLE.
+
+    A mark at rest is still a thing, and things that are alive are never
+    perfectly still. Every so often one part of one mark does something small
+    and then stops.
+
+    These have to survive being layered on top of a resting transform that is
+    not the same for every part -- a gathered satellite sits at translate(gx,
+    gy) scale(gs), a lead sits at scale(1.24), an open part sits at none -- so
+    each gesture is written as a DELTA and composed after whatever the part is
+    already doing. That is what --at is: the part's own resting transform,
+    handed to the keyframes so they can start from it and return to it.
+
+    Five of them, and they are not interchangeable. A part that is folded into
+    a body has no room to travel and can only twitch or breathe; a part
+    standing on its own has space and can lean or shrug. The scheduler knows
+    which state a mark is in and only asks for gestures that fit it.
+
+    Small on purpose. The largest of these turns a shape by two and a half
+    degrees. Anything an eye can measure is a distraction on a page somebody is
+    trying to read; the point is that the register should feel warm rather than
+    that anybody should notice a shape moved.  */
+
+.section-index i.wiggle-twitch {
+    animation: wg-twitch 620ms cubic-bezier(0.34, 0, 0.28, 1) both !important;
+}
+
+.section-index i.wiggle-breathe {
+    animation: wg-breathe 1500ms cubic-bezier(0.4, 0, 0.4, 1) both !important;
+}
+
+.section-index i.wiggle-shrug {
+    animation: wg-shrug 820ms cubic-bezier(0.3, 0, 0.25, 1) both !important;
+}
+
+.section-index i.wiggle-shiver {
+    animation: wg-shiver 540ms linear both !important;
+}
+
+.section-index i.wiggle-lean {
+    animation: wg-lean 1100ms cubic-bezier(0.36, 0, 0.3, 1) both !important;
+}
+
+/* A quick look up and back. The one that reads most like a living thing,
+   which is why it is also the rarest. */
+@keyframes wg-twitch {
+    0%, 100% {
+        transform: var(--at);
+    }
+
+    26% {
+        transform: var(--at) rotate(-2.4deg);
+    }
+
+    58% {
+        transform: var(--at) rotate(1.2deg);
+    }
+
+    80% {
+        transform: var(--at) rotate(-0.4deg);
+    }
+}
+
+/* In and out once, slowly. Barely a gesture at all -- it is the one that can
+   run while somebody is reading the heading beside it. */
+@keyframes wg-breathe {
+    0%, 100% {
+        transform: var(--at);
+    }
+
+    44% {
+        transform: var(--at) scale(1.045, 0.975);
+    }
+
+    72% {
+        transform: var(--at) scale(0.985, 1.015);
+    }
+}
+
+/* Up, and set back down. Wants somewhere to go, so it is only offered to
+   parts that are standing apart. */
+@keyframes wg-shrug {
+    0%, 100% {
+        transform: var(--at);
+    }
+
+    30% {
+        transform: var(--at) translateY(-1.6px) rotate(1.4deg);
+    }
+
+    62% {
+        transform: var(--at) translateY(0.5px) scaleY(0.97);
+    }
+
+    84% {
+        transform: var(--at) translateY(-0.3px);
+    }
+}
+
+/* Four beats, fast, tiny. A thing shaking something off. */
+@keyframes wg-shiver {
+    0%, 100% {
+        transform: var(--at);
+    }
+
+    18% {
+        transform: var(--at) translateX(0.7px);
+    }
+
+    38% {
+        transform: var(--at) translateX(-0.6px);
+    }
+
+    58% {
+        transform: var(--at) translateX(0.4px);
+    }
+
+    78% {
+        transform: var(--at) translateX(-0.2px);
+    }
+}
+
+/* Over, held, and back. The slowest, and the only one with a pause in it. */
+@keyframes wg-lean {
+    0%, 100% {
+        transform: var(--at);
+    }
+
+    24% {
+        transform: var(--at) rotate(2.2deg);
+    }
+
+    56% {
+        transform: var(--at) rotate(2.5deg);
+    }
+
+    86% {
+        transform: var(--at) rotate(-0.5deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .section-index i.wiggle-twitch,
+    .section-index i.wiggle-breathe,
+    .section-index i.wiggle-shrug,
+    .section-index i.wiggle-shiver,
+    .section-index i.wiggle-lean {
+        animation: none !important;
     }
 }

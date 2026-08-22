@@ -75,35 +75,44 @@
     },
     "recognition": {
       "box": [
-        17.877,
+        12.786,
         16
       ],
       "height": 16,
-      "note": "A seal -- round on three sides, flat where it is presented -- and the plate it is pressed onto.",
+      "note": "Raised up on something. A raked plinth lying at the foot, the thing itself standing on it and leaning as anything set down by hand leans, and one smaller mark up and away to the side.\n\nIt was a seal beside a plate, which is a blob beside a brick, and the impression that was tried on top of the plate could not be seen at all: every part of a mark is one colour, so a dent in a shape is invisible by construction. What CAN be shown is height. Recognition is being raised, so the arrangement is vertical now rather than a row.",
       "parts": [
         {
           "alpha": 1,
-          "h": 16.0,
-          "shape": "lens",
-          "w": 7.123,
+          "h": 3.2,
+          "shape": "rake-trapezoid",
+          "w": 9.0,
           "x": 0.0,
-          "y": 0.0
+          "y": 12.8
         },
         {
-          "alpha": 0.45,
-          "h": 4.8,
-          "shape": "plank",
-          "w": 6.594,
-          "x": 11.283,
-          "y": 11.2
+          "alpha": 1,
+          "h": 13.76,
+          "shape": "lens",
+          "w": 6.126,
+          "x": 2.28,
+          "y": -0.8
+        },
+        {
+          "alpha": 0.5,
+          "h": 4.16,
+          "shape": "chip",
+          "w": 2.141,
+          "x": 10.646,
+          "y": 3.52
         }
       ],
       "shapes": [
+        "rake-trapezoid",
         "lens",
-        "plank"
+        "chip"
       ],
       "tone": "blue",
-      "width": 18
+      "width": 13
     },
     "research": {
       "box": [
@@ -157,35 +166,44 @@
     },
     "teaching": {
       "box": [
-        31.108,
+        36.743,
         16
       ],
       "height": 16,
-      "note": "A form, and the horizon it is handed across: a quarter circle, then a shallow cap lying flat and well back from it.",
+      "note": "A hand-off. The giver, the thing held up between them, and the bowl waiting for it -- which is the same shallow cap as before, turned over. As a cap it was a lid lying well back from everything; upside down it is something open, and teaching is not a lid.",
       "parts": [
         {
           "alpha": 1,
-          "h": 14.72,
+          "h": 14.4,
           "shape": "arc-quarter",
-          "w": 15.463,
+          "w": 15.127,
           "x": 0.0,
-          "y": 1.28
+          "y": 1.6
+        },
+        {
+          "alpha": 1,
+          "h": 4.8,
+          "shape": "chip",
+          "w": 2.47,
+          "x": 18.327,
+          "y": 5.44
         },
         {
           "alpha": 0.5,
-          "h": 3.2,
+          "h": 3.36,
           "shape": "cap-wide",
-          "w": 12.444,
-          "x": 18.663,
-          "y": 12.8
+          "w": 13.066,
+          "x": 23.677,
+          "y": 12.64
         }
       ],
       "shapes": [
         "arc-quarter",
+        "chip",
         "cap-wide"
       ],
       "tone": "yellow",
-      "width": 32
+      "width": 37
     },
     "ventures": {
       "box": [
