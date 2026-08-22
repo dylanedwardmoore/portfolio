@@ -243,7 +243,7 @@ SECTIONS = [
         ("", "Adversarial Examples for NLP Contexts",
          "My colleague and I present two methods of generating adversarial examples "
          "for an NLP task. We introduce a new loss function for training word "
-         "vectors in a CBOW model. This was our CS221 and CS224N class projects.",
+         "vectors in a CBOW model. Final project for both CS221 (Artificial Intelligence: Principles and Techniques) and CS224N (Natural Language Processing with Deep Learning).",
          "adversarial2.jpg", [
              ("https://drive.google.com/file/d/1U_g5SAsvcWB3Md4bHveYfyaY2sj2H28H/view?usp=sharing", "Paper"),
          ]),
@@ -251,19 +251,19 @@ SECTIONS = [
          "My team made a CNN for Amazon's robotic arm pick-and-place task. Our model "
          "can use large amounts of generated data (multiple camera angles, many "
          "scenes) and is intended to boost the performance of existing models on the "
-         "actual task via transfer learning. This was a CS230 class project.",
+         "actual task via transfer learning. Final project for CS230 (Deep Learning).",
          "robot_arm3.jpg", [
              ("https://drive.google.com/open?id=1yI4C4Y-0tSd0WSVDIi_A6twL08Q5agwt", "Paper"),
          ]),
         ("", "Video tagging using frame captions",
          "My team extended state of the art CNN image captioning techniques to a "
-         "video tagging task. This was our CS229 class project",
+         "video tagging task. Final project for CS229 (Machine Learning).",
          "video_tagging.jpg", [
              ("https://drive.google.com/file/d/17dVfAEMQJUmjsYnHHc8fcsAJB3EPpyLk/view?usp=sharing", "Paper"),
          ]),
         ("", "Finding protests in social media",
          "My team used CNNs to identify protest images on Chinese social media that "
-         "are likely to be censored. This was our CS224N class project",
+         "are likely to be censored. Final project for CS224N (Natural Language Processing with Deep Learning).",
          "eye_green.jpg", [
              ("https://drive.google.com/open?id=1UksP447kuM7VpuhreQ4rV8aNMBrJx99P", "Paper"),
          ]),
@@ -275,13 +275,13 @@ SECTIONS = [
          ]),
         ("", "Pensieve",
          "My team made an app for sharing memories with loved ones at specific "
-         "moments. This was a CS247 class project.",
+         "moments. Final project for CS247 (Human-Computer Interaction Design Studio).",
          "pensieve4.jpg", [
              ("https://drive.google.com/open?id=1b868SNDfESTWQaKP7j5MFI38Np8WMzNB", "Documentation"),
          ]),
         ("", "Rally",
          "My team made a mobile web app for people to connect with friends and plan "
-         "activities. This was a CS147 class project.",
+         "activities. Final project for CS147 (Introduction to Human-Computer Interaction Design).",
          "rally.jpg", [
              ("https://www.facebook.com/gorallyme/", "Facebook page"),
              ("https://www.youtube.com/watch?v=yIQWqWPzu5Q", "Promo video"),
@@ -289,7 +289,7 @@ SECTIONS = [
         ("", "A general game playing agent",
          "My team made a Java prop net GGP player with performance boosts from "
          "factoring and latches. This program made it to the semifinals of the end "
-         "of year class competition. This was a CS227b class project.",
+         "of year class competition. Final project for CS227B (General Game Playing).",
          "chess_piece2.jpg", [
              ("https://drive.google.com/open?id=1hXBl_rZFLuCw9mlUidw-T7yNCffwIruM", "Documentation"),
          ]),
@@ -384,7 +384,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260822b"
+V = "v=20260822j"
 HEAD = """<!doctype html>
 <html lang="en">
 

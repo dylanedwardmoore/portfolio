@@ -115,9 +115,6 @@
     --bar: 13px;
     --scrollbar: 26px;
 
-    /* One full row of the wheel: a little more than the title's own height,
-       so the outgoing word clears the slot as the incoming one enters. */
-    --title-step: 58px;
 
     /* Floor margins, used once the viewport is too small for the canon. */
     --m-min: 24px;
@@ -237,11 +234,6 @@ img {
     navigation: auto;
 }
 
-.name,
-.masthead h1 {
-    view-transition-name: page-title;
-}
-
 .frame-left {
     view-transition-name: frame-left;
 }
@@ -250,92 +242,31 @@ img {
     view-transition-name: frame-bottom;
 }
 
-/* The portfolio's rail and the landing page's static bar share one
+/* The portfolio's thumb and the landing page's static bar share one
    transition name, so the browser treats them as the same object and morphs
    one into the other across the navigation: the bar that marks the text
    block on the landing page becomes the thing you can drag on the portfolio,
-   and back again. Only one of them is ever rendered at a time. */
-.portfolio .scrollrail {
+   and back again. Only one of them is ever rendered at a time.
+
+   The name is on the THUMB, not on the rail around it. The rail is a
+   full-height track that paints nothing itself; naming it meant the browser
+   was morphing a 750px transparent box whose green lived somewhere inside,
+   and the green could not follow the box's shape. The thumb is the green. */
+.portfolio .scrollrail-thumb {
     view-transition-name: scroll-rail;
 }
 
-/* The titles turn on a wheel.
+/* The titles just fade.
 
-   This is CodeFronts' masked word wheel (MIT), the demo served at
-   .../css-elastic-bounce-text-animation/, applied to a page transition
-   instead of a loop. Its three parts are all here:
+   They used to turn on a masked wheel, stepping a full row so one word left
+   the slot as the next rose into it. It was doing too much: the pages already
+   differ, and a word that travels while the page behind it is changing reads
+   as two separate events rather than one.
 
-     the window   a slot with a gradient mask top and bottom, so a word
-                  dissolves into the opening rather than being cut by it
-     the step     a full row of travel -- the outgoing word leaves the slot
-                  completely as the incoming one arrives, which is what makes
-                  it read as one wheel turning rather than two words fading
-     the easing   cubic-bezier(.6,-0.2,.35,1.2): negative on the way out and
-                  past one on the way in, the anticipation and overshoot that
-                  give it the sprung, elastic snap
-
-   The mask sits on the transition group rather than the heading, so the slot
-   exists only while the wheel is turning and the settled title is never faded
-   at its edges.
-
-   HIERARCHY. Portfolio is a subpage -- the control that leaves it says
-   "Back" -- so the wheel turns one way going in and the other coming out:
-   in, the row steps up and the next title rises into the slot from below;
-   out, it steps down and the title arrives from above. Which way the wheel
-   turned is the whole cue, so there is nothing else layered on top of it.
----------------------------------------------------------------------------*/
-
-@keyframes title-out-up {
-    to {
-        transform: translateY(calc(-1 * var(--title-step)));
-        opacity: 0;
-    }
-}
-
-@keyframes title-in-up {
-    from {
-        transform: translateY(var(--title-step));
-        opacity: 0;
-    }
-}
-
-@keyframes title-out-down {
-    to {
-        transform: translateY(var(--title-step));
-        opacity: 0;
-    }
-}
-
-@keyframes title-in-down {
-    from {
-        transform: translateY(calc(-1 * var(--title-step)));
-        opacity: 0;
-    }
-}
-
-/* The slot. */
-::view-transition-group(page-title) {
-    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
-    mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
-}
-
-::view-transition-old(page-title) {
-    animation: title-out-up 220ms cubic-bezier(0.6, -0.2, 0.35, 1.2) both;
-}
-
-/* Turns in as the new view arrives, not while the old one is still leaving. */
-::view-transition-new(page-title) {
-    animation: title-in-up 300ms cubic-bezier(0.6, -0.2, 0.35, 1.2) 220ms both;
-}
-
-/* Coming back out of the subpage: the wheel turns the other way. */
-html:active-view-transition-type(go-out)::view-transition-old(page-title) {
-    animation-name: title-out-down;
-}
-
-html:active-view-transition-type(go-out)::view-transition-new(page-title) {
-    animation-name: title-in-down;
-}
+   So the headings keep no transition name of their own. Without one they are
+   simply part of the root snapshot, which means they fade out with the view
+   they belong to and fade in with the next -- on exactly the timing set out
+   below, with no separate schedule to keep in step. */
 
 /* THE ORDER OF THE WHOLE THING.
 
@@ -409,27 +340,41 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
     animation-fill-mode: both;
 }
 
+/* The bar does not fade, and it does not distort.
+
+   By default a snapshot is laid out at inline-size: 100%, block-size: auto --
+   it scales by width and keeps its aspect ratio. The bar's width barely
+   changes and its height changes a great deal, so the default held the old
+   bar at its original height while the group resized underneath it, and the
+   real one appeared at its own size the instant the transition ended. That
+   snap was the jump.
+
+   Both marks are flat green rectangles that fill their boxes, so stretching
+   one to any size is indistinguishable from drawing it at that size. The
+   snapshot is told to fill the group outright, and only the incoming one is
+   drawn -- a cross-fade between two greens would go translucent wherever the
+   two shapes failed to overlap, which is the fading the bar must never do. */
 ::view-transition-old(scroll-rail),
 ::view-transition-new(scroll-rail) {
     animation: none;
-    opacity: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
     mix-blend-mode: normal;
+}
+
+::view-transition-old(scroll-rail) {
+    opacity: 0;
+}
+
+::view-transition-new(scroll-rail) {
+    opacity: 1;
 }
 
 /* The colour half of the roll. A snapshot cannot animate its own colour, so
    the settle runs on the live element once the new page is revealed. Gated on
    the transition actually having happened, via .vt-in. */
-@keyframes title-settle {
-    from {
-        color: #2f6b4a;
-    }
-}
-
 .vt-in .name,
-.vt-in .masthead h1 {
-    animation: title-settle 520ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
 
     ::view-transition-group(*),
@@ -438,11 +383,7 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
         animation: none !important;
     }
 
-    .vt-in .name,
-    .vt-in .masthead h1 {
-        animation: none;
-    }
-}
+    .vt-in .name,}
 
 /*---------------------------------------------------------------------------
     The cascade.
@@ -597,9 +538,9 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
         minmax(0, var(--type-area))
         1fr;
     grid-template-rows:
-        minmax(var(--u), 1fr)
+        var(--u)
         auto
-        minmax(calc(var(--u) + var(--bar)), 2fr);
+        minmax(calc(var(--u) + var(--bar)), 1fr);
     min-height: 100vh;
     min-height: 100dvh;
 }
@@ -758,13 +699,23 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
 
 @media (min-height: 440px) {
 
+    /* The head margin is a fixed unit, not a share of the leftover height.
+
+       It used to be minmax(--u, 1fr) against a 2fr foot, which optically
+       centred the block -- and meant the title sat wherever the window's
+       height put it: 107px down at 1920x1080, 227px at 2560x1440, while the
+       portfolio's title stayed at 29px. Crossing between the pages dropped
+       the word down the screen.
+
+       Fixing the head and giving all the slack to the foot is the canon's own
+       proportion anyway: a shallow head margin over a deep foot. */
     .page {
         min-height: 100vh;
         min-height: 100dvh;
         grid-template-rows:
-            minmax(var(--u), 1fr)
+            var(--u)
             auto
-            minmax(calc(var(--u) + var(--bar)), 2fr);
+            minmax(calc(var(--u) + var(--bar)), 1fr);
     }
 
     /* Shown only before the first scroll, and only when there is something
@@ -911,10 +862,14 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
     }
 
     /* On a desktop the rule becomes the bar: the rail's own width, in the
-       rail's own lane beside the frame, running the height of the text and
-       the figure together -- the top of the name to the foot of whichever of
-       the two ends lower. Nothing scrolls here, so it does not move; it is
-       the same mark the portfolio's rail makes, standing still. */
+       rail's own lane beside the frame, running the height of the text --
+       the top line of the name to the last line of the blurb, the leading
+       trimmed off both ends. The portrait is not part of its measure.
+       Nothing scrolls here, so it does not move; it is the same mark the
+       portfolio's rail makes, standing still.
+
+       The top and bottom below are the fallback extent, replaced with the
+       measured one as soon as the script runs. */
     .edge-rule {
         display: block;
         position: absolute;
@@ -968,11 +923,14 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
         --t-body: 17px;
         --t-lead: 20.2px;
         --t-name: 38px;
-        --title-step: 42px;
+    }
+
+    :root {
+        --gutter-l: var(--m-min);
     }
 
     .page {
-        grid-template-columns: var(--m-min) minmax(0, 1fr) var(--m-min);
+        grid-template-columns: var(--gutter-l) minmax(0, 1fr) var(--m-min);
         grid-template-rows: var(--u) minmax(0, auto) calc(var(--u) * 2);
     }
 
@@ -1056,9 +1014,13 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
    comfortably, and the wrapped arrangement gives a better one. In between,
    the wrapped layout still has to leave room for the rule. */
 @media (min-width: 768px) and (max-width: 1079px) {
+    :root {
+        --gutter-l: calc(var(--bar) + var(--m-min));
+    }
+
     .page {
         grid-template-columns:
-            calc(var(--bar) + var(--m-min))
+            var(--gutter-l)
             minmax(0, 1fr)
             var(--m-min);
     }
@@ -1133,7 +1095,7 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
         --t-body: 13.5px;
         --t-lead: 14.5px;
         --t-name: 26px;
-        --title-step: 30px;
+        --gutter-l: calc(var(--bar) + var(--uh));
     }
 
     .page {
@@ -1142,7 +1104,7 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
         overflow: hidden;
         align-items: initial;
         grid-template-columns:
-            calc(var(--bar) + var(--uh))
+            var(--gutter-l)
             minmax(0, 1fr)
             var(--uh);
         grid-template-rows: var(--u) minmax(0, auto) var(--u);
@@ -1241,7 +1203,7 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
 ---------------------------------------------------------------------------*/
 
 .page-head {
-    padding: calc(var(--u) * 1.2) var(--m-min) 0;
+    padding: calc(var(--u) * 1.2) var(--m-min) 0 var(--gutter-l);
 }
 
 .page-head h1 {

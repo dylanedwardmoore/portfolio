@@ -108,24 +108,6 @@
    base insets, so the bar's opaque ground painted straight over the frame's
    rule -- the white notch through the green at the top left. Everything that
    carries a ground has to clear the rule wherever the rule exists. */
-@media (min-width: 768px) {
-    .topbar {
-        margin-left: var(--bar);
-    }
-}
-
-@media (min-width: 768px) and (max-width: 859px) {
-
-    .masthead,
-    .register {
-        padding-left: calc(var(--bar) + var(--m-min));
-    }
-
-    .topbar {
-        padding-left: var(--m-min);
-    }
-}
-
 /*---------------------------------------------------------------------------
     Masthead
 ---------------------------------------------------------------------------*/
@@ -133,7 +115,7 @@
 .masthead {
     /* One unit down, the same distance the landing page's grid puts its
        title, so the two headers sit on the same line in both directions. */
-    padding: var(--u) var(--m-min) calc(var(--u) * 0.5);
+    padding: var(--u) var(--m-min) calc(var(--u) * 0.5) var(--gutter-l);
     max-width: 34rem;
 }
 
@@ -145,7 +127,19 @@
     top: 0;
     z-index: 20;
     background: var(--paper);
-    padding: calc(var(--u) * 0.25) var(--m-min) calc(var(--u) * 0.5);
+    padding: calc(var(--u) * 0.25) var(--m-min) calc(var(--u) * 0.5) var(--gutter-l);
+}
+
+/* Wherever the frame is drawn, the bar's opaque ground has to start after the
+   rule or it paints straight over it -- that was the white notch through the
+   green at the top left. The margin moves the ground clear; the padding then
+   gives back exactly what the margin took, so the Back link still starts on
+   the same line as the title above it rather than 13px to its right. */
+@media (min-width: 768px) {
+    .topbar {
+        margin-left: var(--bar);
+        padding-left: calc(var(--gutter-l) - var(--bar));
+    }
 }
 
 .backlink {
@@ -186,7 +180,7 @@
 ---------------------------------------------------------------------------*/
 
 .register {
-    padding: 0 var(--m-min) calc(var(--u) * 2);
+    padding: 0 var(--m-min) calc(var(--u) * 2) var(--gutter-l);
 }
 
 .section {
@@ -392,28 +386,29 @@
 
 @media (min-width: 860px) {
 
-    /* Left inset identical to the landing page's type area, so the two
-       titles sit on the same line and moving between the pages does not
-       shift them. */
+    /* Every left inset here is the landing page's own left gutter, read from
+       the same token that page's grid is built from.
+
+       This block used to compute its own -- bar plus 1.4 units -- which is not
+       what the landing page does, and the two drifted apart by as much as 18px
+       depending on the window. Restating the formula was the mistake; there is
+       one gutter, and both pages ask for it by name. */
     .topbar {
         /* Starts after the frame so its ground never paints over that rule.
            It may run under the rail's lane, because the rail now outranks it
            and draws on top. */
         margin-left: var(--bar);
         padding: calc(var(--u) * 0.25) calc(var(--u) * 1.4) calc(var(--u) * 0.55)
-            calc(var(--u) * 1.4);
+            calc(var(--gutter-l) - var(--bar));
     }
 
-    /* Left inset identical to the landing page's type area, so the two titles
-       sit on the same line and moving between the pages does not shift them. */
     .masthead {
         padding: var(--u) calc(var(--u) * 1.4) calc(var(--u) * 0.5)
-            calc(var(--bar) + var(--u) * 1.4);
+            var(--gutter-l);
     }
 
     .register {
-        padding: 0 calc(var(--u) * 1.4) calc(var(--u) * 3)
-            calc(var(--bar) + var(--u) * 1.4);
+        padding: 0 calc(var(--u) * 1.4) calc(var(--u) * 3) var(--gutter-l);
     }
 
     .section {

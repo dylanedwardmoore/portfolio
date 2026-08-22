@@ -215,6 +215,62 @@
         draw();
     }
 
+    /* The landing page's bar is the height of the text and nothing else.
+
+       It cannot be done in CSS. The rule is absolutely positioned inside a
+       grid area it shares with the portrait, and the portrait is the taller
+       of the two, so stretching the rule to its own area runs it down past
+       the last line of the blurb to the foot of the photograph. The portrait
+       has to keep contributing its height -- take it out of flow and it
+       covers the buttons underneath -- so the rule is measured instead.
+
+       Measured off the text's ink, not its boxes: the first and last line
+       boxes each carry half the leading above and below the letters, and a
+       mark that included it would sit visibly proud of the words at both
+       ends. Trimming it is what "the height of the text itself" means. */
+    function halfLeading(el) {
+        var cs = getComputedStyle(el);
+        var fs = parseFloat(cs.fontSize);
+        var lh = parseFloat(cs.lineHeight);
+        if (!lh) lh = fs * 1.2;
+        return Math.max(0, (lh - fs) / 2);
+    }
+
+    // Line boxes, in order, for everything the element renders.
+    function lineRects(el) {
+        var r = document.createRange();
+        r.selectNodeContents(el);
+        var rects = r.getClientRects();
+        return rects.length ? rects : [el.getBoundingClientRect()];
+    }
+
+    function syncEdgeRule() {
+        var rule = document.querySelector(".edge-rule");
+        if (!rule) return;
+        var head = document.querySelector(".name");
+        var body = document.querySelector(".bio");
+        var host = rule.offsetParent;
+        if (!head || !body || !host) return;
+        if (getComputedStyle(rule).display === "none") return;
+
+        var first = lineRects(head)[0];
+        var lines = lineRects(body);
+        var last = lines[lines.length - 1];
+        var top = first.top + halfLeading(head);
+        var foot = last.bottom - halfLeading(body);
+        if (!(foot > top)) return;
+
+        var origin = host.getBoundingClientRect().top;
+        rule.style.top = (top - origin) + "px";
+        rule.style.bottom = "auto";
+        rule.style.height = (foot - top) + "px";
+    }
+
+    window.addEventListener("resize", syncEdgeRule);
+    window.addEventListener("orientationchange", syncEdgeRule);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncEdgeRule);
+    syncEdgeRule();
+
     // The sticky section labels have to start exactly where the bar ends, or
     // rows scroll past in the open between them. Measured rather than guessed,
     // since the bar's height follows the type scale.
