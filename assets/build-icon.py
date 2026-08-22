@@ -5,50 +5,37 @@
 
 WHAT IT IS
 
-A section mark, written for a square.
+One field, divided, with a curve through it.
 
-The register marks each of its six sections with a small composition -- two or
-three shapes from the traced library, set side by side with the intervals
-chosen rather than defaulted, in the manner the paintings themselves use. That
-is the site's visual language, and it did not exist when the previous icon was
-drawn. This one is made out of it: the same library, the same grammar, the same
-palette, arranged for a tile instead of a strip.
+    the ground   Neutral Gray    the whole tile, so nothing anywhere is white
+    the bar      Sea Green       down the left, and where it ends it does not
+                                 end square: disc-panel is "flat where it was
+                                 placed, round where it ran out", and it runs
+                                 out into the grey in one long sweep
+    three chips  Yellow, Red,    small, unequal, and nowhere near each other
+                 Sea Green
 
-    bar          Sea Green      the binding edge, full height, bled top and
-                                foot -- the one mark both pages carry, and the
-                                only thing on this site that is always green
-    disc-panel   Dusky Green     "flat where it was placed, round where it ran
-                                out" -- one machined shoulder, which is the
-                                gesture that separates the register's marks
-                                from the flat planes of everything else
-    chip         Apricot Yellow  the small saturated note, cropped by the right
-                                edge so the tile reads as part of something
-                                larger
+WHY IT IS NOT A ROW OF PLANES
 
-WHY THESE THREE AND NOT SIX
+The version before this stood three shapes side by side on a common foot, in
+the register's own grammar, and read as a diminishing line of blocks -- a bar
+chart, which is a picture of a quantity and this is not one. The trouble was
+the grammar: marks in the register stand in a row because they sit above a
+heading in a strip. A tile is not a strip. It wants a field divided, which is
+what the paintings do with a square and what this site does with a page.
 
-The register has six tones and the obvious idea is to put all six in. It was
-tried and it is mud: at sixteen pixels six hues come to two or three pixels
-each and the tile turns to grey noise. The mark is not a census of the sections.
-It is written in their hand, which is the thing that actually generalises --
-shapes from their library, ground left between them, and no two measures in the
-drawing alike.
+So the grey is not a plane among planes here, it is the ground, and there is no
+paper showing anywhere in the tile. The one curve is the only event, and it is a
+boundary between two colours rather than a shape sitting on a background -- the
+same reason Neo-Plasticism divides a field instead of drawing on one.
 
-WHAT IS KEPT FROM THE PAINTINGS
+The chips are what keep it from being a diagram. Three of them, each a different
+size, none aligned with another, one of them the same green as the bar so the
+eye has somewhere to go back to.
 
-  * REAL SHAPES. These are the traced outlines themselves, loaded from
-    img/shapes/library and rasterised, not rectangles standing in for them.
-    Nothing is stretched: each is scaled by height and takes whatever width its
-    own proportion gives it, exactly as the register's marks do. A traced plane
-    squashed to fit is a plane about which something has been decided twice.
-  * UNEQUAL EVERYTHING. Heights 1.00, 0.92, 0.54. Widths 0.20, 0.29, 0.28.
-    Intervals 0.078 and 0.170. Nothing is centred, halved, or repeated.
-  * A COMMON FOOT. All three stand on the bottom edge and run off it, which is
-    what the marks do and what stops the tile being a vignette.
-  * ONE SMALL SATURATED NOTE against several quiet ones.
-
-The ground is Paper because the page is Paper. On a dark tab strip the tile
-reads as a white card with a green edge, which is what the site looks like.
+Everything is the site's own palette and the bar is the site's own shape, traced
+out of a Bolotowsky and scaled by height at its own proportion -- 0.315 wide to
+its own height, which is what it is, not what would have been convenient.
 """
 
 import os
@@ -63,16 +50,24 @@ LIB = os.path.join(HERE, "img", "shapes", "library")
 
 SEA = (0x33, 0xFF, 0x7D, 0xFF)
 DUSKY = (0x00, 0x59, 0x2E, 0xFF)
+GREY = (0xB5, 0xD1, 0xCC, 0xFF)
+RED = (0xFF, 0x33, 0x19, 0xFF)
 YELLOW = (0xFF, 0xE6, 0x00, 0xFF)
-PAPER = (0xFF, 0xFF, 0xFF, 0xFF)
 
-# shape, colour, height as a fraction of the tile, and the interval BEFORE it.
-# The chip's interval is more than twice the first, which is what leaves the
-# open ground on the right for it to be cropped against.
-PARTS = [
-    ("bar", SEA, 1.00, 0.000),
-    ("disc-panel", DUSKY, 0.92, 0.078),
-    ("chip", YELLOW, 0.54, 0.170),
+# The ground. Not a plane in the composition -- the field everything else is
+# cut out of, which is why no part of this tile is ever paper.
+GROUND = GREY
+
+# The bar: a traced shape at its own proportion, full height, hard on the left.
+BAR = ("disc-panel", SEA, 1.00)
+
+# The chips, as (x, y, w, h) in fractions of the tile. No two the same size, no
+# two sharing an edge or a line, and each running off the side it is nearest so
+# the tile stays a crop of something larger.
+CHIPS = [
+    (0.840, 0.000, 0.160, 0.150, YELLOW),
+    (0.560, 0.855, 0.155, 0.145, RED),
+    (0.885, 0.450, 0.115, 0.115, SEA),
 ]
 
 # Supersample, then come down. Every edge lands on a fraction of a pixel at the
@@ -153,20 +148,17 @@ def load(name):
 def draw(size):
     """The mark, at one size, drawn on a supersampled canvas."""
     s = size * SS
-    img = Image.new("RGBA", (s, s), PAPER)
+    img = Image.new("RGBA", (s, s), GROUND)
     d = ImageDraw.Draw(img)
 
-    x = 0.0
-    for name, colour, h, gap in PARTS:
-        polys, w0, h0 = load(name)
-        x += gap
-        w = h * (w0 / h0)          # its own proportion, never forced
-        k = (h * s) / h0           # one scale for both axes
-        top = (1.0 - h) * s        # every part stands on the foot
-        for poly in polys:
-            d.polygon([(x * s + a * k, top + b * k) for a, b in poly],
-                      fill=colour)
-        x += w
+    name, colour, h = BAR
+    polys, w0, h0 = load(name)
+    k = (h * s) / h0                # one scale for both axes, never forced
+    for poly in polys:
+        d.polygon([(a * k, b * k) for a, b in poly], fill=colour)
+
+    for x, y, w, ch, colour in CHIPS:
+        d.rectangle([x * s, y * s, (x + w) * s, (y + ch) * s], fill=colour)
 
     return img.resize((size, size), Image.LANCZOS)
 
