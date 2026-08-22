@@ -1187,8 +1187,12 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
         width: var(--bar);
     }
 
+    /* Flush, like the rule it stands in for -- there is no frame here to sit
+       beside, and the same reasoning about the back-swipe applies. */
     .scrollrail {
-        left: var(--bar);
+        left: 0;
+        width: var(--bar);
+        pointer-events: none;
     }
 
     .doclinks {

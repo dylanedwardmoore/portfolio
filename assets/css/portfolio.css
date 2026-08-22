@@ -46,9 +46,19 @@
     }
 }
 
+/* On a phone the rail stays, but only as a mark. The landing page draws a
+   flush rule at this size, and the portfolio has to carry the same one, or
+   the left edge simply empties out when you cross between the two.
+
+   It is not a handle here. A draggable strip lying in the first thirteen
+   pixels of a phone screen would spend its life arguing with the system's
+   back-swipe, and the phone's own scrolling is the right affordance anyway --
+   so it takes no pointer events and just reports position. */
 @media (max-width: 767px) {
     .portfolio .scrollrail {
-        display: none;
+        left: 0;
+        width: var(--bar);
+        pointer-events: none;
     }
 }
 
