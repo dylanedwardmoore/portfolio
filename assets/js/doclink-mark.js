@@ -54,10 +54,10 @@
         "doclink-mark--stack": 1040,
         "doclink-mark--line": 1310
     };
-    var EMERGE = 460;
-    var FOLD = 470;
-    var SPIN = 360;
-    var PUDDLE = 460;
+    var EMERGE = 640;
+    var FOLD = 560;
+    var SPIN = 640;
+    var PUDDLE = 700;
     var GREEN = 520;
     var FALL = 1000;
 

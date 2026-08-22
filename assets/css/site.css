@@ -1050,6 +1050,9 @@ body.landing {
    word it belongs to. It was on the page and nobody would ever have connected
    the two. */
 .doclink-mark {
+    /* Where the turn stops and the melt takes over. One value, read by both,
+       so there is no seam between them. */
+    --spun: 168deg;
     --red: #ff3319;
     --yellow: #ffe600;
     --blue: #0057ba;
@@ -1761,71 +1764,157 @@ body.landing {
 }
 
 .doclink-mark.is-emerging {
-    animation: dm-emerge 460ms cubic-bezier(0.22, 0.5, 0.3, 1) both;
+    animation: dm-emerge 640ms cubic-bezier(0.3, 0.5, 0.35, 1) both;
+    transform-origin: 50% 100%;
 }
 
+/* Slow, and easing the whole way out rather than snapping level: what is
+   turning here has already started to give. */
 .doclink-mark.is-spinning {
-    animation: dm-spin 360ms cubic-bezier(0.42, 0, 0.3, 1) both;
+    animation: dm-spin 640ms cubic-bezier(0.5, 0.02, 0.35, 1) both;
+    /* The same origin the puddle uses. The turn and the melt hand over
+       mid-transform, and one transform about two different origins is two
+       different places -- it would jump at the seam. Anchoring both at the
+       foot also suits the gesture better: it leans over its own base rather
+       than pirouetting about its middle. */
+    transform-origin: 50% 100%;
 }
 
 .doclink-mark.is-puddling {
-    animation: dm-puddle 460ms cubic-bezier(0.5, 0, 0.4, 1) both;
+    animation: dm-puddle 700ms cubic-bezier(0.42, 0, 0.35, 1) both;
 }
 
 /* Going home it stops being the dark green and becomes the bright one, because
    what it is joining is bright. */
-.doclink-mark.is-puddling .mk-body,
-.doclink-mark.is-puddling .sk-field,
-.doclink-mark.is-puddling .ln-spine {
-    animation: dm-thaw 460ms cubic-bezier(0.5, 0, 0.4, 1) both;
+/*  THE SQUARE THAT MELTS HAS TO BE THE COLOUR OF WHAT IT MELTS INTO, and for
+    a long time it was not.
+
+    The rule that did it read .doclink-mark.is-puddling .ln-spine -- three
+    classes. The folding rule a few hundred lines above reads
+    .doclink-mark--line.anim:not(.is-open) i, which is three classes AND a type
+    selector, so it won every time. The thaw never applied. What actually
+    dropped into a Sea Green rule was a Dusky Green square, still the dark
+    colour of the link it came from, and no amount of getting the geometry
+    right was going to make that read as melting INTO anything.
+
+    Nothing warns about this. Both rules are valid, both are live, and the one
+    that loses simply does nothing -- which is the same failure mode that
+    killed Teaching's lean. So this one carries !important, matching what the
+    other phase animations here already do, and does not depend on winning a
+    specificity count against a rule written for something else.
+
+    Dropping mk-fold's fill costs nothing: it ends on var(--folded), which is
+    exactly what the base rule holds anyway, so the fold survives being
+    overridden.
+
+    The colour moves during the TURN, not during the melt. By the time it is
+    spreading it is already the rule's own green, so what you watch at the end
+    is a shape losing its edges rather than a shape changing colour while it
+    goes -- one thing happening at a time.  */
+.doclink-mark--line.is-spinning .ln-spine {
+    animation: dm-soften 640ms cubic-bezier(0.5, 0.02, 0.35, 1) both,
+        dm-thaw 640ms cubic-bezier(0.5, 0.02, 0.35, 1) both !important;
 }
 
-/* Just appearing. It used to arrive four times too wide and almost flat and
-   draw itself in, on the idea that this read as mass being pulled out of the
-   field -- and at the size this actually is, it read as something flying in
-   and slamming to a stop. The block has only just turned green; the square
-   should come up out of that green quietly, not make an entrance.
+.doclink-mark--line.is-puddling .ln-spine {
+    animation: dm-melt-out 700ms cubic-bezier(0.42, 0, 0.35, 1) both !important;
+}
 
-   So: a fade, and eight per cent of scale underneath it so the shape has some
-   substance as it arrives rather than being a rectangle whose alpha is being
-   turned up. That is the whole of it. Everything expressive in this mark
-   belongs to the expansion, which starts the moment this is done. */
-@keyframes dm-emerge {
+/* Holds the green it arrived at and goes on rounding, to a full lozenge. */
+@keyframes dm-melt-out {
     0% {
-        opacity: 0;
-        transform: scale(0.96);
-    }
-
-    /* Most of the fade is over before the shape has finished arriving, so what
-       you see is a square appearing rather than a square growing. */
-    70% {
-        opacity: 0.92;
-        transform: scale(0.995);
+        background: var(--sea);
+        border-radius: 34%;
     }
 
     100% {
-        opacity: 1;
-        transform: none;
+        background: var(--sea);
+        border-radius: 50%;
     }
 }
 
+/*  Just appearing -- and it is the melt run backwards, which is the whole
+    idea. The mark leaves by spreading along the rule and losing its edges, so
+    it arrives by gathering up off the rule and finding them.
+
+    Two earlier tries missed in opposite directions. The first came in four
+    times too wide and almost flat and drew itself in; at this size that read
+    as something flying in and slamming to a stop. The second overcorrected
+    into a plain fade with a little scale under it, which was quiet but inert
+    -- nothing about it said the square had come from anywhere.
+
+    This one starts low, wide and out of focus, the way the puddle ends, and
+    rises into shape over most of a second. Blur is doing the work: an edge
+    resolving is the one cue that reads as liquid becoming solid, and it costs
+    nothing here because the element is 26 pixels and already its own
+    containing block, so nothing about the layout moves.
+
+    Anchored at the foot, so it gathers upward out of the green rather than
+    growing from its middle.  */
+@keyframes dm-emerge {
+    0% {
+        opacity: 0;
+        transform: scale(1.14, 0.66);
+        filter: blur(2.6px);
+    }
+
+    /* Most of the way up, still soft. */
+    46% {
+        opacity: 0.72;
+        transform: scale(1.06, 0.9);
+        filter: blur(1.1px);
+    }
+
+    /* The edges arrive last. */
+    100% {
+        opacity: 1;
+        transform: none;
+        filter: blur(0);
+    }
+}
+
+/*  NOT A SPIN ANY MORE.
+
+    It was a full turn in 360ms -- a thousand degrees a second, which at this
+    size is a struck top. Whatever else that is, it is not something on its way
+    to becoming liquid: it read as the mark bouncing about before the melt
+    rather than beginning it.
+
+    So: most of a half turn, taking nearly twice as long, decelerating the
+    whole way, and sagging as it goes -- wider and shorter each stop, because
+    the one thing a solid does not do is change proportion. By the end it is
+    still turning but it has stopped being a square, which is what lets the
+    puddle simply carry on from here instead of starting a new gesture.
+
+    It does NOT come back to zero. --spun is where it stops, and the puddle
+    starts from the same value, so the two read as one continuous movement.  */
 @keyframes dm-spin {
     0% {
         transform: none;
     }
 
-    /* Tucks in through the turn, the way anything spinning on its own axis
-       does, and comes back out of it square. */
-    45% {
-        transform: rotate(196deg) scale(0.86);
+    38% {
+        transform: rotate(calc(var(--spun, 0deg) * 0.34)) scale(1.03, 0.95);
     }
 
-    78% {
-        transform: rotate(318deg) scale(0.97);
+    72% {
+        transform: rotate(calc(var(--spun, 0deg) * 0.74)) scale(1.07, 0.89);
     }
 
     100% {
-        transform: rotate(360deg);
+        transform: rotate(var(--spun, 0deg)) scale(1.11, 0.84);
+    }
+}
+
+/* The corners go before the shape does. Rounding through the turn is what
+   makes the sag read as softening rather than as squashing. */
+@keyframes dm-soften {
+    0% {
+        border-radius: 0;
+    }
+
+    100% {
+        border-radius: 34%;
     }
 }
 
@@ -1954,9 +2043,25 @@ body.landing {
     a little, and drop one after another at their own moments. Nothing is
     gathered up first: a name coming apart should go back one letter at a
     time.  */
+/*  MELTING HAPPENS AT THE FLOOR, which means the flatten has to be anchored
+    there. Every piece here spreads by scaling, and a scale pulls toward its
+    origin: with the default centre, flattening to a fifth of the height lifts
+    the ink's bottom edge by two fifths of it, and .mk-body -- whose origin is
+    its top-left corner, because that is where it folds from -- lifted its ink
+    by the whole height. --fall put its foot on the line and the flatten took
+    it twenty-one pixels back up, so the one piece you watch most dissolved in
+    clear white with the rule sitting untouched underneath.
+
+    Origin at the bottom edge and the spread happens where the ink already is.
+    Safe to set only here: at 0% the fall holds --rest, and origin has no
+    effect on a transform that isn't scaling or rotating yet.  */
 .doclink-mark--name.is-falling i {
     animation: dm-fall-solo 620ms cubic-bezier(0.45, 0, 0.9, 0.5) both !important;
+    transform-origin: 50% 100%;
 }
+
+/* Keeps its left edge, which is the edge it has held all along. */
+.doclink-mark--name.is-falling .mk-body { transform-origin: 0 100%; }
 
 .doclink-mark--name.is-falling i:nth-of-type(1) { animation-delay: 40ms !important; }
 .doclink-mark--name.is-falling i:nth-of-type(2) { animation-delay: 0ms !important; }
@@ -1968,27 +2073,32 @@ body.landing {
 .doclink-mark--name.is-falling i:nth-of-type(8) { animation-delay: 128ms !important; }
 
 @keyframes dm-fall-solo {
+    /* --rest, not none: the blue strokes stand at a tilt when they are open,
+       and starting the fall at none snapped them upright before they moved. */
     0% {
-        transform: none;
+        transform: var(--rest, none);
     }
 
     /* Turns first, and lifts a hair off its own weight before going. */
     20% {
         background: var(--sea);
-        transform: translateY(-1.6px);
+        transform: var(--rest, none) translateY(-1.6px);
         animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.45);
     }
 
+    /* Down, and squashed against the line by its own arrival. The tilt is
+       gone by now -- nothing lies at an angle once it is flat. */
     86% {
         background: var(--sea);
         transform: translateY(var(--fall, 16px)) scale(1.16, 0.62);
         opacity: 1;
     }
 
-    /* Spreading into the rule rather than stopping on it. */
+    /* Spreading along the rule rather than stopping on it. Wide, one pixel or
+       so deep, and the same green: by the time it goes it is the line. */
     100% {
         background: var(--sea);
-        transform: translateY(var(--fall, 16px)) scale(1.75, 0.18);
+        transform: translateY(var(--fall, 16px)) scale(1.9, 0.1);
         opacity: 0;
     }
 }
@@ -2014,7 +2124,9 @@ body.landing {
     }
 }
 
+/* Same reason as the name mark: the heap has to flatten onto the line. */
 .doclink-mark--stack.is-falling i {
+    transform-origin: 50% 100%;
     background: var(--sea) !important;
     animation: dm-topple 720ms cubic-bezier(0.4, 0, 0.88, 0.52) both !important;
 }
@@ -2048,7 +2160,7 @@ body.landing {
     }
 
     100% {
-        transform: translateY(var(--fall, 16px)) rotate(calc(var(--tumble, 6deg) * 0.3)) scale(1.5, 0.2);
+        transform: translateY(var(--fall, 16px)) rotate(calc(var(--tumble, 6deg) * 0.3)) scale(1.7, 0.1);
         opacity: 0;
     }
 }
@@ -2057,31 +2169,47 @@ body.landing {
     the turn and then falls whole, which is right for a mark that was never a
     crowd. All that has changed is that it now reaches the floor.  */
 
+/*  The puddle spreads from the mark's own bottom edge, so --drop lands it on
+    the rule and the spreading keeps it there instead of drawing it back up --
+    the same correction the other two marks needed. Blurring as it goes,
+    because an edge is the last thing a melting thing keeps.  */
+.doclink-mark.is-puddling {
+    transform-origin: 50% 100%;
+}
+
+/*  It picks up exactly where the turn left it -- --spun, and already sagging
+    -- and unwinds as it flattens, because nothing lies at an angle once it is
+    flat. The old version started square and level, which threw away the turn
+    and made the melt a separate event that began by snapping upright.  */
 @keyframes dm-puddle {
     0% {
-        transform: none;
+        transform: rotate(var(--spun, 0deg)) scale(1.11, 0.84);
         opacity: 1;
+        filter: blur(0);
     }
 
-    /* Loses its footing first. */
-    26% {
-        transform: translateY(3px) scale(1.08, 0.82);
+    /* Gives at the foot before it goes anywhere. */
+    30% {
+        transform: rotate(calc(var(--spun, 0deg) * 0.72)) translateY(calc(var(--drop, 16px) * 0.16)) scale(1.24, 0.7);
+        filter: blur(0.3px);
     }
 
-    /* Then falls, spreading as it goes. */
-    64% {
-        transform: translateY(calc(var(--drop, 16px) * 0.72)) scale(1.7, 0.34);
-        opacity: 0.92;
+    /* Then down, losing its angle and its edges together. */
+    66% {
+        transform: rotate(calc(var(--spun, 0deg) * 0.3)) translateY(calc(var(--drop, 16px) * 0.74)) scale(1.9, 0.3);
+        opacity: 0.95;
+        filter: blur(0.9px);
     }
 
     88% {
-        transform: translateY(var(--drop, 16px)) scale(2.7, 0.12);
-        opacity: 0.55;
+        transform: translateY(var(--drop, 16px)) scale(2.8, 0.12);
+        opacity: 0.62;
     }
 
     100% {
-        transform: translateY(var(--drop, 16px)) scale(3.4, 0.05);
+        transform: translateY(var(--drop, 16px)) scale(3.5, 0.05);
         opacity: 0;
+        filter: blur(1.7px);
     }
 }
 
