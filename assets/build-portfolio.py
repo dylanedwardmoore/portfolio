@@ -31,39 +31,67 @@ _LIB = json.load(io.open(os.path.join(os.path.dirname(os.path.abspath(__file__))
 
 
 def mark_parts(tone):
-    """The section's mark, as one element per shape.
+    """The section's mark, as one element per shape, plus where each one goes
+    when the mark gathers.
 
     It used to be a single span with the whole mark masked out of the tone in
-    one piece. One piece cannot come apart, and the register now wants it to:
-    the mark gathers into a single silhouette while its section is still ahead
-    of you and opens out when the label reaches the top and becomes the header
-    for what you are reading. So each shape gets its own box, placed where
-    build-shapes.py laid it, masked by its own file out of the library.
+    one piece. One piece cannot come apart, and the register wants it to.
 
-    Everything is a percentage of the mark's box, so the whole thing scales
-    with --mark-w and 16px rather than being pinned to either.
+    The gathering is worked out here rather than written by hand in the
+    stylesheet, because it depends on the shapes: every part is brought onto
+    the centre of the largest one and shrunk enough to be lost inside it. The
+    largest then SWELLS, so a gathered mark is not the big part with the others
+    hidden behind it -- it is visibly fatter than any part on its own, which is
+    what makes a merge read as a merge rather than as a tidying away.
+
+    What the stylesheet gets is four numbers per part: how far to travel, how
+    much to shrink, and which number in the queue it is. Every choreography is
+    written against those, so any story can be told by any of the six marks
+    without knowing which shapes it is made of.
     """
     mark = _LIB["marks"][MARK_OF.get(tone, "earlier")]
     bw, bh = mark["box"]
+    qs = mark["parts"]
+
+    # The one everything else hides in. By area, which for these is always the
+    # part the mark is really about.
+    lead = max(qs, key=lambda q: q["w"] * q["h"])
+    lx, ly = lead["x"] + lead["w"] / 2.0, lead["y"] + lead["h"] / 2.0
+
+    # The queue the choreography works through. The lead goes first and the
+    # rest follow in the order they stand, so a story reads as a body settling
+    # and its limbs coming off it one at a time rather than as a row of things
+    # all leaving at once.
+    order = {}
+    n = 1
+    for q in qs:
+        if q is lead:
+            order[id(q)] = 0
+        else:
+            order[id(q)] = n
+            n += 1
+
     out = []
-    for i, q in enumerate(mark["parts"]):
-        # The image goes in the style attribute rather than through a custom
-        # property. A relative url() inside a var() is resolved against the
-        # stylesheet that uses it, not the document -- so ../assets/... read
-        # from assets/css/ came out as /assets/assets/... and every mask was a
-        # 404. In a style attribute it is the document's own base, which is
-        # what the path is written against.
+    for i, q in enumerate(qs):
         style = ("-webkit-mask-image:url(%s%s.svg);mask-image:url(%s%s.svg);"
                  "left:%.3f%%;top:%.3f%%;width:%.3f%%;height:%.3f%%"
                  % (SHAPES, q["shape"], SHAPES, q["shape"],
                     100.0 * q["x"] / bw, 100.0 * q["y"] / bh,
                     100.0 * q["w"] / bw, 100.0 * q["h"] / bh))
+        if q is lead:
+            style += ";--gx:0px;--gy:0px;--gs:1.24"
+        else:
+            cx, cy = q["x"] + q["w"] / 2.0, q["y"] + q["h"] / 2.0
+            fit = min(1.0, lead["w"] * 0.78 / q["w"], lead["h"] * 0.78 / q["h"])
+            style += (";--gx:%.2fpx;--gy:%.2fpx;--gs:%.3f"
+                      % (lx - cx, ly - cy, fit))
+        style += ";--i:%d" % order[id(q)]
         if q["alpha"] < 1:
             style += ";--a:%g" % q["alpha"]
         out.append('<i style="%s"></i>' % style)
     return "".join(out)
 
-# (year, title, blurb, image-or-None, [(url, label), ...])
+
 SECTIONS = [
     ("Ventures", "sea", "Companies I have helped build.", [
         ("2023 – present", "Memcara",
@@ -423,7 +451,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260823w"
+V = "v=20260823x"
 HEAD = """<!doctype html>
 <html lang="en">
 

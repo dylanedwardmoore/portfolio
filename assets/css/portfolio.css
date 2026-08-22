@@ -305,6 +305,31 @@
    come up to full strength and join the body, which is what stops the overlap
    showing as a darker patch and reads as the faint one falling in with the
    rest. */
+/* THE STORIES.
+
+   Five of them, and which one a mark tells is decided at the moment it is
+   asked to move. The register has six marks and they are on screen one after
+   another for as long as anyone is reading, so a single gesture repeated is
+   the one thing that would certainly wear out. A mark that has three ways of
+   coming apart never quite becomes furniture.
+
+   None of them knows anything about which shapes it is moving. Every step is
+   written against four numbers the generator puts on each part -- how far it
+   travels to gather (--gx, --gy), how much it shrinks (--gs), and its place in
+   the queue (--i) -- so any of the six marks can tell any of the five stories.
+
+   THE LEAD MOVES TOO, AND FOR FREE. Its travel is zero, so every translate in
+   every story collapses to nothing for it and only the turns and the swelling
+   are left. The same keyframes that fling a satellite across the mark make the
+   body it came off wobble in place. That is why the queue puts the lead first:
+   the body settles, and then the limbs come off it one at a time.
+
+   Written as steps rather than as a tween, because a tween has one idea in it
+   and these want four or five: wind up, go, overshoot, come back, settle. The
+   percentages are where the drawing is, not where the clock is -- most of them
+   spend a fifth of their time not going anywhere at all, which is the part
+   that makes a thing look like it decided to move. */
+
 .section-index i {
     position: absolute;
     background: var(--tone);
@@ -316,160 +341,389 @@
     mask-position: center;
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
-    transform: var(--gather, none);
-    transition: transform var(--mt, 440ms) var(--me, ease) var(--md, 0ms),
-        opacity var(--mt, 440ms) linear var(--md, 0ms);
+    /* Gathered is the resting state; .is-open below is the other one, and the
+       stories are how it gets between them. */
+    transform: translate(var(--gx, 0px), var(--gy, 0px)) scale(var(--gs, 1));
+    opacity: 1;
+    transition: opacity 420ms linear;
 }
 
 .section-index.is-open i {
     transform: none;
     opacity: var(--a, 1);
-    transition-delay: var(--mo, 0ms);
 }
 
-/* THE SIX, AND WHY EACH MOVES AS IT DOES.
-
-   Every one is taken from what its shapes already are in build-shapes.py
-   rather than assigned to taste. The gathered offsets are measured off the
-   geometry that file records, which is why they are odd numbers.
-
-   VENTURES -- a thin start, something solid, then the largest thing. The big
-   plane simply slides left over the other two and they are inside it; opening,
-   it draws off to the right and they step out from under it in turn, which is
-   a thing being assembled rather than a thing appearing.
-
-   RESEARCH -- the comb, the one device in these paintings that is plainly a
-   list of separate things. It fans. The rules close up onto the pillar and
-   deal out again left to right, the faint one last and a beat behind the rest,
-   because there is always one more than is finished.
-
-   INDUSTRY -- a large plane machined down one edge and the offcut beside it.
-   The offcut goes back into the notch it was cut from, which is the one pair
-   here that genuinely interlocks. It moves fast and on the blade curve the
-   controls' rules already use: out at once, then crawling the last of it.
-
-   TEACHING -- a form and the horizon it is handed across. The cap slides out
-   from under the quarter and lies down flat, turning the last three degrees as
-   it settles, the way something set down finds its level.
-
-   RECOGNITION -- a seal and the plate it is pressed onto. Gathered, the seal
-   is pressed: a little shorter, sitting down on the plate. Opening, it springs
-   back to full height and the plate slides out from under it. The curve
-   overshoots, so it lifts before it settles.
-
-   EARLIER WORK -- three fragments, each smaller than the last, and the back
-   matter takes the quietest mark. They drift apart, the smallest travelling
-   furthest, over the longest time of any of them and with no overshoot at all.
-   It is the only one that does not do anything sharp. */
-
-[data-mark="ventures"] {
-    --mt: 460ms;
-    --me: cubic-bezier(0.2, 0.9, 0.3, 1.22);
+/* The animation only exists once a mark has actually been asked to change.
+   Without this every mark on the page would tell its closing story on load,
+   since "not open" is also where they all start. */
+.section-index.anim.is-open i {
+    animation-duration: var(--dur, 800ms);
+    animation-delay: calc(var(--i, 0) * var(--stagger, 60ms));
+    animation-fill-mode: both;
 }
 
-[data-mark="ventures"] i:nth-of-type(1) {
-    --gather: translateX(9px) scale(0.88);
-    --md: 0ms;
-    --mo: 130ms;
+.section-index.anim:not(.is-open) i {
+    animation-duration: var(--dur, 800ms);
+    animation-delay: calc(var(--i, 0) * var(--stagger, 60ms));
+    animation-fill-mode: both;
 }
 
-[data-mark="ventures"] i:nth-of-type(2) {
-    --gather: translateX(5px);
-    --md: 60ms;
-    --mo: 70ms;
-}
-
-[data-mark="ventures"] i:nth-of-type(3) {
-    --gather: translateX(-15.3px);
-    --md: 120ms;
-    --mo: 0ms;
-}
-
-[data-mark="research"] {
-    --mt: 520ms;
-    --me: cubic-bezier(0.25, 1, 0.3, 1);
-}
-
-[data-mark="research"] i:nth-of-type(2) {
-    --gather: translateX(-8px);
-    --md: 120ms;
-    --mo: 60ms;
-}
-
-[data-mark="research"] i:nth-of-type(3) {
-    --gather: translateX(-11.2px);
-    --md: 60ms;
-    --mo: 120ms;
-}
-
-[data-mark="research"] i:nth-of-type(4) {
-    --gather: translateX(-16px);
-    --md: 0ms;
-    --mo: 190ms;
-}
-
-[data-mark="industry"] {
-    --mt: 280ms;
-    --me: cubic-bezier(0.16, 0.84, 0.3, 1);
-}
-
-[data-mark="industry"] i:nth-of-type(2) {
-    /* Into the notch, but a fifth of a pixel clear of the plane's own edge.
-       Sat exactly on it the offcut's outline showed as a tab hanging off the
-       left side, which is the one thing a merged silhouette must not do. */
-    --gather: translate(-21.6px, -9.3px);
-}
-
-[data-mark="teaching"] {
-    --mt: 400ms;
-    --me: cubic-bezier(0.3, 0.8, 0.35, 1.12);
-}
-
-[data-mark="teaching"] i:nth-of-type(2) {
-    /* The cap does not tuck under the quarter at the foot, because the arc
-       has taken the quarter away down there -- boxes overlapping is not the
-       same as ink overlapping, and every offset along the bottom left a lip
-       hanging out. It goes UP into the body of the quarter instead, where
-       there is ink to hide in, and comes down as it slides out. Which is the
-       better gesture anyway: a thing handed across is set down, not pushed. */
-    --gather: translate(-17.6px, -10px) rotate(-2deg);
-    transform-origin: 50% 50%;
-    --mo: 40ms;
-}
-
-[data-mark="recognition"] {
-    --mt: 440ms;
-    --me: cubic-bezier(0.2, 1.38, 0.35, 1);
-}
-
-[data-mark="recognition"] i:nth-of-type(1) {
-    /* Pressed: sitting down on the plate, and a little shorter for it. */
-    --gather: translateY(0.7px) scaleY(0.95);
+/* UNROLL -- something rolled up leaning back, then swinging open and rocking
+   to a stop. Turned on its foot, because that is where a thing that unrolls is
+   attached. */
+[data-story="unroll"] i {
     transform-origin: 50% 100%;
 }
 
-[data-mark="recognition"] i:nth-of-type(2) {
-    /* The plate is only half a pixel narrower than the seal, so the window it
-       can hide in runs -11.28 to -10.75 and nowhere else. */
-    --gather: translateX(-11px);
-    --mo: 90ms;
+.anim[data-story="unroll"].is-open i {
+    animation-name: mark-unroll-open;
 }
 
-[data-mark="earlier"] {
-    --mt: 620ms;
-    --me: cubic-bezier(0.25, 0.9, 0.3, 1);
+.anim[data-story="unroll"]:not(.is-open) i {
+    animation-name: mark-unroll-shut;
 }
 
-[data-mark="earlier"] i:nth-of-type(2) {
-    --gather: translateX(-10px);
-    --md: 60ms;
-    --mo: 90ms;
+@keyframes mark-unroll-open {
+    0% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    10% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.06)) rotate(-7deg);
+    }
+
+    24% {
+        /* The hold. Nothing happens here and it is the most important step in
+           the file: a body that leans and then waits has decided to go. */
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.04)) rotate(-9deg);
+        animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+    }
+
+    56% {
+        transform: translate(calc(var(--gx) * 0.34), calc(var(--gy) * 0.34)) scale(1.03) rotate(14deg);
+    }
+
+    75% {
+        transform: translate(calc(var(--gx) * -0.09), calc(var(--gy) * -0.07)) rotate(-5deg);
+    }
+
+    89% {
+        transform: rotate(2.5deg) scaleY(0.94) scaleX(1.04);
+    }
+
+    100% {
+        transform: none;
+    }
 }
 
-[data-mark="earlier"] i:nth-of-type(3) {
-    --gather: translateX(-16px);
-    --md: 0ms;
-    --mo: 170ms;
+@keyframes mark-unroll-shut {
+    0% {
+        transform: none;
+    }
+
+    15% {
+        transform: translate(calc(var(--gx) * -0.11), calc(var(--gy) * -0.07)) rotate(7deg);
+    }
+
+    48% {
+        transform: translate(calc(var(--gx) * 0.72), calc(var(--gy) * 0.72)) scale(0.93) rotate(-17deg);
+    }
+
+    73% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.88)) rotate(7deg);
+    }
+
+    87% {
+        /* Arrives short, then swells past where it is going to stop. A thing
+           that lands at its final size has not landed, it has been placed. */
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.11)) rotate(-2deg);
+    }
+
+    100% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+}
+
+/* POP -- crouch, then burst. The quickest of them and the only one that is
+   over before you have finished looking at it. */
+[data-story="pop"] i {
+    transform-origin: 50% 50%;
+}
+
+.anim[data-story="pop"].is-open i {
+    animation-name: mark-pop-open;
+}
+
+.anim[data-story="pop"]:not(.is-open) i {
+    animation-name: mark-pop-shut;
+}
+
+@keyframes mark-pop-open {
+    0% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    17% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.79));
+        animation-timing-function: cubic-bezier(0.4, 0, 0.1, 1);
+    }
+
+    25% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.2));
+    }
+
+    53% {
+        transform: translate(calc(var(--gx) * -0.17), calc(var(--gy) * -0.17)) scale(1.11) rotate(11deg);
+    }
+
+    73% {
+        transform: translate(calc(var(--gx) * 0.07), calc(var(--gy) * 0.05)) scale(0.95) rotate(-6deg);
+    }
+
+    88% {
+        transform: scale(1.04) rotate(2deg);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mark-pop-shut {
+    0% {
+        transform: none;
+    }
+
+    19% {
+        transform: translate(calc(var(--gx) * -0.15), calc(var(--gy) * -0.11)) scale(1.09) rotate(-8deg);
+    }
+
+    59% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.85)) rotate(10deg);
+    }
+
+    79% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.17));
+    }
+
+    92% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.97));
+    }
+
+    100% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+}
+
+/* SHED -- the slow one. Each part lifts, arcs over, and lands hard enough to
+   flatten itself before it rebounds. The only story here with weight in it. */
+[data-story="shed"] i {
+    transform-origin: 50% 100%;
+}
+
+.anim[data-story="shed"].is-open i {
+    animation-name: mark-shed-open;
+}
+
+.anim[data-story="shed"]:not(.is-open) i {
+    animation-name: mark-shed-shut;
+}
+
+@keyframes mark-shed-open {
+    0% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    13% {
+        transform: translate(var(--gx), calc(var(--gy) - 2px)) scale(calc(var(--gs) * 1.03)) rotate(-4deg);
+    }
+
+    32% {
+        transform: translate(calc(var(--gx) * 0.58), calc(var(--gy) * 0.58 - 4px)) rotate(12deg);
+        animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.45);
+    }
+
+    63% {
+        /* The landing. Flat, wide, and a third of the animation still to go. */
+        transform: translateY(3px) scaleY(0.83) scaleX(1.11);
+    }
+
+    77% {
+        transform: translateY(-2.5px) scaleY(1.1) scaleX(0.94);
+    }
+
+    89% {
+        transform: translateY(0.8px) scaleY(0.96) scaleX(1.02);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mark-shed-shut {
+    0% {
+        transform: none;
+    }
+
+    17% {
+        transform: translateY(-3px) scaleY(1.07) scaleX(0.95) rotate(4deg);
+    }
+
+    54% {
+        transform: translate(calc(var(--gx) * 0.8), calc(var(--gy) * 0.8 - 5px)) rotate(-14deg);
+        animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.45);
+    }
+
+    78% {
+        transform: translate(var(--gx), calc(var(--gy) + 2px)) scale(calc(var(--gs) * 0.88)) scaleY(0.86) scaleX(1.12);
+    }
+
+    91% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.08));
+    }
+
+    100% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+}
+
+/* UNSCREW -- winds itself up the wrong way and spirals out. The turns are
+   bigger than anything else here does, and they are the whole point of it. */
+[data-story="unscrew"] i {
+    transform-origin: 50% 50%;
+}
+
+.anim[data-story="unscrew"].is-open i {
+    animation-name: mark-unscrew-open;
+}
+
+.anim[data-story="unscrew"]:not(.is-open) i {
+    animation-name: mark-unscrew-shut;
+}
+
+@keyframes mark-unscrew-open {
+    0% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    20% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.93)) rotate(-30deg);
+        animation-timing-function: cubic-bezier(0.34, 0, 0.16, 1);
+    }
+
+    48% {
+        transform: translate(calc(var(--gx) * 0.48), calc(var(--gy) * 0.48)) rotate(17deg);
+    }
+
+    71% {
+        transform: translate(calc(var(--gx) * 0.09), calc(var(--gy) * 0.07)) scale(1.06) rotate(-12deg);
+    }
+
+    87% {
+        transform: scale(0.98) rotate(5deg);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mark-unscrew-shut {
+    0% {
+        transform: none;
+    }
+
+    21% {
+        transform: scale(1.05) rotate(11deg);
+    }
+
+    57% {
+        transform: translate(calc(var(--gx) * 0.7), calc(var(--gy) * 0.7)) scale(0.91) rotate(-24deg);
+    }
+
+    81% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.91)) rotate(13deg);
+    }
+
+    93% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.1)) rotate(-4deg);
+    }
+
+    100% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+}
+
+/* STRETCH -- pulls itself long and thin and back again twice before it goes
+   anywhere. The most creature-like of the five and the least like a machine. */
+[data-story="stretch"] i {
+    transform-origin: 50% 100%;
+}
+
+.anim[data-story="stretch"].is-open i {
+    animation-name: mark-stretch-open;
+}
+
+.anim[data-story="stretch"]:not(.is-open) i {
+    animation-name: mark-stretch-shut;
+}
+
+@keyframes mark-stretch-open {
+    0% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
+
+    15% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.23), calc(var(--gs) * 0.75));
+    }
+
+    32% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.85), calc(var(--gs) * 1.21));
+        animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+    }
+
+    60% {
+        transform: translate(calc(var(--gx) * 0.24), calc(var(--gy) * 0.24)) scale(1.13, 0.91) rotate(-6deg);
+    }
+
+    81% {
+        transform: scale(0.92, 1.1);
+    }
+
+    93% {
+        transform: scale(1.04, 0.97);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes mark-stretch-shut {
+    0% {
+        transform: none;
+    }
+
+    19% {
+        transform: scale(1.15, 0.87) rotate(4deg);
+    }
+
+    57% {
+        transform: translate(calc(var(--gx) * 0.75), calc(var(--gy) * 0.75)) scale(0.87, 1.15);
+    }
+
+    79% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 1.19), calc(var(--gs) * 0.83));
+    }
+
+    92% {
+        transform: translate(var(--gx), var(--gy)) scale(calc(var(--gs) * 0.93), calc(var(--gs) * 1.09));
+    }
+
+    100% {
+        transform: translate(var(--gx), var(--gy)) scale(var(--gs));
+    }
 }
 
 /* With no script the marks would never open, and a page that cannot run this
@@ -480,7 +734,7 @@
 .no-js .section-index i {
     transform: none;
     opacity: var(--a, 1);
-    transition: none;
+    animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -488,6 +742,7 @@
     .section-index i {
         transform: none !important;
         opacity: var(--a, 1) !important;
+        animation: none !important;
         transition: none !important;
     }
 }
