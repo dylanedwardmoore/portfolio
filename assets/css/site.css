@@ -624,6 +624,13 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
 .edge-rule {
     display: none;
     background: var(--sea);
+    /* Carried by every variant of the rule, not just the desktop one. This is
+       the landing page's half of the shared mark: whatever width the rule is
+       drawn at, the browser pairs it with the portfolio's rail and moves one
+       into the other. Where both sides are the same 13px flush strip the
+       morph is invisible, which is the point -- the green never blinks or
+       jumps as you cross between the two pages. */
+    view-transition-name: scroll-rail;
 }
 
 /* The portrait is set as a printed figure: floated to the outer edge with the
@@ -917,7 +924,6 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
         bottom: 0;
         left: calc(-1 * var(--uh) * 1.5);
         width: var(--scrollbar);
-        view-transition-name: scroll-rail;
     }
 
     /* The row gap already separates this from the blurb; the block's own
@@ -1055,6 +1061,22 @@ html:active-view-transition-type(go-out)::view-transition-new(page-title) {
             calc(var(--bar) + var(--m-min))
             minmax(0, 1fr)
             var(--m-min);
+    }
+
+    /* The bar is drawn here as well as on a full desktop. The portfolio shows
+       its rail at every width, so if the landing page stopped drawing the bar
+       in this band the mark would have nothing to morph from and would simply
+       appear -- and it would appear at the start of the transition, before
+       the page it belongs to. Drawn on both sides, it travels instead. */
+    .edge-rule {
+        display: block;
+        position: absolute;
+        grid-column: 1;
+        grid-row: 1 / 3;
+        top: 0;
+        bottom: 0;
+        left: calc(-1 * var(--m-min));
+        width: var(--scrollbar);
     }
 }
 
