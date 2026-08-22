@@ -1013,189 +1013,201 @@ body.landing {
 }
 
 /*---------------------------------------------------------------------------
-    THE PORTFOLIO BLOCK CARRIES THE SITE'S MARK.
+    THE PORTFOLIO BLOCK CARRIES THE SITE'S MARK, AND IT SPELLS THE NAME.
 
-    The same composition as the icon: a dusky field, the bright green bar with
-    its one curve, a yellow block with a stripe of paper and a stripe of red
-    under it, and a blue chip at the foot. Only the one block has it, because
-    the register is the only one of the three documents that has a mark.
+    Folded it is a dark square beside the word. Reached for, it spreads into a
+    strip and the pieces stand up as three letters -- D, E, M -- abstractly
+    enough that nobody has to see them and plainly enough that anyone who does
+    will not un-see it.
 
-    EVERYTHING HAPPENS ON THE TILE'S OWN GROUND, and that is a constraint
-    rather than a preference. Hovering fills this block with Sea Green, so a
-    bright green shape that stepped off the tile would step onto its own colour
-    and disappear; the paper stripe would do the same against the block at rest.
-    So the tile brings its own dark field with it and nothing ever leaves.
+        D   the field itself, melted: a straight left edge and the right side
+            turned into a half circle, which is a D and is also the same curve
+            the icon and the register's marks are built on
+        E   the yellow block, the paper stripe and the red stripe, drawn out
+            into three bars on a common left edge
+        M   the blue, in three strokes: two uprights splayed out at the foot
+            and a short one hung between them
 
-    AT REST IT IS A PLAIN DARK SQUARE. Everything is folded into it -- the bar
-    hidden in the middle at a third of its size, the chips at nothing at all --
-    which is what makes the block quiet until it is reached for. There is no
-    version of this where a little coloured composition sits permanently beside
-    one of three links and the page stays calm.
+    WHY THE BRIGHT GREEN LEAVES. Hovering fills this block with Sea Green, so
+    the bar cannot be seen once the fill has arrived -- it is the same colour
+    as the ground it would be standing on. Rather than fight that, it is the
+    point of the first beat: the bar walks out of the field and dissolves into
+    the green as the green arrives. It does not disappear, it becomes the
+    block. Which is what that green does everywhere else on this site.
+
+    Everything else reads on the fill: the dark D against it, and yellow, paper,
+    red and blue over it.
 ---------------------------------------------------------------------------*/
 
 .doclink--marked {
-    /* Twice the rule, which is what the bar is -- but stated in --bar rather
-       than taken from --scrollbar, because that one halves below 1080px to
-       follow the drawn bar and this tile has no reason to. Declared on the
-       block so both the block's padding and the tile inside it can read it. */
+    /* Twice the rule, which is what the bar is. */
     --mark-size: calc(var(--bar) * 2);
-    /* Room at the end for the tile, so the word never runs under it. */
-    padding-right: calc(var(--doclink-pad) + var(--mark-size) + var(--u) * 0.5);
 }
 
+/* Beside the word, in the line, not pinned to the end of the row. It was
+   absolutely positioned against the block's right edge once, and the block is
+   a full-width row: on a 614px window that put the tile 450 pixels from the
+   word it belongs to. It was on the page and nobody would ever have connected
+   the two. */
 .doclink-mark {
-    /* The register's other three tones. They live on the portfolio's own
-       stylesheet, which this page does not load, and they are wanted here for
-       one composition rather than for the page at large -- so they are declared
-       on the mark and go no further. Same values, same book: Eugenia Red and
-       Apricot Yellow are Wada's pairings of Sea Green in combination 284, and
-       Helvetia Blue is its partner in 347. */
     --red: #ff3319;
     --yellow: #ffe600;
     --blue: #0057ba;
-    position: absolute;
-    right: var(--doclink-pad);
-    top: 50%;
+    position: relative;
+    display: inline-block;
+    vertical-align: -0.18em;
+    margin-left: calc(var(--u) * 0.42);
     width: var(--mark-size);
     height: var(--mark-size);
-    margin-top: calc(var(--rule-control) / -2 - var(--mark-size) / 2);
-    /* Nothing leaves the tile. See above. */
-    overflow: hidden;
+    transition: width 520ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doclink-mark.is-open {
+    /* The spread. Two and a bit times its own height, which is what three
+       letters need and no more. */
+    width: 68px;
 }
 
 .doclink-mark i {
     position: absolute;
     display: block;
+    transform: var(--folded, none);
 }
 
-/* The field. A plain rectangle rather than a traced shape, because the one
-   thing it has to be able to do is stop being a rectangle: border-radius is
-   the only way a shape can melt into another shape and have the browser draw
-   every frame in between. */
+/* THE LETTERS, as they stand when the mark is open. Everything else in this
+   file is how they get here and back. */
 .mk-body {
-    inset: 0;
+    left: 0;
+    top: 2px;
+    width: 15px;
+    height: 22px;
     background: var(--link);
-    border-radius: 0;
-    z-index: 0;
+    border-radius: 0 50% 50% 0;
+    transform-origin: 0 0;
+    /* Folded, it is the whole 26px square again: scaled up and lifted back to
+       the top-left corner it started in. */
+    --folded: translateY(-2px) scale(1.7333, 1.1818);
 }
 
 .mk-sea {
     left: 0;
-    top: 0;
-    width: 30%;
-    height: 100%;
+    top: 2px;
+    width: 6px;
+    height: 22px;
     background: var(--sea);
-    /* Relative to THIS FILE, not to the page: a url() in a stylesheet is
-       resolved against the stylesheet, and written page-relative it came out
-       as /assets/css/assets/img/... and fetched nothing. */
     -webkit-mask: url("../img/shapes/library/disc-panel.svg") no-repeat center / 100% 100%;
     mask: url("../img/shapes/library/disc-panel.svg") no-repeat center / 100% 100%;
-    z-index: 1;
+    --folded: translateX(9px) scaleX(0.42);
+}
+
+.doclink-mark.is-open .mk-sea {
+    /* Dissolved into the block's own green. */
+    opacity: 0;
 }
 
 .mk-yellow {
-    left: 76%;
-    top: 0;
-    width: 24%;
-    height: 21%;
+    left: 22px;
+    top: 2px;
+    width: 11px;
+    height: 3.6px;
     background: var(--yellow);
-    z-index: 2;
+    --dx: -14.5px;
+    --dy: 9.2px;
 }
 
 .mk-white {
-    left: 80%;
-    top: 21%;
-    width: 10%;
-    height: 7%;
+    left: 22px;
+    top: 11.2px;
+    width: 7.5px;
+    height: 3.2px;
     background: var(--paper);
-    z-index: 2;
+    --dx: -12.75px;
+    --dy: 0.2px;
 }
 
 .mk-red {
-    left: 90%;
-    top: 21%;
-    width: 10%;
-    height: 7%;
+    left: 22px;
+    top: 20.4px;
+    width: 11px;
+    height: 3.6px;
     background: var(--red);
-    z-index: 2;
+    --dx: -14.5px;
+    --dy: -9.2px;
 }
 
 .mk-blue {
-    left: 52%;
-    top: 92%;
-    width: 10%;
-    height: 8%;
     background: var(--blue);
-    z-index: 2;
+    top: 2px;
+    width: 3.4px;
+    height: 22px;
 }
 
-/* FOLDED: where everything sits when nobody is looking.
-
-   The chips go to nothing at all, not to a fifth of themselves. A fifth of a
-   six-pixel chip is still a pixel, and four coloured pixels scattered over a
-   dark square is not a quiet mark, it is a dirty one. At zero they are gone,
-   and the tile is what it should be while nobody is pointing at it: one dark
-   square with a seam of green in it.
-
-   The bar keeps a sliver, because it is the thing that walks and a walk needs
-   somewhere to start from. */
-.doclink-mark .mk-sea {
-    --folded: translateX(115%) scaleX(0.34);
-    transform: var(--folded);
+.mk-blue1 {
+    left: 40px;
+    --dx: -28.7px;
+    --dy: 0px;
+    --tilt: -9deg;
 }
 
-.doclink-mark .mk-yellow {
-    --folded: translate(-120%, 180%) scale(0);
-    transform: var(--folded);
+.mk-blue2 {
+    left: 50.5px;
+    height: 11.5px;
+    --dx: -39.2px;
+    --dy: 5.25px;
+    --tilt: 0deg;
 }
 
-.doclink-mark .mk-white {
-    --folded: translate(-180%, 90%) scale(0);
-    transform: var(--folded);
+.mk-blue3 {
+    left: 61px;
+    --dx: -49.7px;
+    --dy: 0px;
+    --tilt: 9deg;
 }
 
-.doclink-mark .mk-red {
-    --folded: translate(-380%, 90%) scale(0);
-    transform: var(--folded);
+/* Folded, every chip is at the middle of the square at nothing at all. Not a
+   fifth of itself: a fifth of a chip this size is still a pixel, and six
+   coloured pixels scattered over a dark square is not a quiet mark, it is a
+   dirty one. */
+.mk-yellow,
+.mk-white,
+.mk-red,
+.mk-blue {
+    --folded: translate(var(--dx), var(--dy)) scale(0);
 }
 
-.doclink-mark .mk-blue {
-    --folded: translate(80%, -260%) scale(0);
-    transform: var(--folded);
+.doclink-mark.is-open .mk-blue {
+    transform: rotate(var(--tilt));
 }
 
-/* OPENED. */
 .doclink-mark.is-open i {
     transform: none;
 }
 
-.doclink-mark.is-open .mk-body {
-    /* The melt. A half circle turned out of the right-hand side, which is the
-       same curve the bar carries and the same one the icon is built on. */
-    border-radius: 0 50% 50% 0;
+.doclink-mark.is-open .mk-blue1 {
+    transform: rotate(-9deg);
+}
+
+.doclink-mark.is-open .mk-blue3 {
+    transform: rotate(9deg);
 }
 
 /*  THE STORYBOARD.
 
-    One beat at a time, and the whole thing runs a second and a third, which is
-    long for this site and is the point: it is a small piece of theatre on a
-    page that otherwise has none, and it is only ever seen by someone who has
-    stopped and pointed at the thing.
-
-        0     the bar walks out of the field to the left, in two steps, with a
-              bob between them, because two steps is a walk and one is a slide
-        340   the field wiggles once -- a small thing noticing it is lighter
-        460   it wiggles harder and the three top chips come off it
-        700   it rolls over, and the blue chip crawls out from under the lift
+        0     the bar walks out of the field to the left, in two steps with a
+              bob between them, and dissolves into the arriving green
+        330   the field wiggles once -- a small thing noticing it is lighter
+        450   it wiggles harder and the three chips come off it, thrown clear
+              and falling into their bars
+        700   it rolls over and holds, and the blue strokes crawl out from
+              under the lift and stand up
         980   it melts: the right side turns into a half circle and settles
 
-    Each shape carries its own clock rather than sharing one, which is why the
-    numbers below are durations and delays instead of percentages of a whole.
-    They are meant to overlap untidily. A storyboard where every beat begins as
-    the last one ends is a list, not a performance. */
+    Each part carries its own clock rather than sharing one. They are meant to
+    overlap untidily -- a storyboard where every beat begins as the last one
+    ends is a list, not a performance. */
 
 .doclink-mark.anim.is-open .mk-sea {
-    animation: mk-sea-out 460ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: mk-sea-out 440ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .doclink-mark.anim.is-open .mk-body {
@@ -1203,110 +1215,124 @@ body.landing {
 }
 
 .doclink-mark.anim.is-open .mk-yellow {
-    animation: mk-top-out 380ms cubic-bezier(0.3, 0.9, 0.3, 1.2) 500ms both;
+    animation: mk-bar-out 400ms cubic-bezier(0.3, 0.9, 0.3, 1.2) 470ms both;
 }
 
 .doclink-mark.anim.is-open .mk-white {
-    animation: mk-top-out 380ms cubic-bezier(0.3, 0.9, 0.3, 1.2) 560ms both;
+    animation: mk-bar-out 400ms cubic-bezier(0.3, 0.9, 0.3, 1.2) 530ms both;
 }
 
 .doclink-mark.anim.is-open .mk-red {
-    animation: mk-top-out 380ms cubic-bezier(0.3, 0.9, 0.3, 1.2) 610ms both;
+    animation: mk-bar-out 400ms cubic-bezier(0.3, 0.9, 0.3, 1.2) 580ms both;
 }
 
-.doclink-mark.anim.is-open .mk-blue {
-    animation: mk-blue-out 520ms cubic-bezier(0.35, 0.6, 0.3, 1) 760ms both;
+.doclink-mark.anim.is-open .mk-blue1 {
+    animation: mk-stroke-out 540ms cubic-bezier(0.35, 0.6, 0.3, 1) 720ms both;
+}
+
+.doclink-mark.anim.is-open .mk-blue2 {
+    animation: mk-stroke-out 540ms cubic-bezier(0.35, 0.6, 0.3, 1) 800ms both;
+}
+
+.doclink-mark.anim.is-open .mk-blue3 {
+    animation: mk-stroke-out 540ms cubic-bezier(0.35, 0.6, 0.3, 1) 870ms both;
 }
 
 /* Folding back is quicker and plainer. Nobody watches a thing leave, and a
    long exit on a pointer that has already moved on is a page arguing with its
    reader. */
 .doclink-mark.anim:not(.is-open) i {
-    animation: mk-fold 420ms cubic-bezier(0.45, 0, 0.25, 1) both;
+    animation: mk-fold 400ms cubic-bezier(0.45, 0, 0.25, 1) both;
 }
 
 .doclink-mark.anim:not(.is-open) .mk-body {
-    animation: mk-body-fold 480ms cubic-bezier(0.45, 0, 0.25, 1) both;
+    animation: mk-body-fold 460ms cubic-bezier(0.45, 0, 0.25, 1) both;
 }
 
 @keyframes mk-sea-out {
     0% {
-        transform: translateX(115%) scaleX(0.34);
+        transform: translateX(9px) scaleX(0.42);
+        opacity: 1;
     }
 
-    /* The first step, and a small lift off the back foot with it. */
+    /* The first step, and a lift off the back foot with it. */
     34% {
-        transform: translateX(70%) scaleX(0.55) translateY(-6%);
+        transform: translateX(5.4px) scaleX(0.62) translateY(-6%);
+        opacity: 1;
     }
 
     52% {
-        transform: translateX(58%) scaleX(0.62) translateY(0);
+        transform: translateX(4.4px) scaleX(0.7);
+        opacity: 1;
     }
 
-    /* The second, longer stride. */
-    82% {
-        transform: translateX(-6%) scaleX(1.04) translateY(-3%);
+    /* The second, longer stride -- and by now the block's green has arrived
+       underneath, so the last of it is a dissolve rather than a departure. */
+    84% {
+        transform: translateX(-0.4px) scaleX(1.03);
+        opacity: 0.35;
     }
 
     100% {
         transform: none;
+        opacity: 0;
     }
 }
 
 @keyframes mk-body-out {
     0%,
-    24% {
-        transform: rotate(0deg);
+    23% {
+        transform: translateY(-2px) scale(1.7333, 1.1818);
         border-radius: 0;
     }
 
     /* One wiggle. */
-    29% {
-        transform: rotate(-2.6deg);
+    28% {
+        transform: translateY(-2px) scale(1.7333, 1.1818) rotate(-2.4deg);
     }
 
-    34% {
-        transform: rotate(1.8deg);
+    33% {
+        transform: translateY(-2px) scale(1.7333, 1.1818) rotate(1.7deg);
     }
 
-    38% {
-        transform: rotate(0deg);
+    37% {
+        transform: translateY(-2px) scale(1.7333, 1.1818);
     }
 
     /* And a harder one, which is what shakes the chips loose. */
-    43% {
-        transform: rotate(4.4deg);
+    42% {
+        transform: translateY(-1.4px) scale(1.63, 1.14) rotate(4.2deg);
     }
 
-    48% {
-        transform: rotate(-3.6deg);
+    47% {
+        transform: translateY(-1.2px) scale(1.55, 1.12) rotate(-3.4deg);
     }
 
-    53% {
-        transform: rotate(1.4deg);
+    52% {
+        transform: translateY(-1px) scale(1.46, 1.1) rotate(1.2deg);
         border-radius: 0;
     }
 
-    /* The roll. Over onto one side, held there, and back -- the hold is what
-       gives the blue chip somewhere to crawl out from. */
+    /* The roll. Over onto one side and held there past the point gravity
+       allows, which is what gives the blue somewhere to crawl out from. */
     62% {
-        transform: rotate(-11deg) translateX(2%);
+        transform: translateY(-0.6px) scale(1.28, 1.07) rotate(-10.5deg);
         animation-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
     }
 
     72% {
-        transform: rotate(-12.5deg) translateX(2.6%);
+        transform: translateY(-0.4px) scale(1.16, 1.05) rotate(-11.8deg);
     }
 
-    80% {
-        transform: rotate(2deg) translateX(0);
-        border-radius: 0;
+    81% {
+        transform: scale(1.04, 1.01) rotate(1.8deg);
+        border-radius: 0 18% 18% 0;
     }
 
     /* The melt. */
     92% {
-        transform: rotate(-0.8deg) scale(1.03, 0.96);
-        border-radius: 0 60% 60% 0;
+        transform: scale(0.98, 1.02) rotate(-0.7deg);
+        border-radius: 0 62% 62% 0;
     }
 
     100% {
@@ -1315,15 +1341,15 @@ body.landing {
     }
 }
 
-@keyframes mk-top-out {
+@keyframes mk-bar-out {
     0% {
-        transform: var(--folded);
+        transform: translate(var(--dx), var(--dy)) scale(0);
     }
 
-    /* Thrown clear, then falling into place -- these are shaken off, so they
+    /* Thrown clear, then falling into the bar. These are shaken off, so they
        are the only parts here that do not decide anything for themselves. */
     58% {
-        transform: translate(6%, -14%) scale(1.12) rotate(8deg);
+        transform: translate(calc(var(--dx) * 0.1), calc(var(--dy) * 0.1 - 2px)) scale(1.18) rotate(9deg);
     }
 
     100% {
@@ -1331,36 +1357,36 @@ body.landing {
     }
 }
 
-@keyframes mk-blue-out {
+@keyframes mk-stroke-out {
     0% {
-        transform: var(--folded);
+        transform: translate(var(--dx), var(--dy)) scale(0) rotate(0deg);
     }
 
-    /* Crawling: two lurches and a rest, low to the ground, nothing thrown. */
+    /* Crawling: out low and flat under the roll, two lurches, no throw. */
     26% {
-        transform: translate(52%, -170%) scale(0.5);
+        transform: translate(calc(var(--dx) * 0.66), var(--dy)) scale(0.5, 0.3) rotate(0deg);
     }
 
-    46% {
-        transform: translate(46%, -150%) scale(0.6);
+    44% {
+        transform: translate(calc(var(--dx) * 0.5), var(--dy)) scale(0.62, 0.34) rotate(0deg);
     }
 
-    74% {
-        transform: translate(14%, -44%) scale(0.9);
+    72% {
+        transform: translate(calc(var(--dx) * 0.16), calc(var(--dy) * 0.4)) scale(0.9, 0.72) rotate(calc(var(--tilt) * 0.4));
     }
 
-    88% {
-        transform: translate(2%, -6%) scale(1.06);
+    /* And standing up. */
+    89% {
+        transform: scale(1.02, 1.08) rotate(calc(var(--tilt) * 1.25));
     }
 
     100% {
-        transform: none;
+        transform: rotate(var(--tilt));
     }
 }
 
 /* One set of keyframes folds every part, because each one already knows where
-   it goes: --folded is declared beside the resting transform it belongs to, so
-   the animation only has to say "from open, back to wherever you live". */
+   it goes: --folded is declared beside the box it belongs to. */
 @keyframes mk-fold {
     0% {
         transform: none;
@@ -1374,23 +1400,26 @@ body.landing {
 @keyframes mk-body-fold {
     0% {
         border-radius: 0 50% 50% 0;
+        transform: none;
     }
 
     46% {
-        transform: rotate(3deg) scale(0.97);
-        border-radius: 0 40% 40% 0;
+        transform: scale(1.3, 1.08) rotate(2.6deg);
+        border-radius: 0 34% 34% 0;
     }
 
     100% {
-        transform: none;
+        transform: translateY(-2px) scale(1.7333, 1.1818);
         border-radius: 0;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
 
+    .doclink-mark,
     .doclink-mark i {
         animation: none !important;
+        transition: none !important;
     }
 }
 
