@@ -14,6 +14,7 @@ filled square by the section label, and a wash behind a row on hover.
 import html
 import io
 import json
+import math
 import os
 
 IMG = "../assets/img/portfolio/"
@@ -53,6 +54,7 @@ def mark_parts(tone):
     bw, bh = mark["box"]
     qs = mark["parts"]
 
+
     # The one everything else hides in. By area, which for these is always the
     # part the mark is really about.
     lead = max(qs, key=lambda q: q["w"] * q["h"])
@@ -71,6 +73,22 @@ def mark_parts(tone):
             order[id(q)] = n
             n += 1
 
+    # HOW LONG THE WHOLE TELLING LASTS, for this mark.
+    #
+    # The body has to still be there when the last piece arrives, because what
+    # it does in the second half is answer them. A piece's duration follows its
+    # travel, so the mark's span is the longest of those plus enough for the
+    # queue to have emptied. Without this the body finished first and spent the
+    # end of every telling doing nothing while pieces landed around it.
+    span = 0.0
+    for q in qs:
+        if q is lead:
+            continue
+        cx, cy = q["x"] + q["w"] / 2.0, q["y"] + q["h"] / 2.0
+        d = min(1.0, math.hypot(lx - cx, ly - cy) / 24.0)
+        span = max(span, 0.22 + 1.30 * d)
+    span += 0.1 + 0.12 * max(0, len(qs) - 2)
+
     out = []
     for i, q in enumerate(qs):
         style = ("-webkit-mask-image:url(%s%s.svg);mask-image:url(%s%s.svg);"
@@ -79,12 +97,34 @@ def mark_parts(tone):
                     100.0 * q["x"] / bw, 100.0 * q["y"] / bh,
                     100.0 * q["w"] / bw, 100.0 * q["h"] / bh))
         if q is lead:
-            style += ";--gx:0px;--gy:0px;--gs:1.24"
+            style += ";--gx:0px;--gy:0px;--gs:1.24;--dist:0;--mass:1;--arcpx:0px"
         else:
             cx, cy = q["x"] + q["w"] / 2.0, q["y"] + q["h"] / 2.0
+            dx, dy = lx - cx, ly - cy
             fit = min(1.0, lead["w"] * 0.78 / q["w"], lead["h"] * 0.78 / q["h"])
+            # HOW FAR, AND HOW HEAVY.
+            #
+            # Across the six marks a satellite has between 8 and 24 pixels to
+            # cross -- three times the distance for the same money, and until
+            # now the same money: every one of them got the same duration, so
+            # the far ones moved at three times the speed of the near ones and
+            # the register had no consistent sense of pace at all.
+            #
+            # dist is that travel against the longest of them, and the
+            # stylesheet spends it on duration. mass is the part's area against
+            # the body it came off, and the stylesheet spends it on how much a
+            # part is allowed to overshoot: heavy things settle, light things
+            # ring.
+            #
+            # arcpx is how far off the straight line the part swings on the way.
+            # Nothing alive travels in a straight line between two points, and
+            # every one of these did.
+            dist = min(1.0, math.hypot(dx, dy) / 24.0)
+            mass = min(1.0, (q["w"] * q["h"]) / (lead["w"] * lead["h"]))
             style += (";--gx:%.2fpx;--gy:%.2fpx;--gs:%.3f"
-                      % (lx - cx, ly - cy, fit))
+                      ";--dist:%.3f;--mass:%.3f;--arcpx:%.2fpx"
+                      % (dx, dy, fit, dist, mass,
+                         (1.6 + dist * 3.4) * (1.32 - mass)))
         style += ";--i:%d" % order[id(q)]
         if q["alpha"] < 1:
             style += ";--a:%g" % q["alpha"]
@@ -94,7 +134,7 @@ def mark_parts(tone):
         # custom property, so it has to be said in an attribute.
         out.append('<i%s style="%s"></i>'
                    % (" data-lead" if q is lead else "", style))
-    return "".join(out)
+    return "".join(out), span
 
 
 SECTIONS = [
@@ -441,9 +481,11 @@ def build():
         cls = ' data-tone="%s"' % tone if tone else ""
         parts.append('    <section class="section" id="s%d"%s>' % (idx, cls))
         parts.append('        <div class="section-label" style="--d:%d">' % nxt())
-        parts.append('            <span class="section-index" data-mark="%s">'
+        body, span = mark_parts(tone)
+        parts.append('            <span class="section-index" data-mark="%s" '
+                     'style="--span:%.3f">'
                      '<span class="section-index-n">%02d</span>%s</span>'
-                     % (MARK_OF.get(tone, "earlier"), idx, mark_parts(tone)))
+                     % (MARK_OF.get(tone, "earlier"), span, idx, body))
         parts.append('            <h2>%s</h2>' % esc(name))
         parts.append('            <p>%s</p>' % esc(standfirst))
         parts.append('        </div>')
@@ -456,7 +498,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260824c"
+V = "v=20260824e"
 HEAD = """<!doctype html>
 <html lang="en">
 

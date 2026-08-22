@@ -369,7 +369,17 @@
    Without this every mark on the page would tell its closing story on load,
    since "not open" is also where they all start. */
 .section-index.anim i {
-    animation-duration: var(--dur, 800ms);
+    /* DURATION FOLLOWS TRAVEL.
+
+       A satellite has between 8 and 24 pixels to cross depending on which mark
+       it belongs to, and they all used to take the same time -- so the far
+       ones moved at three times the speed of the near ones and the register
+       had no consistent pace. Now the distance buys the time: a piece with
+       nothing to cross takes three quarters of the telling, one with the full
+       width takes all of it and a fifth again. The speed comes out roughly
+       even across all six marks, which is the only way six different
+       compositions can feel like one hand. */
+    animation-duration: calc(var(--dur, 800ms) * (0.220 + 1.30 * var(--dist, 0.6)));
     animation-delay: calc(var(--i, 0) * var(--stagger, 60ms));
     animation-fill-mode: both;
     animation-timing-function: cubic-bezier(0.42, 0, 0.24, 1);
@@ -378,6 +388,10 @@
 /* THE BODY. One animation whatever story is being told, because there is only
    one thing for it to do. */
 .section-index.anim i[data-lead] {
+    /* Half again as long as a piece's telling, because the body is not just
+       deflating -- it is still there when the last piece arrives, and it has
+       to answer. See mark-body-open. */
+    animation-duration: calc(var(--dur, 800ms) * var(--span, 1.45));
     animation-delay: 0ms;
     animation-name: mark-body-open;
 }
@@ -389,13 +403,41 @@
     animation-name: mark-body-shut;
 }
 
+/* THE BODY ANSWERS.
+
+   It used to deflate and stop, which meant that for the second half of every
+   telling the largest thing in the mark was doing nothing at all while pieces
+   arrived around it. Secondary action -- a thing reacting to what has happened
+   to it rather than only acting -- is most of what separates a group of moving
+   objects from a creature, and it was the plainest omission in the file.
+
+   So the deflate is over by the middle, and the rest is answers: a give as the
+   first piece sets down, a smaller one after the next, and a last settle. None
+   of them is more than three per cent. They are not meant to be watched, they
+   are meant to stop the body looking dead. */
 @keyframes mark-body-open {
     0% {
         transform: scale(var(--gs));
     }
 
-    34% {
+    24% {
         transform: scale(calc(var(--gs) * 1.02));
+    }
+
+    54% {
+        transform: none;
+    }
+
+    68% {
+        transform: scale(1.03, 0.968);
+    }
+
+    80% {
+        transform: scale(0.984, 1.016);
+    }
+
+    91% {
+        transform: scale(1.009, 0.994);
     }
 
     100% {
@@ -453,6 +495,15 @@
 
 .section-index.anim[data-mark="industry"] i:not([data-lead]) {
     animation-delay: calc(var(--dur, 800ms) * 0.3 + var(--i, 0) * var(--stagger, 60ms));
+}
+
+/* And the roll has to last long enough to still be there when the offcut it
+   waited for finally lands. The mark's span is worked out from how far its
+   pieces travel; this one also makes its piece wait three tenths of a telling
+   before it starts, so the body needs that back or it finishes first and the
+   answering beats play to an empty room. */
+.section-index.anim[data-mark="industry"] i[data-lead] {
+    animation-duration: calc(var(--dur, 800ms) * (var(--span, 1.45) + 0.34));
 }
 
 @keyframes mark-roll-open {
@@ -544,11 +595,11 @@
     }
 
     68% {
-        transform: translate(calc(var(--gx) * 0.22), calc(var(--gy) * 0.22)) rotate(4deg);
+        transform: translate(calc(var(--gx) * 0.22), calc(var(--gy) * 0.22)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) rotate(4deg);
     }
 
     89% {
-        transform: translate(calc(var(--gx) * -0.03), calc(var(--gy) * -0.02)) scale(1.01) rotate(-2deg);
+        transform: translate(calc(var(--gx) * -0.03), calc(var(--gy) * -0.02)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) scale(1.01) rotate(-2deg);
     }
 
     100% {
@@ -562,11 +613,11 @@
     }
 
     19% {
-        transform: translate(calc(var(--gx) * -0.06), calc(var(--gy) * -0.04)) rotate(5deg);
+        transform: translate(calc(var(--gx) * -0.06), calc(var(--gy) * -0.04)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) rotate(5deg);
     }
 
     60% {
-        transform: translate(calc(var(--gx) * 0.6), calc(var(--gy) * 0.6)) scale(0.97) rotate(-8deg);
+        transform: translate(calc(var(--gx) * 0.6), calc(var(--gy) * 0.6)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) scale(0.97) rotate(-8deg);
     }
 
     87% {
@@ -606,7 +657,7 @@
     }
 
     62% {
-        transform: translate(calc(var(--gx) * 0.2), calc(var(--gy) * 0.2)) scale(1.02) rotate(3deg);
+        transform: translate(calc(var(--gx) * 0.2), calc(var(--gy) * 0.2)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) scale(1.02) rotate(3deg);
     }
 
     85% {
@@ -628,7 +679,7 @@
     }
 
     64% {
-        transform: translate(calc(var(--gx) * 0.7), calc(var(--gy) * 0.7)) scale(0.96) rotate(6deg);
+        transform: translate(calc(var(--gx) * 0.7), calc(var(--gy) * 0.7)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) scale(0.96) rotate(6deg);
     }
 
     89% {
@@ -728,11 +779,11 @@
     }
 
     60% {
-        transform: translate(calc(var(--gx) * 0.4), calc(var(--gy) * 0.4)) rotate(8deg);
+        transform: translate(calc(var(--gx) * 0.4), calc(var(--gy) * 0.4)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) rotate(8deg);
     }
 
     83% {
-        transform: translate(calc(var(--gx) * 0.05), calc(var(--gy) * 0.04)) rotate(-4deg);
+        transform: translate(calc(var(--gx) * 0.05), calc(var(--gy) * 0.04)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) rotate(-4deg);
     }
 
     94% {
@@ -754,7 +805,7 @@
     }
 
     62% {
-        transform: translate(calc(var(--gx) * 0.65), calc(var(--gy) * 0.65)) scale(0.95) rotate(-15deg);
+        transform: translate(calc(var(--gx) * 0.65), calc(var(--gy) * 0.65)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) scale(0.95) rotate(-15deg);
     }
 
     88% {
@@ -794,7 +845,7 @@
     }
 
     66% {
-        transform: translate(calc(var(--gx) * 0.3), calc(var(--gy) * 0.3)) scale(1.07, 0.95);
+        transform: translate(calc(var(--gx) * 0.3), calc(var(--gy) * 0.3)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) scale(1.07, 0.95);
     }
 
     87% {
@@ -816,7 +867,7 @@
     }
 
     62% {
-        transform: translate(calc(var(--gx) * 0.68), calc(var(--gy) * 0.68)) scale(0.93, 1.08);
+        transform: translate(calc(var(--gx) * 0.68), calc(var(--gy) * 0.68)) translateY(calc(var(--arc, 1) * var(--arcpx, 0px))) scale(0.93, 1.08);
     }
 
     88% {

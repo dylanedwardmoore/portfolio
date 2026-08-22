@@ -64,6 +64,22 @@
         mark.classList.remove("anim");
         void mark.offsetWidth;
 
+        /* WHICH WAY EACH PIECE BENDS.
+
+           Nothing alive travels in a straight line between two points, so
+           every travelling step swings off the line by a few pixels -- and the
+           side it swings to is drawn here, per piece, per telling. A mark with
+           three satellites therefore has eight ways of coming apart for each
+           of its five stories, and the same story told twice never bends the
+           same way twice running.
+
+           It is the cheapest variety in the whole file: one number per part,
+           and the difference between an ensemble and a mechanism. */
+        Array.prototype.forEach.call(
+            mark.querySelectorAll("i:not([data-lead])"), function (part) {
+                part.style.setProperty("--arc", Math.random() < 0.5 ? "-1" : "1");
+            });
+
         mark.dataset.story = s.name;
         mark.style.setProperty("--dur",
             Math.round((open ? s.open : s.shut) * jitter) + "ms");
