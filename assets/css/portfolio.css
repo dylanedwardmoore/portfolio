@@ -404,7 +404,25 @@
     transition: opacity 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+/* THE FIGURE IS A SQUARE BEFORE ITS PICTURE ARRIVES.
+
+   Forty-two of these load lazily, and without a ratio declared here each one
+   was a box of no height at all until its image landed -- then suddenly a
+   hundred and four pixels of one. Scrolling down the register pushed every
+   row below the reading point further down as the pictures caught up: the
+   document grew by 475px between two measurements of the same page, which is
+   most of a phone screen arriving underneath the thumb. That is the shifting
+   and stuttering near the foot of the page.
+
+   A ratio fixes it because the browser can lay the box out before it knows
+   anything about the file. Square, and cropped to it: the sources are square
+   in 77 of 80 cases and the three that are not were rendering at 124 and 68
+   against everything else's 104. This rule already existed for the widest
+   layout and only for it; it belongs to all of them. */
 .entry-figure img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
     filter: saturate(0.1) contrast(0.9) brightness(1.06);
     transition: filter 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -586,11 +604,6 @@
         display: block;
     }
 
-    .entry-figure img {
-        width: 100%;
-        aspect-ratio: 1;
-        object-fit: cover;
-    }
 }
 
 @media (min-width: 1180px) {
