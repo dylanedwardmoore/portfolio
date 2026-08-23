@@ -154,6 +154,62 @@ describe("stylesheet structure", () => {
     }
 });
 
+describe("the fill list is stated once, four times over", () => {
+    /*  The hover ground is described in four places: the gradient rule that
+        paints it, the :focus-visible rule that parks it at the edges, the
+        :hover rule that does the same inside the pointer query, and the
+        selector hoverfill.js attaches its spring to.
+
+        CSS cannot name a selector list once and reuse it, and putting a
+        marker class on every anchor would duplicate into the markup what the
+        stylesheet already knows. So the list is written out each time and
+        this test is what makes that safe: add a link type to one of them and
+        forget another, and you get a control that paints a gradient nothing
+        ever moves, or a spring driving properties nothing reads. Both look
+        like working code.  */
+    const norm = list => list
+        .split(",")
+        .map(s2 => s2.trim().replace(/:(hover|focus-visible)\b/g, "").trim())
+        .filter(Boolean)
+        .sort();
+
+    function fillRules() {
+        const out = { gradient: null, focus: null, hover: null };
+        for (const sheet of OWN_CSS) {
+            for (const r of parseCss(read(sheet)).rules) {
+                const bg = r.decls["background-image"] || "";
+                if (bg.includes("--fill-a")) out.gradient = r.selector;
+                else if (r.decls["--fill-a"] && r.decls["--fill-b"]) {
+                    if (r.selector.includes(":focus-visible")) out.focus = r.selector;
+                    else if (r.selector.includes(":hover")) out.hover = r.selector;
+                }
+            }
+        }
+        return out;
+    }
+
+    test("the stylesheet's three lists match each other", () => {
+        const r = fillRules();
+        assert.ok(r.gradient, "no gradient rule found -- has the fill been renamed?");
+        assert.ok(r.focus, "no :focus-visible rule parking the stops at the edges");
+        assert.ok(r.hover, "no :hover rule parking the stops at the edges");
+        assert.deepEqual(norm(r.focus), norm(r.gradient),
+            "a control is painted a gradient but never filled by keyboard focus");
+        assert.deepEqual(norm(r.hover), norm(r.gradient),
+            "a control is painted a gradient but never filled on hover");
+    });
+
+    test("and the script attaches to exactly those", () => {
+        const js = read("assets/js/hoverfill.js");
+        const m = js.match(/var FILLS\s*=\s*([\s\S]*?);/);
+        assert.ok(m, "hoverfill.js no longer declares FILLS");
+        // Rebuild the string the way the source concatenates it.
+        const list = [...m[1].matchAll(/"([^"]*)"/g)].map(q => q[1]).join("");
+        assert.deepEqual(norm(list), norm(fillRules().gradient),
+            "the script and the stylesheet disagree about which links fill");
+    });
+});
+
 describe("selectors point at real things", () => {
     test("every class the stylesheets target exists in markup or in a script", () => {
         const known = new Set([...markupClasses(), ...scriptClasses()]);

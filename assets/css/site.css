@@ -258,7 +258,6 @@ a {
 
     .bio a:hover,
     .prose a:hover {
-        background: var(--sea);
         color: var(--ink);
         /* Transparent rather than none: a shadow interpolates to another
            shadow, and `none` is the one value it cannot always reach. */
@@ -292,7 +291,6 @@ a {
 
 @media (hover: hover) and (pointer: fine) {
     .doclink-inline:hover {
-        background: var(--sea);
         color: var(--ink);
         box-shadow: inset 0 -1px 0 transparent;
     }
@@ -935,30 +933,79 @@ body.landing {
     align-content: start;
 }
 
-/*  THE GROUND IS A GRADIENT, NOT A COLOUR.
+/*  THE GROUND IS A GRADIENT, NOT A COLOUR -- and there is one of these, for
+    every link on the site that fills.
 
-    Two hard stops -- --fill-a and --fill-b -- moving apart along a gradient
-    line whose angle is the direction the pointer was travelling when it
-    crossed the edge. assets/js/hoverfill.js springs all three, on the scroll
-    rail's constants, so the ground spreads from where it was entered and
-    gathers back to where it was left.
+    Two hard stops, --fill-a and --fill-b, moving apart along a gradient line
+    whose angle is the direction the pointer was travelling when it crossed
+    the edge. assets/js/hoverfill.js springs all three, on the scroll rail's
+    constants, so the ground spreads from where it was entered and gathers
+    back to where it was left.
 
-    At rest both stops sit at 50%: a zero-width band of green between two
-    transparencies, which paints nothing. That is also exactly what a browser
-    with no script gets, and why the plain colour fill below is still here
-    behind a :not(.fill-js) -- the script adds that class only once it has
-    attached, and never under reduced motion or on a touch pointer.
+    ONE MECHANISM, NOT TWO. The obvious way to do this is a spring for
+    browsers that can run it and a background-colour transition for the rest,
+    which is two implementations of one idea kept in step by hand. Instead the
+    fallback below sets the SAME two properties the script animates, straight
+    to the edges. So there is one thing being drawn, always; the script only
+    changes how the numbers get there. Inline styles outrank a stylesheet, so
+    while it is driving, it wins, and when it lets go the rule underneath is
+    already correct.
 
-    Every var() carries its own fallback. A custom property that resolves to
-    nothing does not fall back, it invalidates the whole declaration at
-    computed-value time, and the fill would simply never appear.  */
+    That is also why there is no .fill-js class any more, and no
+    :not(.fill-js) rules: nothing needs to know whether the script ran.
+
+    At rest both stops sit at 50%: a zero-width band between two
+    transparencies, painting nothing.
+
+    --fill-ink is the colour, so the register's links can fill in their
+    section's own tone rather than the page's green. Every var() carries a
+    fallback -- a custom property that resolves to nothing does not fall back,
+    it invalidates the whole declaration at computed-value time, and the fill
+    would simply never appear.  */
 .doclink,
-.backlink {
+.backlink,
+.doclink-inline,
+.bio a,
+.prose a,
+.entry-links a {
     background-image: linear-gradient(var(--fill-rake, 90deg),
             transparent var(--fill-a, 50%),
-            var(--sea) var(--fill-a, 50%),
-            var(--sea) var(--fill-b, 50%),
+            var(--fill-ink, var(--sea)) var(--fill-a, 50%),
+            var(--fill-ink, var(--sea)) var(--fill-b, 50%),
             transparent var(--fill-b, 50%));
+}
+
+/*  The ground, arrived. This is what a browser with no script does, what a
+    reduced-motion browser does, and what the keyboard does -- none of which
+    have a direction to come from, so all of them simply take the whole thing.
+    It is also the state the spring is heading for, which is the point: the
+    script overrides these inline on its way there and releases them when it
+    is done.
+
+    :hover is inside the pointer query for the reason it always is here -- iOS
+    hands :hover to a finger only passing through on its way to scrolling, and
+    then leaves it there.  */
+.doclink:focus-visible,
+.backlink:focus-visible,
+.doclink-inline:focus-visible,
+.bio a:focus-visible,
+.prose a:focus-visible,
+.entry-links a:focus-visible {
+    --fill-a: 0%;
+    --fill-b: 100%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    .doclink:hover,
+    .backlink:hover,
+    .doclink-inline:hover,
+    .bio a:hover,
+    .prose a:hover,
+    .entry-links a:hover {
+        --fill-a: 0%;
+        --fill-b: 100%;
+    }
 }
 
 .doclink {
@@ -1051,13 +1098,6 @@ body.landing {
         outline: none;
     }
 
-    /* The fallback, and only the fallback. background-color rather than the
-       background shorthand: the shorthand resets background-image, which
-       would wipe the gradient the script is drawing into. */
-    html:not(.fill-js) .doclink:hover {
-        background-color: var(--sea);
-    }
-
     /* Square, and quickly, because it is under the ground by the time it gets
        there. The rake is only ever watched on the way back out. */
     .doclink:hover::after {
@@ -1066,11 +1106,7 @@ body.landing {
     }
 }
 
-/* Keyboard focus has no pointer and therefore no direction to come from, so
-   it takes the plain ground. Nothing about the fill gesture would mean
-   anything here -- there is no hand to answer. */
 .doclink:focus-visible {
-    background-color: var(--sea);
     outline: none;
 }
 

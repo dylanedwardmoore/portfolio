@@ -56,7 +56,7 @@ correct.
 | `browser/console.test.js` | No console errors, no uncaught exceptions, no 404s — every page at five sizes. |
 | `browser/layout.test.js` | No page scrolls sideways at any of the 38 sizes. The landing page never scrolls. No page scrolls more than 220px past its own content. Navigation controls clear 24px on phones. |
 | `browser/scrollrail.test.js` | The thumb never runs backwards, never leaves its track, reaches both ends, is never completely covered, outranks the section labels, leaves no strain at rest, and survives a mid-scroll resize. |
-| `browser/hoverfill.test.js` | The hover ground is armed for a fine pointer only — never under reduced motion, never for touch — and the plain colour fill still happens where it is not. The sweep covers, leaves nothing behind, opens at the point the pointer crossed, follows the direction of travel, and never turns its gradient axis mid-sweep. |
+| `browser/hoverfill.test.js` | The spring is armed for a fine pointer only — never under reduced motion, never for touch — and the ground still arrives where it is not. For all six kinds of filling link: the sweep covers, leaves nothing behind, opens at the point the pointer crossed, follows the direction of travel, and never turns its gradient axis mid-sweep. |
 | `browser/marks.test.js` | Every mark has parts, every mask actually loads (fetched, not just computed), declared width matches occupied width, Ventures is open at the top, exactly one mark open at a time. |
 | `browser/transitions.test.js` | No `view-transition-name` is claimed twice in one document. The cascade always lets go. Landing → portfolio → back leaves both working. The three redirect pages really do redirect. |
 | `browser/motion.test.js` | Under `prefers-reduced-motion`, nothing animates anywhere and the rail leaves no strain. |
@@ -88,6 +88,15 @@ over-specific until you know what they caught:
   layer left grown at rest hands the morph an image with transparent margins.
 - **`overflow-clip-margin` without `calc()`.** Chrome rejects it outright and
   drops the whole declaration.
+- **The fill list is stated once, four times over.** The hover ground is
+  described in four places — the gradient rule, the `:focus-visible` rule, the
+  `:hover` rule, and the selector the script attaches to. CSS cannot name a
+  selector list once and reuse it, and putting a marker class on every anchor
+  would duplicate into the markup what the stylesheet already knows. So the
+  list is written out each time, and a test compares all four. Add a link type
+  to one and forget another and you get a control painted a gradient nothing
+  moves, or a spring driving properties nothing reads — both of which look
+  like working code.
 - **The hover ground never turns its axis mid-sweep.** Its two stops are
   percentages along a gradient *line*, so they only mean anything paired with
   the angle that drew it. Turning the line while a band is part way across
@@ -122,6 +131,13 @@ Worth stating so the green tick is not read as more than it is.
 - **No real touch.** Phone viewports are emulated, with touch enabled; they are
   not a phone, and they never collapse an address bar mid-scroll — the one
   condition most likely to disturb the rail.
+- **Inline links wrap, and their boxes lie.** `getBoundingClientRect()` on an
+  inline link returns the union of its line fragments, and for a link that
+  wraps, the middle of that union falls in the gap between the end of one line
+  and the start of the next — empty page. Aiming a pointer there is how these
+  tests first "proved" the prose links were not animating when they were
+  working perfectly. `watch()` returns both boxes for this reason: the union
+  for the geometry, the first fragment for somewhere the pointer can land.
 - **Timing is asserted loosely.** Animation tests wait for settling rather than
   measuring frames, because frame timing under a headless browser on a loaded
   machine is not a signal.

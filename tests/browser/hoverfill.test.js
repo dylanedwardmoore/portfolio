@@ -36,14 +36,30 @@ after(async () => { await ctx.close(); });
 const DESKTOP = { width: 1200, height: 900 };
 const LANDING = PAGES[0];
 const PORTFOLIO = PAGES.find(p => p.name === "portfolio");
+const DISSERTATION = PAGES.find(p => p.name === "dissertation");
 
-/** Boxes the control and starts a per-frame recorder on its inline props. */
+/**
+ * Boxes the control and starts a per-frame recorder on its inline props.
+ *
+ * Returns TWO boxes, because for an inline link they are not the same thing.
+ * getBoundingClientRect() gives the union of every line fragment, and a link
+ * that wraps has a union whose middle falls in the gap between the end of one
+ * line and the start of the next -- empty page, nothing to hover. Aiming a
+ * pointer there is how these tests first "proved" the prose links were not
+ * animating when they were animating perfectly well.
+ *
+ *   box  the union, which is the box the gradient is painted across and the
+ *        one the script projects the pointer onto
+ *   hit  the first line fragment, which is somewhere the pointer can land
+ */
 async function watch(p, sel) {
-    const box = await p.evaluate(s => {
+    const { box, hit } = await p.evaluate(s => {
         const el = document.querySelector(s);
         el.scrollIntoView({ block: "center" });
-        const r = el.getBoundingClientRect();
-        return { x: r.x, y: r.y, w: r.width, h: r.height };
+        const u = el.getBoundingClientRect();
+        const f = el.getClientRects()[0] || u;
+        const b = r => ({ x: r.x, y: r.y, w: r.width, h: r.height });
+        return { box: b(u), hit: b(f) };
     }, sel);
     await p.evaluate(s => {
         window.__frames = [];
@@ -63,7 +79,7 @@ async function watch(p, sel) {
         };
         tick();
     }, sel);
-    return box;
+    return { box, hit };
 }
 
 const frames = p => p.evaluate(() => {
@@ -72,61 +88,87 @@ const frames = p => p.evaluate(() => {
 });
 
 describe("the fill is armed only where it belongs", () => {
-    test("a fine pointer with motion allowed gets it", async () => {
-        const p = await ctx.openPage(LANDING, DESKTOP);
+    /*  There is no marker class to look for any more -- the stylesheet and
+        the spring drive the same two properties, so nothing needs to know
+        whether the script ran. What separates the two cases is whether the
+        stops MOVE: the rule puts them at the edges in one step, the spring
+        walks them there. So that is what is asked.  */
+    async function stopsAfterHover(vp, opts) {
+        const p = await ctx.openPage(LANDING, vp, opts);
         try {
-            assert.equal(await p.evaluate(() =>
-                document.documentElement.classList.contains("fill-js")), true);
-        } finally { await p.__close(); }
-    });
-
-    test("reduced motion does not, and still fills plainly", async () => {
-        const p = await ctx.openPage(LANDING, DESKTOP, { reducedMotion: true });
-        try {
-            assert.equal(await p.evaluate(() =>
-                document.documentElement.classList.contains("fill-js")), false,
-                "the spring ran despite reduced motion");
-            /*  And the plain fill still has to happen, or asking for less
-                motion would mean no hover feedback at all. Asserted by
-                hovering and reading the colour rather than by looking for the
-                rule: a declaration whose value is a var() reports an empty
-                string through the CSSOM, so the rule can be present, correct,
-                and invisible to a test that goes looking for it.  */
             const box = await p.evaluate(() => {
                 const r = document.querySelector(".doclink").getBoundingClientRect();
                 return { x: r.x, y: r.y, w: r.width, h: r.height };
             });
-            await p.mouse.move(box.x + box.w * 0.5, box.y + box.h * 0.5);
-            await p.waitForTimeout(260);
-            const bg = await p.evaluate(() =>
-                getComputedStyle(document.querySelector(".doclink")).backgroundColor);
-            assert.equal(bg, "rgb(51, 255, 125)",
-                `under reduced motion the block did not take the plain ground (${bg})`);
+            await p.mouse.move(box.x + box.w * 0.5, box.y - 40);
+            await p.mouse.move(box.x + box.w * 0.5, box.y + box.h * 0.5, { steps: 3 });
+            await p.waitForTimeout(40);
+            const mid = await p.evaluate(() => {
+                const el = document.querySelector(".doclink");
+                return {
+                    inline: el.style.getPropertyValue("--fill-a"),
+                    computed: getComputedStyle(el).getPropertyValue("--fill-a").trim(),
+                };
+            });
+            await p.waitForTimeout(600);
+            const settled = await p.evaluate(() =>
+                getComputedStyle(document.querySelector(".doclink"))
+                    .getPropertyValue("--fill-a").trim());
+            return { mid, settled };
         } finally { await p.__close(); }
+    }
+
+    test("a fine pointer with motion allowed gets the spring", async () => {
+        const r = await stopsAfterHover(DESKTOP, {});
+        assert.notEqual(r.mid.inline, "",
+            "no inline stops part way through the sweep -- the spring is not running");
+        assert.ok(parseFloat(r.mid.inline) > 0.5,
+            `the stops were already at the edge (${r.mid.inline}) 40ms in; `
+            + "that is the stylesheet's one-step fill, not a sweep");
+    });
+
+    test("reduced motion does not, and still fills", async () => {
+        const r = await stopsAfterHover(DESKTOP, { reducedMotion: true });
+        assert.equal(r.mid.inline, "",
+            "the spring ran despite reduced motion");
+        assert.equal(r.mid.computed, "0%",
+            `asking for less motion left the block unfilled (${r.mid.computed})`);
     });
 
     test("a touch pointer does not", async () => {
         const p = await ctx.openPage(LANDING,
             { width: 390, height: 844, phone: true });
         try {
-            assert.equal(await p.evaluate(() =>
-                document.documentElement.classList.contains("fill-js")), false,
-                "a finger passing through would light the block up and leave it lit");
+            // A finger passing through on its way to scrolling must not light
+            // a block up and leave it lit, which is what iOS :hover does.
+            await p.waitForTimeout(200);
+            const inline = await p.evaluate(() =>
+                document.querySelector(".doclink").style.getPropertyValue("--fill-a"));
+            assert.equal(inline, "", "the spring attached on a touch pointer");
         } finally { await p.__close(); }
     });
 });
 
 describe("the sweep", () => {
+    /*  Every kind of link that fills, including the inline ones. Those are
+        the interesting case: an inline box can wrap, and its background is
+        painted across the union of its fragments, which is the same box the
+        script projects the pointer onto. If those two ever disagreed the
+        ground would sweep somewhere the words are not.  */
     for (const [label, page, sel] of [
         ["landing block", LANDING, ".doclink"],
+        ["blurb link", LANDING, ".bio a"],
         ["back control", PORTFOLIO, ".backlink"],
+        ["register link", PORTFOLIO, ".entry-links a"],
+        ["way back", DISSERTATION, ".doclink-inline"],
+        ["prose link", DISSERTATION, ".prose a"],
     ]) {
         test(`${label}: covers, then comes off completely`, async () => {
             const p = await ctx.openPage(page, DESKTOP);
             try {
-                const box = await watch(p, sel);
-                await p.mouse.move(box.x + box.w * 0.4, box.y - 50);
-                await p.mouse.move(box.x + box.w * 0.4, box.y + box.h * 0.5, { steps: 3 });
+                const { hit } = await watch(p, sel);
+                await p.mouse.move(hit.x + hit.w * 0.4, hit.y - 50);
+                await p.mouse.move(hit.x + hit.w * 0.4, hit.y + hit.h * 0.5, { steps: 3 });
                 await p.waitForTimeout(700);
 
                 const settled = await p.evaluate(s => {
@@ -139,7 +181,7 @@ describe("the sweep", () => {
                 assert.ok(settled.a <= 0.6 && settled.b >= 99.4,
                     `settled short of the edges: ${settled.a}..${settled.b}`);
 
-                await p.mouse.move(box.x + box.w + 60, box.y + box.h * 0.5, { steps: 3 });
+                await p.mouse.move(hit.x + hit.w + 60, hit.y + hit.h * 0.5, { steps: 3 });
                 await p.waitForTimeout(800);
                 const left = await p.evaluate(s => {
                     const el = document.querySelector(s);
@@ -154,13 +196,13 @@ describe("the sweep", () => {
         test(`${label}: bounces, and never turns its axis mid-sweep`, async () => {
             const p = await ctx.openPage(page, DESKTOP);
             try {
-                const box = await watch(p, sel);
+                const { hit } = await watch(p, sel);
                 // In one side and straight out the other, no dwell: the case
                 // where a naive implementation re-maps the stops onto a new
                 // axis while the band is part way across.
-                await p.mouse.move(box.x - 40, box.y + box.h * 0.5);
-                await p.mouse.move(box.x + box.w * 0.5, box.y + box.h * 0.5, { steps: 2 });
-                await p.mouse.move(box.x + box.w + 40, box.y + box.h * 0.5, { steps: 2 });
+                await p.mouse.move(hit.x - 40, hit.y + hit.h * 0.5);
+                await p.mouse.move(hit.x + hit.w * 0.5, hit.y + hit.h * 0.5, { steps: 2 });
+                await p.mouse.move(hit.x + hit.w + 40, hit.y + hit.h * 0.5, { steps: 2 });
                 await p.waitForTimeout(800);
                 const f = await frames(p);
                 assert.ok(f.length > 10, `only ${f.length} animated frames`);
@@ -190,11 +232,11 @@ describe("the sweep", () => {
             0%, the direction work is doing nothing and nobody would see it.  */
         const p = await ctx.openPage(LANDING, DESKTOP);
         try {
-            const box = await watch(p, ".doclink");
+            const { hit } = await watch(p, ".doclink");
             // Come in from the left, low, so the projection is nowhere near
             // the middle.
-            await p.mouse.move(box.x - 60, box.y + box.h * 0.5);
-            await p.mouse.move(box.x + 6, box.y + box.h * 0.5, { steps: 3 });
+            await p.mouse.move(hit.x - 60, hit.y + hit.h * 0.5);
+            await p.mouse.move(hit.x + 6, hit.y + hit.h * 0.5, { steps: 3 });
             await p.waitForTimeout(500);
             const f = await frames(p);
             const first = f[0];
@@ -210,11 +252,11 @@ describe("the sweep", () => {
     test("the direction it sweeps follows the direction of travel", async () => {
         const p = await ctx.openPage(LANDING, DESKTOP);
         try {
-            const box = await watch(p, ".doclink");
+            const { hit } = await watch(p, ".doclink");
             // Straight down onto it: the gradient should run top-to-bottom,
             // which in CSS angles is 180deg.
-            await p.mouse.move(box.x + box.w * 0.5, box.y - 60);
-            await p.mouse.move(box.x + box.w * 0.5, box.y + 8, { steps: 3 });
+            await p.mouse.move(hit.x + hit.w * 0.5, hit.y - 60);
+            await p.mouse.move(hit.x + hit.w * 0.5, hit.y + 8, { steps: 3 });
             await p.waitForTimeout(500);
             const f = await frames(p);
             // Late enough that the rake has settled out of the reading.

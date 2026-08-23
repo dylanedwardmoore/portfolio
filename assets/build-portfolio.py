@@ -508,7 +508,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260824w"
+V = "v=20260824x"
 HEAD = """<!doctype html>
 <html lang="en">
 

@@ -25,10 +25,17 @@
     the same code covers coming in from the left, dropping in from above, or
     cutting across a corner, without a single special case.
 
-    At rest both stops sit at 50% and the gradient is a zero-width band of
-    green between two transparencies: nothing, painted nowhere, costing
-    nothing. That is also what a browser with no script gets, which is why the
-    plain colour fill is still in the stylesheet behind a :not(.fill-js).
+    At rest both stops sit at 50% and the gradient is a zero-width band
+    between two transparencies: nothing, painted nowhere, costing nothing.
+
+    ONE MECHANISM, NOT TWO. The stylesheet already puts those same two stops
+    at 0% and 100% on :hover and :focus-visible, which is the whole gesture
+    for a browser with no script, one asked for reduced motion, and anyone
+    arriving by keyboard. This file does not replace that, it only changes how
+    the numbers get there: inline styles outrank a stylesheet, so while the
+    spring is running it wins, and when it lets go the rule underneath is
+    already the state it was heading for. Nothing here needs to announce
+    itself to the stylesheet, which is why there is no marker class.
 
     THE BOUNCE IS REAL AND IT IS SMALL. The stops spring to 0% and 100% -- the
     exact edges, not past them -- so the overshoot carries them off the box
@@ -282,10 +289,17 @@
         });
     }
 
-    var controls = document.querySelectorAll(".doclink, .backlink");
-    if (!controls.length) return;
+    /*  Every link on the site that fills.
+
+        This list is the same one the stylesheet carries -- see the shared
+        gradient rule in site.css -- and the two have to agree: a control the
+        stylesheet paints a gradient for and this file does not attach to
+        would fill instantly and never move. They are kept honest by a test
+        rather than by hope; tests/static/css-integrity.test.js reads both and
+        compares them.  */
+    var FILLS = ".doclink, .backlink, .doclink-inline, .bio a, .prose a,"
+        + " .entry-links a";
+
+    var controls = document.querySelectorAll(FILLS);
     Array.prototype.forEach.call(controls, attach);
-    // Tells the stylesheet to stand down: the plain colour fill is the
-    // fallback for exactly the case where this file did not run.
-    document.documentElement.classList.add("fill-js");
 }());
