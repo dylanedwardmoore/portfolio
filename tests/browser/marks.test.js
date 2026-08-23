@@ -163,3 +163,225 @@ describe("marks respond to the sticky header", () => {
         } finally { await p.__close(); }
     });
 });
+
+describe("a mark answers a click", () => {
+    /*  The marks are not controls and are deliberately not dressed as any --
+        no pointer, no focus ring, no role. But a small drawing that moves on
+        its own and then ignores being pressed is worse than one that never
+        moved, so a click gets one of the same small gestures the idle timer
+        plays.
+
+        Everything here is about the two ways that can go wrong. A gesture
+        holds its target with !important, so one that is not cleared outranks
+        the next opening or closing story and strands a shape half way out of
+        the body. And a click that changed which mark was open would put the
+        register's header and its marks out of step with each other.  */
+
+    const MARK = ".section-index";
+
+    /** Nothing anywhere is still holding a gesture. */
+    const atRest = (p) => p.evaluate(() => {
+        const out = [];
+        for (const m of document.querySelectorAll(".section-index")) {
+            for (const el of [m, ...m.querySelectorAll("i")]) {
+                const held = [...el.classList].filter(c => c.startsWith("wiggle-"));
+                if (held.length) out.push(`${m.dataset.mark}: ${held.join(" ")}`);
+                if (el.style.getPropertyValue("--at")) {
+                    out.push(`${m.dataset.mark}: --at left set`);
+                }
+            }
+            if (m.dataset.stirring) out.push(`${m.dataset.mark}: still stirring`);
+        }
+        return out;
+    });
+
+    test("clicking one starts a gesture, and the gesture ends", async () => {
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await p.evaluate(() => window.scrollTo(0, 0));
+            await p.waitForTimeout(400);
+            assert.deepEqual(await atRest(p), [], "something was moving before the click");
+
+            // A real pointer, not a dispatched event: half the point is that
+            // the mark is actually reachable and not covered by the sticky bar.
+            await p.click(`${MARK}[data-mark="ventures"]`);
+            const running = await p.evaluate(() =>
+                document.querySelector('.section-index[data-mark="ventures"]')
+                    .getAnimations({ subtree: true })
+                    .filter(a => a.playState === "running")
+                    .map(a => a.animationName));
+            assert.ok(running.some(n => /^wg-/.test(n)),
+                `the click started nothing (running: ${running.join(", ") || "none"})`);
+
+            // The longest gesture is 1500ms and the timer clears at ms + 40.
+            await p.waitForTimeout(2200);
+            assert.deepEqual(await atRest(p), [],
+                "a gesture was left holding its target after it finished");
+        } finally { await p.__close(); }
+    });
+
+    test("clicking one does not open or close anything", async () => {
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await p.evaluate(() => window.scrollTo(0, 0));
+            await p.waitForTimeout(400);
+            const state = () => p.evaluate(() =>
+                [...document.querySelectorAll(".section-index")]
+                    .map(m => m.dataset.mark + ":"
+                        + (m.classList.contains("is-open") ? "open" : "shut")));
+            const before = await state();
+            await p.click(`${MARK}[data-mark="ventures"]`);
+            await p.waitForTimeout(2200);
+            assert.deepEqual(await state(), before,
+                "a click changed which mark the register thinks is the header");
+        } finally { await p.__close(); }
+    });
+
+    test("a gathered mark moves as one body; an open one moves a piece", async () => {
+        /*  Gathered, every part is the same colour and lies on top of the
+            others, so the silhouette is a single shape and stirring one part
+            inside it is invisible -- those gestures go on the mark. Open, the
+            pieces stand apart and one of them moving is the whole point, so
+            those go on a part. Wired the wrong way round, the class goes on,
+            the timer runs, and nothing moves.  */
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await p.evaluate(() => window.scrollTo(0, 0));
+            await p.waitForTimeout(400);
+
+            const drawn = await p.evaluate(() => {
+                const held = (m) => [m, ...m.querySelectorAll("i")]
+                    .map(el => ({
+                        where: el === m ? "mark" : "part",
+                        name: [...el.classList].find(c => c.startsWith("wiggle-")),
+                    }))
+                    .filter(x => x.name);
+                const sample = (m) => {
+                    const out = [];
+                    // The click handler puts the class on synchronously, and a
+                    // second click clears the first, so a tight loop samples
+                    // the draw without waiting out sixteen gestures.
+                    for (let i = 0; i < 24; i++) { m.click(); out.push(...held(m)); }
+                    return out;
+                };
+                const marks = [...document.querySelectorAll(".section-index")];
+                const open = marks.find(m => m.classList.contains("is-open"));
+                const shut = marks.find(m => !m.classList.contains("is-open")
+                    && m.getBoundingClientRect().top < window.innerHeight);
+                return {
+                    open: open && sample(open),
+                    shut: shut && sample(shut),
+                };
+            });
+
+            assert.ok(drawn.open && drawn.open.length, "the open mark drew nothing");
+            assert.ok(drawn.shut && drawn.shut.length, "the gathered mark drew nothing");
+
+            assert.deepEqual(
+                [...new Set(drawn.shut.map(x => x.where))], ["mark"],
+                "a gathered mark played a gesture on one of its parts, which is "
+                + "inside the body and cannot be seen");
+            assert.ok(drawn.open.some(x => x.where === "part"),
+                "an open mark never moved a single piece in 24 draws");
+
+            await p.waitForTimeout(2200);
+            assert.deepEqual(await atRest(p), [], "left holding a gesture");
+        } finally { await p.__close(); }
+    });
+
+    test("a gesture interrupted by a story leaves nothing behind", async () => {
+        /*  The one failure that shows. A wiggle carries !important, so one
+            still on when a mark is asked to open or close outranks the story
+            and pins that shape where the wiggle had it until some later
+            gesture happens to clear it.  */
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await p.evaluate(() => window.scrollTo(0, 0));
+            await p.waitForTimeout(400);
+            await p.evaluate(() => {
+                document.querySelector('.section-index[data-mark="ventures"]').click();
+                // And scroll out from under it while it is still going.
+                window.scrollTo(0, document.documentElement.scrollHeight * 0.5);
+            });
+            await p.waitForTimeout(2600);
+            assert.deepEqual(await atRest(p),
+                [], "a gesture survived the story that interrupted it");
+        } finally { await p.__close(); }
+    });
+
+    test("and it also stirs on its own, without being asked", async () => {
+        /*  Nothing else here exercises the timer -- every other assertion in
+            this file provokes the marks and then watches. The idle loop is
+            the half of the feature nobody triggers, which makes it exactly
+            the half that can stop working without anyone noticing.
+
+            The first stir is drawn between five and fourteen seconds in, so
+            eighteen seconds is one guaranteed stir and usually two. What is
+            asserted about it is the part that can go quietly wrong: that
+            whatever it played belongs to the repertoire for the state the
+            mark was in. A gathered mark playing a part gesture would move
+            something buried inside its own silhouette.  */
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await p.evaluate(() => window.scrollTo(0, 0));
+            await p.waitForTimeout(600);
+            await p.evaluate(() => {
+                window.__stirs = [];
+                new MutationObserver(records => {
+                    for (const r of records) {
+                        const el = r.target;
+                        const name = [...el.classList].find(c => c.startsWith("wiggle-"));
+                        if (!name) continue;
+                        const mark = el.closest(".section-index");
+                        window.__stirs.push({
+                            mark: mark.dataset.mark,
+                            open: mark.classList.contains("is-open"),
+                            where: el === mark ? "mark" : "part",
+                            name,
+                        });
+                    }
+                }).observe(document.body, {
+                    subtree: true, attributes: true, attributeFilter: ["class"],
+                });
+            });
+            await p.waitForTimeout(18000);
+            const stirs = await p.evaluate(() => window.__stirs);
+
+            assert.ok(stirs.length >= 1,
+                "nothing stirred in eighteen seconds -- the idle loop is not running");
+
+            // Gathered marks move as one body; open marks may move a piece or,
+            // for the ripple, run the whole ensemble.
+            const wrong = stirs.filter(s => !s.open && s.where !== "mark");
+            assert.deepEqual(wrong, [],
+                "a gathered mark stirred one of its parts, which is inside the "
+                + "body where nothing can be seen to move");
+            const strays = stirs.filter(s => s.open && s.where === "mark"
+                && s.name !== "wiggle-ripple");
+            assert.deepEqual(strays, [],
+                "an open mark moved as one body -- only the ripple does that");
+
+            await p.waitForTimeout(2200);
+            assert.deepEqual(await atRest(p), [], "a stir was left holding on");
+        } finally { await p.__close(); }
+    });
+
+    test("but it is never dressed as a control", async () => {
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            const dressed = await p.evaluate(() => {
+                const out = [];
+                for (const m of document.querySelectorAll(".section-index")) {
+                    const cs = getComputedStyle(m);
+                    if (cs.cursor === "pointer") out.push(`${m.dataset.mark}: pointer`);
+                    for (const attr of ["role", "tabindex", "href", "onclick"]) {
+                        if (m.hasAttribute(attr)) out.push(`${m.dataset.mark}: ${attr}`);
+                    }
+                }
+                return out;
+            });
+            assert.deepEqual(dressed, [],
+                "the mark is advertising itself as something to press");
+        } finally { await p.__close(); }
+    });
+});

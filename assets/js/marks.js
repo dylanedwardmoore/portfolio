@@ -57,19 +57,17 @@
         var s = STORIES[Math.floor(Math.random() * STORIES.length)];
         var jitter = 0.88 + Math.random() * 0.28;
 
+        // A wiggle in flight holds its target with !important and would win
+        // against the story about to start, stranding that shape until the
+        // fidget's own timer got round to clearing it. idle.js owns the
+        // gestures and their names, and hangs this on every mark so the list
+        // does not have to be restated here and kept in step.
+        if (mark._quiet) mark._quiet();
+
         // Taking the class off and reading a layout value back puts the
         // animation to the start again. Without it a mark asked to move while
         // it is already moving simply carries on with the old telling, which is
         // how you get a shape stranded half way out.
-        // A wiggle in flight holds its part with !important and would win
-        // against the story about to start, stranding that shape until the
-        // fidget's own timer got round to clearing it.
-        Array.prototype.forEach.call(mark.querySelectorAll("i"), function (p) {
-            p.classList.remove("wiggle-twitch", "wiggle-breathe", "wiggle-shrug",
-                "wiggle-shiver", "wiggle-lean");
-            p.style.removeProperty("--at");
-        });
-
         mark.classList.remove("anim");
         void mark.offsetWidth;
 

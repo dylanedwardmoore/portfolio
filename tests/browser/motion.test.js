@@ -46,6 +46,36 @@ describe("with prefers-reduced-motion: reduce", () => {
         });
     }
 
+    test("a mark does not answer a click either", async () => {
+        /*  The marks are the one thing on the site that moves when it is
+            pressed. idle.js declines to run at all under reduced motion, so
+            the click handler is never attached and the stylesheet silences
+            every gesture besides -- but a class arriving with nothing to
+            animate is exactly the kind of half-honoured guard this file
+            exists to catch.  */
+        const portfolio = PAGES.find(p => p.name === "portfolio");
+        const p = await ctx.openPage(portfolio, REPRESENTATIVE[3], { reducedMotion: true });
+        try {
+            await p.waitForTimeout(400);
+            const held = await p.evaluate(() => {
+                const out = [];
+                for (const m of document.querySelectorAll(".section-index")) {
+                    for (let i = 0; i < 4; i++) m.click();
+                    for (const el of [m, ...m.querySelectorAll("i")]) {
+                        for (const c of el.classList) {
+                            if (c.startsWith("wiggle-")) out.push(`${m.dataset.mark}: ${c}`);
+                        }
+                    }
+                }
+                return out;
+            });
+            assert.deepEqual(held, [], "a click put a gesture on under reduced motion");
+            const running = await p.evaluate(() =>
+                document.getAnimations().filter(a => a.playState === "running").length);
+            assert.equal(running, 0, "a click started something");
+        } finally { await p.__close(); }
+    });
+
     test("the rail leaves no strain on the mark", async () => {
         const portfolio = PAGES.find(p => p.name === "portfolio");
         const p = await ctx.openPage(portfolio, REPRESENTATIVE[3], { reducedMotion: true });

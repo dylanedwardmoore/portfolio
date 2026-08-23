@@ -53,13 +53,14 @@ correct.
 | `static/css-integrity.test.js` | Braces balance. Every animation names a `@keyframes` that exists; every `@keyframes` is referenced by something. Custom properties are defined or every use has a fallback. No `calc()` in `overflow-clip-margin`. No class is styled that appears in neither markup nor script. |
 | `static/html-structure.test.js` | Charset, viewport, `lang`, one `<h1>`, no skipped heading levels, no duplicate ids, `alt` on every image, `rel="noopener"` on every `target="_blank"`, no inline handlers, decorative marks `aria-hidden`. |
 | `static/generated.test.js` | Re-running `build-portfolio.py` changes nothing. Every mark declares `--mark-w` and `--span`, no part escapes its own box, every mask is in the shape library. |
+| `static/gestures.test.js` | Every small gesture idle.js can play has a rule at the scope its class is put on, can be taken off again, is silenced under reduced motion, and outlives the timer that clears it. The open mark stirs more often than a gathered one. |
 | `browser/console.test.js` | No console errors, no uncaught exceptions, no 404s — every page at five sizes. |
 | `browser/layout.test.js` | No page scrolls sideways at any of the 38 sizes. The landing page never scrolls. No page scrolls more than 220px past its own content. Navigation controls clear 24px on phones. |
 | `browser/scrollrail.test.js` | The thumb never runs backwards, never leaves its track, reaches both ends, is never completely covered, outranks the section labels, leaves no strain at rest, and survives a mid-scroll resize. |
 | `browser/hoverfill.test.js` | The spring is armed for a fine pointer only — never under reduced motion, never for touch — and the ground still arrives where it is not. For all six kinds of filling link: the sweep covers, leaves nothing behind, opens at the point the pointer crossed, follows the direction of travel, and never turns its gradient axis mid-sweep. |
-| `browser/marks.test.js` | Every mark has parts, every mask actually loads (fetched, not just computed), declared width matches occupied width, Ventures is open at the top, exactly one mark open at a time. |
+| `browser/marks.test.js` | Every mark has parts, every mask actually loads (fetched, not just computed), declared width matches occupied width, Ventures is open at the top, exactly one mark open at a time. A click plays a gesture and leaves nothing behind, changes no mark's state, and is never dressed as a control; a gathered mark moves as one body and an open one moves a piece; the idle loop still stirs on its own. |
 | `browser/transitions.test.js` | No `view-transition-name` is claimed twice in one document. The cascade always lets go. Landing → portfolio → back leaves both working. The three redirect pages really do redirect. |
-| `browser/motion.test.js` | Under `prefers-reduced-motion`, nothing animates anywhere and the rail leaves no strain. |
+| `browser/motion.test.js` | Under `prefers-reduced-motion`, nothing animates anywhere, clicking a mark does nothing, and the rail leaves no strain. |
 
 ## Why several of these exist
 
@@ -97,6 +98,18 @@ over-specific until you know what they caught:
   to one and forget another and you get a control painted a gradient nothing
   moves, or a spring driving properties nothing reads — both of which look
   like working code.
+- **A gesture has a rule at the scope its class goes on.** The marks' small
+  gestures are played on the whole mark when it is gathered and on one piece
+  when it is open, because a piece stirring inside a gathered body is under
+  the silhouette and cannot be seen. Wire one to the wrong selector and it is
+  valid CSS that matches nothing: the class goes on, the timer runs, the class
+  comes off, and the shape never moved.
+- **A gesture can be taken off again.** They carry `!important`, so one left on
+  outranks the opening or closing story that follows and pins that shape half
+  way out of the body until some later gesture happens to clear it.
+- **A gesture outlives the timer that clears it.** Clear it early and the class
+  comes off mid-flight; the shape snaps home in one frame from wherever it had
+  reached. It is the one fault in that file an eye can definitely see.
 - **The hover ground never turns its axis mid-sweep.** Its two stops are
   percentages along a gradient *line*, so they only mean anything paired with
   the angle that drew it. Turning the line while a band is part way across
