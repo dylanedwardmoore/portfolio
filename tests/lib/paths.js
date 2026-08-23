@@ -54,6 +54,7 @@ export const PAGES = [
 export const OWN_CSS = ["assets/css/site.css", "assets/css/portfolio.css"];
 export const OWN_JS = [
     "assets/js/scrollrail.js",
+    "assets/js/hoverfill.js",
     "assets/js/figures.js",
     "assets/js/marks.js",
     "assets/js/idle.js",

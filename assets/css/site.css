@@ -935,9 +935,35 @@ body.landing {
     align-content: start;
 }
 
+/*  THE GROUND IS A GRADIENT, NOT A COLOUR.
+
+    Two hard stops -- --fill-a and --fill-b -- moving apart along a gradient
+    line whose angle is the direction the pointer was travelling when it
+    crossed the edge. assets/js/hoverfill.js springs all three, on the scroll
+    rail's constants, so the ground spreads from where it was entered and
+    gathers back to where it was left.
+
+    At rest both stops sit at 50%: a zero-width band of green between two
+    transparencies, which paints nothing. That is also exactly what a browser
+    with no script gets, and why the plain colour fill below is still here
+    behind a :not(.fill-js) -- the script adds that class only once it has
+    attached, and never under reduced motion or on a touch pointer.
+
+    Every var() carries its own fallback. A custom property that resolves to
+    nothing does not fall back, it invalidates the whole declaration at
+    computed-value time, and the fill would simply never appear.  */
+.doclink,
+.backlink {
+    background-image: linear-gradient(var(--fill-rake, 90deg),
+            transparent var(--fill-a, 50%),
+            var(--sea) var(--fill-a, 50%),
+            var(--sea) var(--fill-b, 50%),
+            transparent var(--fill-b, 50%));
+}
+
 .doclink {
     display: block;
-    background: none;
+    background-color: transparent;
     color: var(--ink);
     /* Holds the rule below. It used to be an inset box-shadow, which sits on
        the padding box for free; a shadow cannot be given a shape or moved on
@@ -1022,8 +1048,14 @@ body.landing {
    Keyboard focus keeps the fill; it is only hover that touch counterfeits. */
 @media (hover: hover) and (pointer: fine) {
     .doclink:hover {
-        background: var(--sea);
         outline: none;
+    }
+
+    /* The fallback, and only the fallback. background-color rather than the
+       background shorthand: the shorthand resets background-image, which
+       would wipe the gradient the script is drawing into. */
+    html:not(.fill-js) .doclink:hover {
+        background-color: var(--sea);
     }
 
     /* Square, and quickly, because it is under the ground by the time it gets
@@ -1034,8 +1066,11 @@ body.landing {
     }
 }
 
+/* Keyboard focus has no pointer and therefore no direction to come from, so
+   it takes the plain ground. Nothing about the fill gesture would mean
+   anything here -- there is no hand to answer. */
 .doclink:focus-visible {
-    background: var(--sea);
+    background-color: var(--sea);
     outline: none;
 }
 

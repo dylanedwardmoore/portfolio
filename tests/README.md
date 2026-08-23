@@ -56,6 +56,7 @@ correct.
 | `browser/console.test.js` | No console errors, no uncaught exceptions, no 404s — every page at five sizes. |
 | `browser/layout.test.js` | No page scrolls sideways at any of the 38 sizes. The landing page never scrolls. No page scrolls more than 220px past its own content. Navigation controls clear 24px on phones. |
 | `browser/scrollrail.test.js` | The thumb never runs backwards, never leaves its track, reaches both ends, is never completely covered, outranks the section labels, leaves no strain at rest, and survives a mid-scroll resize. |
+| `browser/hoverfill.test.js` | The hover ground is armed for a fine pointer only — never under reduced motion, never for touch — and the plain colour fill still happens where it is not. The sweep covers, leaves nothing behind, opens at the point the pointer crossed, follows the direction of travel, and never turns its gradient axis mid-sweep. |
 | `browser/marks.test.js` | Every mark has parts, every mask actually loads (fetched, not just computed), declared width matches occupied width, Ventures is open at the top, exactly one mark open at a time. |
 | `browser/transitions.test.js` | No `view-transition-name` is claimed twice in one document. The cascade always lets go. Landing → portfolio → back leaves both working. The three redirect pages really do redirect. |
 | `browser/motion.test.js` | Under `prefers-reduced-motion`, nothing animates anywhere and the rail leaves no strain. |
@@ -87,6 +88,12 @@ over-specific until you know what they caught:
   layer left grown at rest hands the morph an image with transparent margins.
 - **`overflow-clip-margin` without `calc()`.** Chrome rejects it outright and
   drops the whole declaration.
+- **The hover ground never turns its axis mid-sweep.** Its two stops are
+  percentages along a gradient *line*, so they only mean anything paired with
+  the angle that drew it. Turning the line while a band is part way across
+  makes the same two numbers describe a different shape, and the ground jumps
+  sideways in a single frame — which is exactly what a pointer flicking in one
+  side and out the other would have caused.
 
 ## The one test seam
 

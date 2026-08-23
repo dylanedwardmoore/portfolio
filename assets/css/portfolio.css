@@ -206,8 +206,10 @@
    landing page, which fill rather than invert. Pointer only -- see the note
    on .doclink in site.css. */
 @media (hover: hover) and (pointer: fine) {
-    .backlink:hover {
-        background: var(--sea);
+    /* The fallback only; the gradient in site.css is the real ground. See the
+       note there, and hoverfill.js. */
+    html:not(.fill-js) .backlink:hover {
+        background-color: var(--sea);
     }
 
     .backlink:hover::after {
