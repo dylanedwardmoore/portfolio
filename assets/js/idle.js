@@ -3,11 +3,15 @@
 
     A mark at rest is still a thing, and things that are alive are never
     perfectly still. Every few seconds this picks one mark and lets it do one
-    small thing. It is also what answers a click: the marks are not controls
-    and are not advertised as any -- no pointer, no focus ring, nothing that
-    says press me -- but anyone who does press one gets an answer, because a
-    small drawing that moves on its own and then ignores you is worse than one
-    that never moved.
+    small thing.
+
+    It is also what answers a pointer. The marks are not controls and are not
+    advertised as any -- no cursor, no focus ring, nothing that says press me
+    -- but anyone who does press one gets an answer, because a small drawing
+    that moves on its own and then ignores you is worse than one that never
+    moved. And crossing any link in a section stirs that section's mark too,
+    so the register answers where somebody is actually reading rather than
+    only where the shapes happen to be.
 
     TWO REPERTOIRES, BECAUSE THERE ARE TWO THINGS TO MOVE.
 
@@ -239,6 +243,41 @@
         gesture(mark);
     }
 
+    /*  A LINK UNDER THE POINTER.
+
+        Every link in the register belongs to a section, and every section has
+        a mark, so crossing a link stirs that section's mark -- the same
+        gesture a click on the mark itself would have played, drawn from the
+        same repertoire, and so still the gathered one for a gathered mark and
+        the open one for an open mark. The register answers you wherever you
+        happen to be reading it rather than only where the shapes are, which is
+        the point: the marks are the thing that is alive, and a hand moving
+        down the page is the nearest thing to a reason for one to look up.
+
+        POLITE, WHERE A CLICK IS INSISTENT. A click is a request and gets an
+        answer every time, interrupting whatever the mark was doing. A pointer
+        crossing a link is not a request -- it is what happens on the way to
+        somewhere else -- so it never interrupts. Anything already under way on
+        that mark is left to finish.
+
+        That is also what keeps a hand swept down a column of links from
+        setting the register off like a till: a gesture runs for between a
+        third of a second and a second, and nothing on that mark can start
+        until it is done.
+
+        The check is made when the pointer arrives rather than when the page
+        loads, so a machine that has both a trackpad and a touchscreen answers
+        for whichever is being used at the time.  */
+    var FINE = window.matchMedia
+        && window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    function brush(mark) {
+        if (!FINE || !FINE.matches) return;
+        if (telling(mark) || moving(mark) || mark.dataset.stirring) return;
+        if (!onScreen(mark)) return;
+        gesture(mark);
+    }
+
     function stir() {
         var pool = [];
         Array.prototype.forEach.call(marks, function (m) {
@@ -266,6 +305,18 @@
         m._quiet = function () { quiet(m); };
         m.addEventListener("click", function () { poke(m); });
     });
+
+    // Resolved once, here, rather than walked up from the link on every
+    // crossing: the register does not change shape after it is built, and a
+    // pointer moving down a column of entries would otherwise pay for a
+    // closest() per link per pass.
+    Array.prototype.forEach.call(
+        document.querySelectorAll(".section a[href]"), function (a) {
+            var section = a.closest && a.closest(".section");
+            var mark = section && section.querySelector(".section-index");
+            if (!mark) return;
+            a.addEventListener("mouseenter", function () { brush(mark); });
+        });
 
     // Irregular on purpose. A stir every five to fourteen seconds, and the gap
     // drawn fresh each time -- a fixed interval is a metronome, and a

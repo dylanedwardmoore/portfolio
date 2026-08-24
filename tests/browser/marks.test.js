@@ -454,6 +454,128 @@ describe("a mark answers a click", () => {
         } finally { await p.__close(); }
     });
 
+    test("and a link under the pointer stirs its own section's mark", async () => {
+        /*  Every link in the register belongs to a section and every section
+            has a mark, so crossing a link answers on that mark -- the same
+            gesture a click on the shapes would have played. A real pointer
+            rather than a dispatched event: half of what is worth checking is
+            that the link is reachable at all.  */
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await p.evaluate(() => window.scrollTo(0, 0));
+            await p.waitForTimeout(900);
+
+            const before = await p.evaluate(() =>
+                [...document.querySelectorAll(".section-index")]
+                    .map(m => m.dataset.mark + ":"
+                        + (m.classList.contains("is-open") ? "open" : "shut")));
+
+            await p.hover(".section a[href]");
+            const answered = await p.evaluate(() => {
+                const mark = document.querySelector(".section a[href]")
+                    .closest(".section").querySelector(".section-index");
+                return {
+                    held: [mark, ...mark.querySelectorAll("i")]
+                        .some(el => [...el.classList].some(c => c.startsWith("wiggle-"))),
+                    running: mark.getAnimations({ subtree: true })
+                        .filter(a => a.playState === "running")
+                        .map(a => a.animationName),
+                };
+            });
+            assert.ok(answered.held || answered.running.some(n => /^wg-/.test(n)),
+                "crossing a link stirred nothing on its section's mark");
+
+            assert.deepEqual(await p.evaluate(() =>
+                [...document.querySelectorAll(".section-index")]
+                    .map(m => m.dataset.mark + ":"
+                        + (m.classList.contains("is-open") ? "open" : "shut"))), before,
+                "crossing a link changed which mark the register calls the header");
+
+            await p.waitForTimeout(1400);
+            assert.deepEqual(await atRest(p), [], "left holding a gesture");
+        } finally { await p.__close(); }
+    });
+
+    test("and it draws from the repertoire that fits that mark's state", async () => {
+        /*  The whole point of routing it through the same door as a click:
+            a gathered mark still moves as one body and an open one still moves
+            a piece. Wired to its own gesture instead, this is the assertion
+            that would have gone quietly false.  */
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await p.waitForTimeout(600);
+            const drawn = await p.evaluate(async () => {
+                const out = [];
+                const links = [...document.querySelectorAll(".section a[href]")];
+                for (let n = 0; n < 26; n++) {
+                    const a = links[Math.floor(n * links.length / 26)];
+                    a.scrollIntoView({ block: "center" });
+                    await new Promise(r => setTimeout(r, 320));
+                    const mark = a.closest(".section").querySelector(".section-index");
+                    const open = mark.classList.contains("is-open");
+                    a.dispatchEvent(new MouseEvent("mouseenter"));
+                    for (const el of [mark, ...mark.querySelectorAll("i")]) {
+                        const name = [...el.classList].find(c => c.startsWith("wiggle-"));
+                        if (name) out.push({ open, name, where: el === mark ? "mark" : "part" });
+                    }
+                    await new Promise(r => setTimeout(r, 1150));
+                }
+                return out;
+            });
+
+            assert.ok(drawn.length >= 6,
+                `only ${drawn.length} crossings played anything`);
+            assert.deepEqual(drawn.filter(d => !d.open && d.where !== "mark"), [],
+                "a gathered mark stirred one of its pieces, which is inside the "
+                + "body where nothing can be seen to move");
+            assert.deepEqual(
+                drawn.filter(d => d.open && d.where === "mark" && d.name !== "wiggle-ripple"),
+                [], "an open mark moved as one body -- only the ripple does that");
+        } finally { await p.__close(); }
+    });
+
+    test("but a crossing never interrupts, where a click always does", async () => {
+        /*  A click is a request and gets an answer every time. A pointer
+            crossing a link is not a request -- it is what happens on the way
+            to somewhere else -- so it leaves anything already under way alone.
+            That distinction is also what keeps a hand swept down a column of
+            links from setting the register off like a till.  */
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await p.waitForTimeout(1200);
+            const seen = await p.evaluate(async () => {
+                const a = document.querySelector(".section a[href]");
+                const mark = a.closest(".section").querySelector(".section-index");
+                const running = () => mark.getAnimations({ subtree: true })
+                    .filter(x => x.playState === "running" && /^wg-/.test(x.animationName))
+                    .map(x => ({ name: x.animationName, t: Math.round(x.currentTime) }));
+                for (let i = 0; i < 40 && (mark.dataset.stirring || running().length); i++) {
+                    await new Promise(r => setTimeout(r, 100));
+                }
+                a.dispatchEvent(new MouseEvent("mouseenter"));
+                await new Promise(r => setTimeout(r, 120));
+                const before = running();
+                a.dispatchEvent(new MouseEvent("mouseenter"));
+                const afterCross = running();
+                await new Promise(r => setTimeout(r, 60));
+                mark.click();
+                const afterClick = running();
+                return { before, afterCross, afterClick };
+            });
+
+            assert.ok(seen.before.length, "nothing was running to be interrupted");
+            assert.ok(seen.afterCross.length
+                && seen.afterCross[0].t >= seen.before[0].t,
+                `a second crossing restarted the gesture `
+                + `(${seen.before[0]?.t}ms -> ${seen.afterCross[0]?.t}ms)`);
+            assert.ok(seen.afterClick.length && seen.afterClick[0].t <= 40,
+                "a click did not interrupt what the pointer had started");
+
+            await p.waitForTimeout(1400);
+            assert.deepEqual(await atRest(p), [], "left holding a gesture");
+        } finally { await p.__close(); }
+    });
+
     test("but it is never dressed as a control", async () => {
         const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
         try {

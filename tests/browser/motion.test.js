@@ -70,6 +70,24 @@ describe("with prefers-reduced-motion: reduce", () => {
                 return out;
             });
             assert.deepEqual(held, [], "a click put a gesture on under reduced motion");
+
+            // Nor a pointer crossing a link, which is the other way in.
+            const hovered = await p.evaluate(() => {
+                const out = [];
+                for (const a of document.querySelectorAll(".section a[href]")) {
+                    a.dispatchEvent(new MouseEvent("mouseenter"));
+                }
+                for (const m of document.querySelectorAll(".section-index")) {
+                    for (const el of [m, ...m.querySelectorAll("i")]) {
+                        for (const c of el.classList) {
+                            if (c.startsWith("wiggle-")) out.push(`${m.dataset.mark}: ${c}`);
+                        }
+                    }
+                }
+                return out;
+            });
+            assert.deepEqual(hovered, [],
+                "crossing a link put a gesture on under reduced motion");
             const running = await p.evaluate(() =>
                 document.getAnimations().filter(a => a.playState === "running").length);
             assert.equal(running, 0, "a click started something");
