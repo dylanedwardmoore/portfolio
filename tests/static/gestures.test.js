@@ -33,7 +33,7 @@ const IDLE = read("assets/js/idle.js");
 const SHEET = read("assets/css/portfolio.css");
 const MARKUP = read("portfolio/index.html");
 
-const ENTRY = /\{\s*name:\s*"([\w-]+)",\s*ms:\s*(\d+),\s*weight:\s*(\d+),\s*scope:\s*"(mark|part)"\s*\}/g;
+const ENTRY = /\{\s*name:\s*"([\w-]+)",\s*ms:\s*(\d+),\s*weight:\s*(\d+),\s*scope:\s*"(mark|part)"(?:,\s*grain:\s*(true|false))?\s*\}/g;
 
 /** The gestures declared in one of idle.js's two repertoires. */
 function repertoire(from, to) {
@@ -41,6 +41,7 @@ function repertoire(from, to) {
     assert.ok(src, `idle.js no longer declares ${from}`);
     return [...src.matchAll(ENTRY)].map(m => ({
         name: m[1], ms: Number(m[2]), weight: Number(m[3]), scope: m[4],
+        grain: m[5] === "true",
     }));
 }
 
@@ -147,6 +148,79 @@ describe("every gesture idle.js can play", () => {
         }
         assert.deepEqual([...new Set(loud)], [],
             "these still run for somebody who asked the site to hold still");
+    });
+
+    test("a hairline is only offered what a hairline survives", () => {
+        /*  Several shapes in the register are a pixel and a bit wide, and a
+            bar that narrow is drawn as one or two solid columns of pixels. It
+            stays solid only while its long edges sit on the grid: measured on
+            the register itself, sending a 1.19px piece half a pixel SIDEWAYS
+            costs it half its solid ink, and turning it a degree and a half
+            costs a third and spreads it half again as wide. From a normal
+            distance the piece does not look like it moved, it looks like it
+            went out.
+
+            So idle.js draws the piece first and the gesture second, and a thin
+            piece draws only from the ones marked grain -- the ones that travel
+            the long way along it, or only scale it. That marking has to be
+            true of the keyframes as well as of the table, which is what this
+            checks: a gesture offered to a hairline may not turn it, and any
+            travel it does must be written against --ax and --ay.  */
+        const safe = OPEN.filter(g => g.grain && g.scope === "part");
+        assert.ok(safe.length >= 2,
+            `a hairline has only ${safe.length} gesture(s) it can take`);
+
+        const bad = [];
+        for (const g of safe) {
+            const steps = RULES.filter(r => r.keyframes === "wg-" + g.name);
+            assert.ok(steps.length, `wg-${g.name} has no keyframes`);
+            for (const r of steps) {
+                const t = r.decls.transform || "";
+                if (/\brotate\s*\(/.test(t) && !/var\(--turn/.test(t)) {
+                    bad.push(`${g.name} turns the piece it is given`);
+                }
+                // Travel that is not tied to the grain sends the piece
+                // whichever way the keyframe felt like, which for half of them
+                // is straight across their own width.
+                if (/\btranslate[XY]?\s*\(/.test(t) && !/var\(--a[xy]/.test(t)) {
+                    bad.push(`${g.name} travels off the grain: ${t}`);
+                }
+            }
+        }
+        assert.deepEqual([...new Set(bad)], [],
+            "these are offered to pieces too thin to take them");
+    });
+
+    test("and every thin piece in the register runs upright", () => {
+        /*  The ripple is the one gesture no piece can decline: it goes on the
+            mark and lifts all of them. It drops its turn for the thin ones --
+            that is what --turn is -- but the lift itself is vertical, which is
+            along the grain only while every thin piece in the register is
+            taller than it is wide. That is true of all seven of them today.
+            Trace a wide, flat hairline into the library and this fails, which
+            is the point: the ripple would then need its lift on --ax/--ay
+            too.  */
+        const h = Number((SHEET.match(
+            /\.section-index\s*\{[^}]*?height:\s*([\d.]+)px/) || [])[1]);
+        assert.ok(h > 0, "the mark's height is no longer declared in px");
+
+        const flat = [];
+        for (const m of MARKUP.matchAll(/class="section-index"[^>]*>[\s\S]*?(?=<\/span>\s*<h2)/g)) {
+            const block = m[0];
+            const markW = Number((block.match(/--mark-w:([\d.]+)px/) || [])[1]);
+            if (!markW) continue;
+            for (const part of block.matchAll(/width:([\d.]+)%;height:([\d.]+)%/g)) {
+                const w = (Number(part[1]) / 100) * markW;
+                const ht = (Number(part[2]) / 100) * h;
+                if (Math.min(w, ht) < 3 && w > ht) {
+                    flat.push(`${w.toFixed(2)}x${ht.toFixed(2)}`);
+                }
+            }
+        }
+        assert.deepEqual(flat, [],
+            "a thin piece in the register is wider than it is tall, so the "
+            + "ripple's vertical lift now goes across its grain and will "
+            + "smear it out");
     });
 
     test("and the ripple's one assumption still holds", () => {

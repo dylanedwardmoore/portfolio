@@ -53,6 +53,13 @@
     WHICH GESTURE. Weighted too, and the slowest and most conspicuous is
     always the rarest. Breathing should be common and leaning should be a
     surprise.
+
+    HOW BIG ANY OF THEM IS is not decided here -- the stylesheet holds the
+    amplitudes, and they are all fractions of a pixel. What is decided here is
+    how long each one is held before the mark is put back to rest, and those
+    numbers have to match: clear a gesture early and the shape snaps home from
+    wherever it had reached, which at this size is the only part of the whole
+    arrangement anyone would actually notice.
 -----------------------------------------------------------------------------*/
 
 (function () {
@@ -74,25 +81,43 @@
         lean or drift. Only breathing and the twitch belong to both, because
         they are the two that read at any size -- and even those are a
         different gesture in each list, since one moves a body and the other
-        moves a piece of one.  */
+        moves a piece of one. The stylesheet's --wg is what keeps those two
+        looking the same size in both places.
+
+        ms is how long the gesture is held, and it is the stylesheet's
+        duration exactly. Nothing here is longer than about a second: these
+        are fidgets rather than gestures, and a movement of half a pixel taken
+        slowly is not subtle, it is invisible.  */
     var GATHERED = [
-        { name: "breathe", ms: 1500, weight: 5, scope: "mark" },
-        { name: "twitch", ms: 620, weight: 4, scope: "mark" },
-        { name: "bob", ms: 740, weight: 4, scope: "mark" },
-        { name: "settle", ms: 700, weight: 3, scope: "mark" },
-        { name: "rock", ms: 1150, weight: 2, scope: "mark" }
+        { name: "breathe", ms: 1100, weight: 5, scope: "mark" },
+        { name: "twitch", ms: 520, weight: 4, scope: "mark" },
+        { name: "bob", ms: 620, weight: 4, scope: "mark" },
+        { name: "settle", ms: 600, weight: 3, scope: "mark" },
+        { name: "rock", ms: 900, weight: 2, scope: "mark" }
     ];
 
+    /*  grain: true means the gesture is one a HAIRLINE can take -- see THE
+        GRAIN OF A PIECE in the stylesheet. Several of these shapes are a pixel
+        and a bit wide, and a bar that narrow stays solid only while its long
+        edges sit on the pixel grid. Turning it, or sending it sideways by a
+        fraction of a pixel, splits those edges into three or four faint
+        columns: the piece stops looking like it moved and starts looking like
+        it went out. Travelling the long way along it, and scaling it, cost
+        nothing at any width.
+
+        So the thin pieces get the three that run along their own grain, and
+        the ripple, which lifts them without turning them.  */
     var OPEN = [
-        { name: "breathe", ms: 1500, weight: 5, scope: "part" },
-        { name: "twitch", ms: 620, weight: 4, scope: "part" },
-        { name: "shiver", ms: 540, weight: 3, scope: "part" },
-        { name: "shrug", ms: 820, weight: 3, scope: "part" },
-        { name: "drift", ms: 1250, weight: 3, scope: "part" },
-        { name: "lean", ms: 1100, weight: 2, scope: "part" },
+        { name: "breathe", ms: 1100, weight: 5, scope: "part", grain: true },
+        { name: "twitch", ms: 520, weight: 4, scope: "part" },
+        { name: "shiver", ms: 480, weight: 3, scope: "part", grain: true },
+        { name: "shrug", ms: 700, weight: 3, scope: "part" },
+        { name: "drift", ms: 950, weight: 3, scope: "part" },
+        { name: "slide", ms: 950, weight: 3, scope: "part", grain: true },
+        { name: "lean", ms: 900, weight: 2, scope: "part" },
         // Runs through every piece in turn, so it lasts the last piece's
         // delay plus its own telling. See --i in the stylesheet.
-        { name: "ripple", ms: 960, weight: 2, scope: "mark" }
+        { name: "ripple", ms: 860, weight: 2, scope: "mark", grain: true }
     ];
 
     function pick(list) {
@@ -121,8 +146,11 @@
         els.forEach(function (el) {
             el.classList.remove("wiggle-breathe", "wiggle-twitch", "wiggle-bob",
                 "wiggle-settle", "wiggle-rock", "wiggle-shiver", "wiggle-shrug",
-                "wiggle-drift", "wiggle-lean", "wiggle-ripple");
+                "wiggle-drift", "wiggle-slide", "wiggle-lean", "wiggle-ripple");
             el.style.removeProperty("--at");
+            el.style.removeProperty("--ax");
+            el.style.removeProperty("--ay");
+            el.style.removeProperty("--turn");
         });
     }
 
@@ -150,13 +178,51 @@
         return r.bottom > 0 && r.top < window.innerHeight;
     }
 
+    /*  HOW WIDE A PIECE IS, AND WHICH WAY IT RUNS.
+
+        Read off the used width and height rather than the drawn box, because
+        the drawn box has the piece's own resting transform in it -- a gathered
+        satellite is scaled -- and what matters here is how many pixels of the
+        shape there actually are to draw.
+
+        Three pixels is where the measurements turn: at 2.7px wide a sideways
+        half-pixel costs 14% of a piece's solid ink and a turn costs 9%, both
+        of which are nothing. At 1.75px and below it is half the piece.  */
+    function grain(part) {
+        var cs = getComputedStyle(part);
+        var w = parseFloat(cs.width), h = parseFloat(cs.height);
+        var wide = w >= h;
+        return { thin: Math.min(w, h) < 3, ax: wide ? 1 : 0, ay: wide ? 0 : 1 };
+    }
+
     function gesture(mark) {
-        var g = pick(mark.classList.contains("is-open") ? OPEN : GATHERED);
         var target = mark;
-        if (g.scope === "part") {
+        var g;
+
+        if (!mark.classList.contains("is-open")) {
+            // Gathered, there is only the body to move.
+            g = pick(GATHERED);
+        } else {
+            // Open, the piece is drawn FIRST and the gesture second, because
+            // what a piece can be asked to do depends on how wide it is.
             var parts = mark.querySelectorAll("i");
-            target = parts[Math.floor(Math.random() * parts.length)];
-            if (!target) return;
+            var part = parts[Math.floor(Math.random() * parts.length)];
+            if (!part) return;
+            var gr = grain(part);
+            g = pick(gr.thin ? OPEN.filter(function (x) { return x.grain; }) : OPEN);
+
+            if (g.scope === "part") {
+                target = part;
+                target.style.setProperty("--ax", gr.ax);
+                target.style.setProperty("--ay", gr.ay);
+            } else {
+                // The ripple runs through every piece at once and so cannot
+                // decline on any one piece's behalf. Each is told whether it
+                // is wide enough to be turned.
+                Array.prototype.forEach.call(parts, function (p) {
+                    p.style.setProperty("--turn", grain(p).thin ? "0" : "1");
+                });
+            }
         }
 
         // The transform the target is already holding, so the gesture can be a

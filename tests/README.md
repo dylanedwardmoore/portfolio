@@ -53,7 +53,7 @@ correct.
 | `static/css-integrity.test.js` | Braces balance. Every animation names a `@keyframes` that exists; every `@keyframes` is referenced by something. Custom properties are defined or every use has a fallback. No `calc()` in `overflow-clip-margin`. No class is styled that appears in neither markup nor script. |
 | `static/html-structure.test.js` | Charset, viewport, `lang`, one `<h1>`, no skipped heading levels, no duplicate ids, `alt` on every image, `rel="noopener"` on every `target="_blank"`, no inline handlers, decorative marks `aria-hidden`. |
 | `static/generated.test.js` | Re-running `build-portfolio.py` changes nothing. Every mark declares `--mark-w` and `--span`, no part escapes its own box, every mask is in the shape library. |
-| `static/gestures.test.js` | Every small gesture idle.js can play has a rule at the scope its class is put on, can be taken off again, is silenced under reduced motion, and outlives the timer that clears it. The open mark stirs more often than a gathered one. |
+| `static/gestures.test.js` | Every small gesture idle.js can play has a rule at the scope its class is put on, can be taken off again, is silenced under reduced motion, and outlives the timer that clears it. The open mark stirs more often than a gathered one. Nothing offered to a hairline turns it or sends it across its own grain, and every thin piece in the register still runs upright. |
 | `browser/console.test.js` | No console errors, no uncaught exceptions, no 404s — every page at five sizes. |
 | `browser/layout.test.js` | No page scrolls sideways at any of the 38 sizes. The landing page never scrolls. No page scrolls more than 220px past its own content. Navigation controls clear 24px on phones. |
 | `browser/scrollrail.test.js` | The thumb never runs backwards, never leaves its track, reaches both ends, is never completely covered, outranks the section labels, leaves no strain at rest, and survives a mid-scroll resize. |
@@ -110,6 +110,17 @@ over-specific until you know what they caught:
 - **A gesture outlives the timer that clears it.** Clear it early and the class
   comes off mid-flight; the shape snaps home in one frame from wherever it had
   reached. It is the one fault in that file an eye can definitely see.
+- **Nothing offered to a hairline turns it or crosses its grain.** Seven of the
+  register's eighteen shapes are between 1.2 and 2.7px wide, and a bar that
+  narrow is drawn as one or two solid columns of pixels — solid only while its
+  long edges sit on the grid. Measured on the register itself at dpr 2: sending
+  a 1.19px piece half a pixel *sideways* costs it **50%** of its solid ink and
+  spreads it over half again as many pixels; turning it 1.6° costs **32%**.
+  Along its length, or scaled, it loses nothing. From reading distance the
+  difference does not look like a shape moving — it looks like a shape going
+  out, which is exactly what it was reported as. The same movements cost a 6px
+  piece between nothing and 8%, which is why it was invisible until the
+  gestures came down to fractions of a pixel.
 - **The hover ground never turns its axis mid-sweep.** Its two stops are
   percentages along a gradient *line*, so they only mean anything paired with
   the angle that drew it. Turning the line while a band is part way across
