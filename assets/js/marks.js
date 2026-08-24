@@ -95,13 +95,35 @@
         mark.classList.add("anim");
         mark.classList.toggle("is-open", open);
 
-        // Say when the telling is over. The .anim class has to stay on -- it
-        // is what holds the fill-mode that keeps the parts where they landed
-        // -- so it cannot be the signal that a mark is quiet again. idle.js
-        // waits for this before it stirs anything.
+        /*  AND PUT THE STORY AWAY WHEN IT IS OVER.
+
+            .anim is what names the animations; while it is on, every piece is
+            being held at its last keyframe by fill-mode. That looks harmless
+            and is not, because an animation that is merely finished is still
+            THERE -- and anything that takes a piece's animation-name away and
+            gives it back hands the browser a brand new animation, which it
+            starts from the beginning.
+
+            That is what a gesture does. It carries its own animation
+            shorthand, so for as long as it runs the story's name is off the
+            piece; when the gesture ends and the name comes back, the piece
+            replays its whole opening from the start -- it jumps into the body
+            and travels out again, twenty pixels, in the middle of what was
+            supposed to be a one-pixel tick.
+
+            So the class comes off with the telling. Nothing moves when it
+            does: every shut story ends at translate(--gx, --gy) scale(--gs)
+            and every open one at none, which are exactly the two resting
+            rules underneath. The fill was holding the pieces where the
+            stylesheet was already putting them.
+
+            It has to be a class rather than a flag, because it is the class
+            that carries the animation. dataset.settled stays as the signal
+            idle.js waits on.  */
         delete mark.dataset.settled;
         clearTimeout(mark._settle);
         mark._settle = setTimeout(function () {
+            mark.classList.remove("anim");
             mark.dataset.settled = "1";
         }, Math.round((open ? s.open : s.shut) * jitter) * 2 + 400);
     }

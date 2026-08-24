@@ -53,12 +53,12 @@ correct.
 | `static/css-integrity.test.js` | Braces balance. Every animation names a `@keyframes` that exists; every `@keyframes` is referenced by something. Custom properties are defined or every use has a fallback. No `calc()` in `overflow-clip-margin`. No class is styled that appears in neither markup nor script. |
 | `static/html-structure.test.js` | Charset, viewport, `lang`, one `<h1>`, no skipped heading levels, no duplicate ids, `alt` on every image, `rel="noopener"` on every `target="_blank"`, no inline handlers, decorative marks `aria-hidden`. |
 | `static/generated.test.js` | Re-running `build-portfolio.py` changes nothing. Every mark declares `--mark-w` and `--span`, no part escapes its own box, every mask is in the shape library. |
-| `static/gestures.test.js` | Every small gesture idle.js can play has a rule at the scope its class is put on, can be taken off again, is silenced under reduced motion, and outlives the timer that clears it. The open mark stirs more often than a gathered one. Every gesture played on a *piece* travels in whole multiples of `--px` and does nothing else — no rotate, no scale — and holds and jumps rather than sliding; the gathered body still glides. |
+| `static/gestures.test.js` | Every small gesture idle.js can play has a rule at the scope its class is put on, can be taken off again, is silenced under reduced motion, and outlives the timer that clears it. The open mark stirs more often than a gathered one. Every gesture played on a *piece* travels in whole multiples of `--px` and does nothing else — no rotate, no scale — and holds and jumps rather than sliding; the gathered body still glides. Every story ends exactly where the resting rules already put its pieces. |
 | `browser/console.test.js` | No console errors, no uncaught exceptions, no 404s — every page at five sizes. |
 | `browser/layout.test.js` | No page scrolls sideways at any of the 38 sizes. The landing page never scrolls. No page scrolls more than 220px past its own content. Navigation controls clear 24px on phones. |
 | `browser/scrollrail.test.js` | The thumb never runs backwards, never leaves its track, reaches both ends, is never completely covered, outranks the section labels, leaves no strain at rest, and survives a mid-scroll resize. |
 | `browser/hoverfill.test.js` | The spring is armed for a fine pointer only — never under reduced motion, never for touch — and the ground still arrives where it is not. For all six kinds of filling link: the sweep covers, leaves nothing behind, opens at the point the pointer crossed, follows the direction of travel, and never turns its gradient axis mid-sweep. |
-| `browser/marks.test.js` | Every mark has parts, every mask actually loads (fetched, not just computed), declared width matches occupied width, Ventures is open at the top, exactly one mark open at a time. A click plays a gesture and leaves nothing behind, changes no mark's state, and is never dressed as a control; a gathered mark moves as one body and an open one moves a piece; the idle loop still stirs on its own. |
+| `browser/marks.test.js` | Every mark has parts, every mask actually loads (fetched, not just computed), declared width matches occupied width, Ventures is open at the top, exactly one mark open at a time. A click plays a gesture and leaves nothing behind, changes no mark's state, and is never dressed as a control; a gathered mark moves as one body and an open one moves a piece; no piece ever travels further than a gesture can take it; the idle loop still stirs on its own. |
 | `browser/transitions.test.js` | No `view-transition-name` is claimed twice in one document. The cascade always lets go. Landing → portfolio → back leaves both working. The three redirect pages really do redirect. |
 | `browser/motion.test.js` | Under `prefers-reduced-motion`, nothing animates anywhere, clicking a mark does nothing, and the rail leaves no strain. |
 
@@ -131,6 +131,20 @@ over-specific until you know what they caught:
   movements cost the *gathered* body between nothing and 5%, which is why it
   keeps its smooth repertoire and why this was invisible until the gestures
   came down to fractions of a pixel.
+- **A gesture never sends a piece back into the body.** A story runs with
+  `animation-fill-mode: both`, so while `.anim` is on, every piece is held at
+  its last keyframe by an animation that has *finished but is still there*. A
+  gesture carries its own `animation` shorthand, so while it runs the story's
+  name is off the piece — and when the gesture ends and the name comes back,
+  the browser sees a **new** animation and starts it from the beginning. The
+  piece replayed its whole opening: into the body and out again, up to 24px, in
+  the middle of a one-pixel tick. On the register it read as the small shapes
+  disappearing into the big one. Nothing about it looks wrong in the source —
+  the class goes on, the class comes off, the gesture is one pixel — so it is
+  measured instead. The test has to *scroll a section in* first: at the top of
+  the page the first mark is open without ever having played anything, so there
+  is nothing to replay, and written the obvious way the test passes against the
+  bug it is named after.
 - **The hover ground never turns its axis mid-sweep.** Its two stops are
   percentages along a gradient *line*, so they only mean anything paired with
   the angle that drew it. Turning the line while a band is part way across

@@ -366,6 +366,94 @@ describe("a mark answers a click", () => {
         } finally { await p.__close(); }
     });
 
+    test("and never sends a piece back into the body", async () => {
+        /*  THE BUG THIS IS HERE FOR, which shipped and was reported.
+
+            A story runs with animation-fill-mode: both, so while .anim is on,
+            every piece is held at its last keyframe by an animation that has
+            finished but is still there. A gesture carries its own animation
+            shorthand, so for as long as it runs the story's name is off the
+            piece -- and when the gesture ends and the name comes back, the
+            browser sees a NEW animation and starts it from the beginning.
+
+            The piece replayed its whole opening: it jumped into the body and
+            travelled out again, up to twenty-four pixels, in the middle of
+            what was meant to be a one-pixel tick. On the register it read as
+            the small shapes disappearing into the big one.
+
+            THE SECTION HAS TO BE SCROLLED TO, and that is most of what makes
+            this test work. At the top of the page the first mark is open
+            without ever having PLAYED anything -- the observer takes that
+            state up rather than performing it -- so there is no finished
+            animation sitting on it and nothing to replay. Written the obvious
+            way, against whichever mark is open on load, this passes against
+            the bug it is named after.  */
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            const watched = [];
+            for (const name of ["industry", "research"]) {
+                await p.evaluate((n) => {
+                    document.querySelector(`.section-index[data-mark="${n}"]`)
+                        .closest(".section").scrollIntoView();
+                }, name);
+                // Long enough for the story to run and for marks.js to call it
+                // settled, which is when the class it is held by comes off.
+                await p.waitForTimeout(2600);
+
+                watched.push(...await p.evaluate(async (n) => {
+                    const mark = document.querySelector(`.section-index[data-mark="${n}"]`);
+                    if (!mark.classList.contains("is-open")) return [];
+                    const parts = [...mark.querySelectorAll("i")];
+                    const at = (el) => {
+                        const m = getComputedStyle(el).transform.match(/matrix\(([^)]+)\)/);
+                        if (!m) return { x: 0, y: 0 };
+                        const v = m[1].split(",").map(Number);
+                        return { x: v[4], y: v[5] };
+                    };
+                    const rest = parts.map(at);
+                    const out = [];
+                    for (let k = 0; k < 8; k++) {
+                        mark.click();
+                        const played = [mark, ...parts]
+                            .map(el => [...el.classList].find(c => c.startsWith("wiggle-")))
+                            .filter(Boolean)[0] || "(none)";
+                        const t0 = performance.now();
+                        let far = 0;
+                        await new Promise(done => {
+                            const tick = () => {
+                                parts.forEach((el, i) => {
+                                    const a = at(el);
+                                    far = Math.max(far,
+                                        Math.hypot(a.x - rest[i].x, a.y - rest[i].y));
+                                });
+                                // Past the longest gesture and its timer's slack.
+                                if (performance.now() - t0 > 1300) return done();
+                                requestAnimationFrame(tick);
+                            };
+                            tick();
+                        });
+                        out.push({ mark: n, played, far: +far.toFixed(2) });
+                        await new Promise(r => setTimeout(r, 120));
+                    }
+                    return out;
+                }, name));
+            }
+
+            assert.ok(watched.length >= 8,
+                `only ${watched.length} gestures were watched -- neither section `
+                + "took the header, so nothing was actually tested");
+            /*  One device pixel on the diagonal is the most any of these can
+                travel. Three is loose enough to survive a fractional device
+                pixel ratio, and tight enough that a piece heading back into
+                the body -- eight pixels at the very least, twenty-four at
+                worst -- cannot hide under it.  */
+            const ran = watched.filter(w => w.far > 3);
+            assert.deepEqual(ran, [],
+                "a piece travelled far further than a gesture can take it, which "
+                + "means it is replaying its story rather than fidgeting");
+        } finally { await p.__close(); }
+    });
+
     test("but it is never dressed as a control", async () => {
         const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
         try {

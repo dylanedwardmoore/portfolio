@@ -320,6 +320,36 @@ describe("every gesture idle.js can play", () => {
             "a story no longer leaves its pieces at none when it opens a mark");
     });
 
+    test("and every story ends exactly where the resting rules already put it", () => {
+        /*  marks.js takes .anim off once a telling is over, and it has to,
+            because an animation that is merely finished is still there: take
+            its name away and give it back -- which is what every gesture does
+            -- and the browser starts it again from the beginning. That shipped,
+            and read as the small shapes diving back into the big one.
+
+            Dropping the class is only safe while the fill it removes was
+            holding each piece exactly where the stylesheet puts it anyway.
+            Every open story must therefore end at none, which is the rule
+            above, and every shut story at the gathered transform, which is
+            this one. Change either end and marks will flinch when they
+            settle -- once per section, on every scroll.  */
+        const RESTING = "translate(var(--gx), var(--gy)) scale(var(--gs))";
+        // The lead gathers in place, so its --gx and --gy are zero and its
+        // story is written as the scale alone.
+        const LEAD = "scale(var(--gs))";
+        const wrong = RULES
+            .filter(r => /^mark-.*-shut$/.test(r.keyframes || "")
+                && /\b100%/.test(r.selector))
+            .filter(r => {
+                const t = (r.decls.transform || "").replace(/\s+/g, " ").trim();
+                return t !== RESTING && t !== LEAD;
+            })
+            .map(r => `${r.keyframes} ends at ${r.decls.transform}`);
+        assert.deepEqual(wrong, [],
+            "a story no longer leaves its pieces where the gathered rule puts "
+            + "them, so taking .anim off at the end of it will move something");
+    });
+
     test("outlives the timer that clears it", () => {
         /*  idle.js holds a gesture for its declared ms and then puts the mark
             back to rest. Shorter than the animation and the class comes off
