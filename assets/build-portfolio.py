@@ -148,7 +148,7 @@ def mark_parts(tone):
 
 
 SECTIONS = [
-    ("Ventures", "sea", "Companies I have helped build.", [
+    ("Ventures", "sea", "Companies I have helped found and build.", [
         ("2023 – present", "Memcara",
          "Cofounder and Chief AI Officer of Memcara, building AI-enabled tools for "
          "caregiving in long-term care facilities. I joined as a researcher in 2023 "
