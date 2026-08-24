@@ -58,7 +58,7 @@ correct.
 | `browser/layout.test.js` | No page scrolls sideways at any of the 38 sizes. The landing page never scrolls. No page scrolls more than 220px past its own content. Navigation controls clear 24px on phones. |
 | `browser/scrollrail.test.js` | The thumb never runs backwards, never leaves its track, reaches both ends, is never completely covered, outranks the section labels, leaves no strain at rest, and survives a mid-scroll resize. |
 | `browser/hoverfill.test.js` | The spring is armed for a fine pointer only — never under reduced motion, never for touch — and the ground still arrives where it is not. For all six kinds of filling link: the sweep covers, leaves nothing behind, opens at the point the pointer crossed, follows the direction of travel, and never turns its gradient axis mid-sweep. |
-| `browser/marks.test.js` | Every mark has parts, every mask actually loads (fetched, not just computed), declared width matches occupied width, Ventures is open at the top, exactly one mark open at a time. A click plays a gesture and leaves nothing behind, changes no mark's state, and is never dressed as a control; a gathered mark moves as one body and an open one moves a piece; no piece ever travels further than a gesture can take it; the idle loop still stirs on its own. Crossing any link stirs its own section's mark, from the repertoire that fits that mark's state, and a crossing never interrupts where a click always does. Scrolling strains the marks that are moving and never the pinned one, comes all the way home, leaves a gesture under way untouched, and the page landing at an end is felt by every mark. |
+| `browser/marks.test.js` | Every mark has parts, every mask actually loads (fetched, not just computed), declared width matches occupied width, Ventures is open at the top, exactly one mark open at a time. A click plays a gesture and leaves nothing behind, changes no mark's state, and is never dressed as a control; a gathered mark moves as one body and an open one moves a piece; no piece ever travels further than a gesture can take it; the idle loop still stirs on its own. Crossing any link stirs its own section's mark, from the repertoire that fits that mark's state, and a crossing never interrupts where a click always does. Scrolling strains every mark on screen including the pinned one, comes all the way home, leaves a gesture under way untouched, and the page landing at an end lands on every mark. |
 | `browser/transitions.test.js` | No `view-transition-name` is claimed twice in one document. The cascade always lets go. Landing → portfolio → back leaves both working. The three redirect pages really do redirect. |
 | `browser/motion.test.js` | Under `prefers-reduced-motion`, nothing animates anywhere, neither clicking a mark nor crossing a link does anything, scrolling strains nothing, and the rail leaves no strain. |
 
@@ -142,12 +142,16 @@ over-specific until you know what they caught:
   scroll carries `scale: 0.986 1.025` and a `transform` of its own at the same
   moment, and the gesture's clock advances through it untouched. Two static
   assertions hold the halves apart.
-- **A pinned mark is exempt, and it is measured over a whole run.** A mark
-  strained a moment before it takes the header is still relaxing for a few
-  hundred milliseconds — correctly, since a spring has memory — so a snapshot
-  that classifies by where a mark is *now* calls that a pinned mark under
-  strain and is wrong. The test scrolls in steps too small to change which
-  section owns the header, and asserts only about a mark pinned throughout.
+- **The pinned mark strains too, and it is measured over a whole run.** It was
+  exempt at first, on the argument that a label stuck at the sticky line is not
+  moving relative to the screen and has nothing to be in arrears of — correct
+  about the local physics and wrong about the page, since what is moving is the
+  register and that is the one mark the reader is looking straight at. Either
+  way the test has to scroll in steps too small to change which section owns
+  the header and assert only about a mark pinned *throughout*: a mark strained
+  a moment before it takes the header is still relaxing for a few hundred
+  milliseconds — correctly, since a spring has memory — so a snapshot that
+  classifies by where a mark is *now* gets the wrong answer about it.
 - **A gesture never sends a piece back into the body.** A story runs with
   `animation-fill-mode: both`, so while `.anim` is on, every piece is held at
   its last keyframe by an animation that has *finished but is still there*. A

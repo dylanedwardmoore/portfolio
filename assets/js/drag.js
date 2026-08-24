@@ -25,19 +25,25 @@
 
     A HARD FLICK INTO EITHER END gets an impulse of its own on top of that,
     because the page landing is a different event from the page slowing: it is
-    the whole register stopping at once rather than content sliding past. That
-    is the one time the pinned mark feels anything (see below), and it is
+    the whole register stopping at once rather than content sliding past. It is
     delivered against the direction of travel, which is what an impact is.
     Leaning on the wheel at an end -- trying to go somewhere there is nothing
     left to go -- pulls the other way instead, WITH the hand, because that is a
     haul rather than a collision.
 
-    THE PINNED MARK FEELS NOTHING, the rest of the time. Its label is stuck at
-    the sticky line, so while its section owns the header the mark is not
-    moving relative to the screen at all and there is nothing for it to be in
-    arrears of. Straining it would be inventing motion that is not happening --
-    and it is the one mark the reader is looking straight at. It still relaxes
-    whatever it was carrying when it arrived.
+    THE PINNED MARK FEELS IT TOO, and it did not at first. Its label is stuck
+    at the sticky line, so strictly it is not moving relative to the screen and
+    has nothing to be in arrears of -- which is the argument that exempted it,
+    and it is correct about the local physics and wrong about the page. What is
+    moving is the register, the mark is part of the register, and it is the one
+    mark the reader is looking straight at while it happens. Exempting it took
+    the effect out of exactly the place it was meant to be seen and left it
+    only on the marks in the reader's periphery.
+
+    So every mark on the page answers the scroll. The thing that made the
+    exemption sound right -- that a stuck label does not move -- is the same
+    thing that makes it read well now: the mark is the one part of the header
+    that is allowed to acknowledge that the page is going somewhere.
 
     IT DOES NOT TOUCH THE GESTURES, and that is the whole reason it is written
     this way. The small movements in idle.js are animations on `transform`, and
@@ -168,18 +174,10 @@
         return cap > 0 ? cap * s / (Math.abs(s) + cap) : 0;
     }
 
-    // What the stylesheet falls back to where the bar has not been measured.
-    function stickyTop() {
-        var v = parseFloat(getComputedStyle(document.documentElement)
-            .getPropertyValue("--sticky-top"));
-        return v > 0 ? v : 48;
-    }
-
     var state = [];
     Array.prototype.forEach.call(marks, function (mark) {
         state.push({
             mark: mark,
-            section: mark.closest ? mark.closest(".section") : null,
             omega: omegaOf(mark),
             x: 0,
             vel: 0,
@@ -207,8 +205,9 @@
         requestAnimationFrame(frame);
     }
 
-    /* Delivered to every mark, pinned included. Both the callers are the page
-       itself moving or refusing to, rather than content going past. */
+    /* An impulse on top of whatever the scroll is already doing. Both callers
+       are the page itself stopping or refusing to move, rather than content
+       going past, which is why it arrives all at once instead of as arrears. */
     function everyone(force) {
         for (var i = 0; i < state.length; i++) state[i].push += force;
         start();
@@ -226,16 +225,7 @@
         var v = (y - wasY) / dt;
         wasY = y;
 
-        var top = stickyTop();
-        var i, s, r;
-        var pinned = [];
-        for (i = 0; i < state.length; i++) {
-            r = state[i].section && state[i].section.getBoundingClientRect();
-            // Its label is stuck exactly while its section is astride the
-            // sticky line, which is the same test the register uses to decide
-            // who owns the header.
-            pinned.push(Boolean(r) && r.top <= top && r.bottom > top);
-        }
+        var i, s;
 
         // THE PAGE LANDING. Caught on the frame it arrives rather than by
         // watching for a scroll that stopped, because at the ends there is no
@@ -257,12 +247,8 @@
             if (Math.abs(v) < STOPPED) {
                 // Nothing is being carried, so nothing is behind anything.
                 s.lag = 0;
-            } else if (!pinned[i]) {
-                // A pinned mark is not moving relative to the screen and is in
-                // arrears of nothing. It keeps any impulse it was handed.
-                s.lag += (v * K_LAG - s.lag) * 0.4;
             } else {
-                s.lag = 0;
+                s.lag += (v * K_LAG - s.lag) * 0.4;
             }
             if (Math.abs(s.push) < QUIET) s.push = 0;
             if (Math.abs(s.lag) < QUIET) s.lag = 0;
@@ -334,9 +320,9 @@
     window.addEventListener("scroll", start, { passive: true });
 
     /* LEANING ON AN END. A haul rather than a collision: it pulls the marks
-       WITH the hand, and it reaches the pinned one too, because at the ends
-       nothing is sliding past anything -- the whole register is being leaned
-       on. */
+       WITH the hand. At an end nothing is sliding past anything and there is
+       no velocity to be in arrears of, so without this the one gesture that is
+       purely about wanting to go further would produce nothing at all. */
     window.addEventListener("wheel", function (e) {
         var y = window.pageYOffset || 0;
         if (!((y <= 0 && e.deltaY < 0) || (y >= maxScroll() - 0.5 && e.deltaY > 0))) {

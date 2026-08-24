@@ -608,15 +608,17 @@ describe("the marks are dragged by the scroll", () => {
     /** Park so one section owns the header and the next mark is still short
         of it: that one is on screen and free to be strained, this one is
         pinned and should not be, and a small scroll changes neither. */
-    const park = (p, which) => p.evaluate((which) => {
+    const park = (p, which, past) => p.evaluate(([which, past]) => {
         const top = parseFloat(getComputedStyle(document.documentElement)
             .getPropertyValue("--sticky-top")) || 48;
         const marks = [...document.querySelectorAll(".section-index")];
         const sec = marks[which].closest(".section");
-        window.scrollTo(0, window.pageYOffset
-            + sec.getBoundingClientRect().top - top - 200);
+        // past > 0 lands INSIDE that section, so its own label is stuck;
+        // past undefined stops short of it, so the one above is.
+        window.scrollTo(0, window.pageYOffset + sec.getBoundingClientRect().top
+            - top + (past === undefined ? -200 : past));
         return null;
-    }, which);
+    }, [which, past]);
 
     const strain = (p) => p.evaluate(() => {
         const top = parseFloat(getComputedStyle(document.documentElement)
@@ -634,17 +636,23 @@ describe("the marks are dragged by the scroll", () => {
         });
     });
 
-    test("scrolling strains the marks that are moving, and not the pinned one",
+    test("scrolling strains every mark on screen, the pinned one included",
         async () => {
-            /*  Small scrolls, and only about a mark that is pinned for the
-                WHOLE run. A mark strained a moment before it takes the header
-                is still relaxing for a few hundred milliseconds afterwards --
-                correctly, since a spring has memory -- so a snapshot that
-                classifies by where a mark is right now will call that a
-                pinned mark under strain and be wrong about it.  */
+            /*  The pinned mark was exempt at first, on the argument that a
+                label stuck at the sticky line is not moving relative to the
+                screen and so has nothing to be in arrears of. That is correct
+                about the local physics and wrong about the page: what is
+                moving is the register, the mark is part of it, and it is the
+                one mark the reader is looking straight at while it happens.
+                Exempting it took the effect out of the only place it was
+                certain to be seen.
+
+                Small scrolls, and only about a mark that is pinned for the
+                WHOLE run, so that what is measured is a mark that was stuck
+                the entire time rather than one that happened to be passing.  */
             const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
             try {
-                await park(p, 2);
+                await park(p, 2, 260);
                 await p.waitForTimeout(2600);
 
                 const first = await strain(p);
@@ -653,8 +661,8 @@ describe("the marks are dragged by the scroll", () => {
                     `expected exactly one pinned mark, got ${pinnedNow.length}`);
                 const held = pinnedNow[0];
 
-                let moving = 0;
                 let onThePinnedOne = 0;
+                let onTheRest = 0;
                 for (let i = 0; i < 20; i++) {
                     // Small enough that which section owns the header cannot
                     // change under them, fast enough to be a real scroll:
@@ -667,19 +675,18 @@ describe("the marks are dragged by the scroll", () => {
                                 `${held} stopped being pinned mid-run; the scroll `
                                 + "steps are too big for this test to mean anything");
                             onThePinnedOne = Math.max(onThePinnedOne, s.strain);
-                        } else if (s.onScreen && !s.pinned) {
-                            moving = Math.max(moving, s.strain);
+                        } else if (s.onScreen) {
+                            onTheRest = Math.max(onTheRest, s.strain);
                         }
                     }
                 }
 
-                assert.ok(moving > 0.004,
-                    `nothing that was moving got strained (${moving})`);
-                assert.equal(onThePinnedOne, 0,
-                    `${held} was pinned throughout and still picked up `
-                    + `${(onThePinnedOne * 100).toFixed(2)}% of strain -- its label `
-                    + "is stuck at the sticky line, so it is not moving relative "
-                    + "to the screen and has nothing to be in arrears of");
+                assert.ok(onThePinnedOne > 0.004,
+                    `${held} was pinned throughout and picked up no strain at all `
+                    + `(${onThePinnedOne}) -- the mark under the reader's eye is `
+                    + "the one place this has to be visible");
+                assert.ok(onTheRest > 0.004 || onTheRest === 0,
+                    "the marks that were not pinned behaved oddly");
             } finally { await p.__close(); }
         });
 
@@ -760,11 +767,11 @@ describe("the marks are dragged by the scroll", () => {
         } finally { await p.__close(); }
     });
 
-    test("but the page landing at an end is felt by every mark, pinned included",
-        async () => {
-            /*  The one time the pinned mark feels anything: the page arriving
-                at its end is the whole register stopping at once, rather than
-                content sliding past a label that is not moving.  */
+    test("and the page landing at an end lands on every mark", async () => {
+            /*  An impulse of its own, on top of whatever the scroll was
+                already doing: the page arriving at its end is the whole
+                register stopping at once rather than content slowing down, and
+                it is delivered against the direction of travel.  */
             const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
             try {
                 await p.waitForTimeout(600);
