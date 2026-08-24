@@ -210,6 +210,95 @@ describe("the fill list is stated once, four times over", () => {
     });
 });
 
+describe("the sticky ground reaches as far as the rows do", () => {
+    /*  At phone widths the section label sticks and the rows pass directly
+        beneath it, so its opaque ground is the only thing stopping them
+        showing through. The rows are pulled out past the register's measure on
+        either side; the label's ground was not, and for nine pixels between
+        the scroll rail and the label there was nothing covering them. Every
+        row rule that went under the label came out the other side of it -- at
+        ninety-seven of two hundred and fourteen scroll positions on a phone,
+        measured.
+
+        It was not a wrong number. It was the same number written twice, in two
+        rules, and only one of them changed. So it is written once now, and
+        this is what keeps it that way: both rules have to read --row-bleed,
+        and neither may go back to spelling the number out.  */
+    const sheet = read("assets/css/portfolio.css");
+    const { rules } = parseCss(sheet);
+
+    const horizontals = (r) => [
+        r.decls["margin"], r.decls["margin-left"], r.decls["margin-right"],
+        r.decls["padding"], r.decls["padding-left"], r.decls["padding-right"],
+    ].filter(Boolean).join(" ");
+
+    test("both the rows and the sticky label read --row-bleed", () => {
+        const wants = [
+            ["the rows", (r) => r.selector === ".entry" && !r.at.length],
+            ["the sticky label", (r) => r.selector === ".section-label"
+                && r.at.some(a => /max-width/.test(a))],
+        ];
+        for (const [what, pick] of wants) {
+            const found = rules.filter(r => !r.keyframes && pick(r));
+            assert.equal(found.length, 1,
+                `expected one rule for ${what}, found ${found.length}`);
+            assert.ok(/var\(\s*--row-bleed/.test(horizontals(found[0])),
+                `${what} no longer takes its horizontal inset from --row-bleed, `
+                + "so the two can drift apart again");
+        }
+    });
+
+    test("and neither writes the number out instead", () => {
+        /*  The shorthands have to be split at the top level, not on whitespace:
+            `margin: calc(var(--u) * 0.25) 0 calc(var(--u) * 0.6)` is three
+            values, its horizontal one is the zero in the middle, and a naive
+            split reports the bottom margin as a horizontal inset.  */
+        const sides = (value) => {
+            const parts = [];
+            let depth = 0, cur = "";
+            for (const c of value) {
+                if (c === "(") depth++;
+                if (c === ")") depth--;
+                if (/\s/.test(c) && depth === 0) {
+                    if (cur) { parts.push(cur); cur = ""; }
+                    continue;
+                }
+                cur += c;
+            }
+            if (cur) parts.push(cur);
+            // top | top,horizontal | top,horizontal,bottom | t,r,b,l
+            if (parts.length === 1) return parts;
+            if (parts.length === 2 || parts.length === 3) return [parts[1]];
+            return [parts[1], parts[3]];
+        };
+
+        const guilty = [];
+        for (const r of rules) {
+            if (r.keyframes) continue;
+            if (r.selector !== ".entry" && r.selector !== ".section-label") continue;
+            for (const side of ["margin-left", "margin-right",
+                                "padding-left", "padding-right"]) {
+                const v = r.decls[side];
+                if (v && /var\(\s*--u\b/.test(v)) {
+                    guilty.push(`${r.selector} { ${side}: ${v} }`);
+                }
+            }
+            for (const short of ["margin", "padding"]) {
+                const v = r.decls[short];
+                if (!v) continue;
+                for (const h of sides(v)) {
+                    if (/var\(\s*--u\b/.test(h)) {
+                        guilty.push(`${r.selector} { ${short}: ${v} }`);
+                    }
+                }
+            }
+        }
+        assert.deepEqual(guilty, [],
+            "these state a horizontal inset in terms of --u rather than "
+            + "--row-bleed, which is how the ground and the rows drifted apart");
+    });
+});
+
 describe("selectors point at real things", () => {
     test("every class the stylesheets target exists in markup or in a script", () => {
         const known = new Set([...markupClasses(), ...scriptClasses()]);

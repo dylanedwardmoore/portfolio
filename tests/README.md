@@ -50,12 +50,12 @@ correct.
 | File | Covers |
 | --- | --- |
 | `static/assets.test.js` | Every `href`, `src` and `url()` resolves on disk. One cache stamp per page, the same one on all five, and the generator agrees with it. The `.ico` is a real multi-size icon. |
-| `static/css-integrity.test.js` | Braces balance. Every animation names a `@keyframes` that exists; every `@keyframes` is referenced by something. Custom properties are defined or every use has a fallback. No `calc()` in `overflow-clip-margin`. No class is styled that appears in neither markup nor script. |
+| `static/css-integrity.test.js` | The rows and the sticky label both take their horizontal inset from `--row-bleed`, and neither writes the number out. Braces balance. Every animation names a `@keyframes` that exists; every `@keyframes` is referenced by something. Custom properties are defined or every use has a fallback. No `calc()` in `overflow-clip-margin`. No class is styled that appears in neither markup nor script. |
 | `static/html-structure.test.js` | Charset, viewport, `lang`, one `<h1>`, no skipped heading levels, no duplicate ids, `alt` on every image, `rel="noopener"` on every `target="_blank"`, no inline handlers, decorative marks `aria-hidden`. |
 | `static/generated.test.js` | Re-running `build-portfolio.py` changes nothing. Every mark declares `--mark-w` and `--span`, no part escapes its own box, every mask is in the shape library. |
 | `static/gestures.test.js` | Every small gesture idle.js can play has a rule at the scope its class is put on, can be taken off again, is silenced under reduced motion, and outlives the timer that clears it. The open mark stirs more often than a gathered one. Every gesture played on a *piece* travels in whole multiples of `--px` and does nothing else — no rotate, no scale — and holds and jumps rather than sliding; the gathered body still glides. Every story ends exactly where the resting rules already put its pieces. The scroll drag is carried on `scale` and no gesture writes that property. |
 | `browser/console.test.js` | No console errors, no uncaught exceptions, no 404s — every page at five sizes. |
-| `browser/layout.test.js` | No page scrolls sideways at any of the 38 sizes. The landing page never scrolls. No page scrolls more than 220px past its own content. Navigation controls clear 24px on phones. |
+| `browser/layout.test.js` | No page scrolls sideways at any of the 38 sizes. The landing page never scrolls. No page scrolls more than 220px past its own content. Navigation controls clear 24px on phones. At narrow widths the sticky section label's ground reaches at least as far as the rows that pass beneath it, nothing sticks out beside it as the register scrolls, and it stays clear of the scroll rail. |
 | `browser/scrollrail.test.js` | The thumb never runs backwards, never leaves its track, reaches both ends, is never completely covered, outranks the section labels, leaves no strain at rest, and survives a mid-scroll resize. |
 | `browser/hoverfill.test.js` | The spring is armed for a fine pointer only — never under reduced motion, never for touch — and the ground still arrives where it is not. For all six kinds of filling link: the sweep covers, leaves nothing behind, opens at the point the pointer crossed, follows the direction of travel, and never turns its gradient axis mid-sweep. |
 | `browser/marks.test.js` | Every mark has parts, every mask actually loads (fetched, not just computed), declared width matches occupied width, Ventures is open at the top, exactly one mark open at a time. A click plays a gesture and leaves nothing behind, changes no mark's state, and is never dressed as a control; a gathered mark moves as one body and an open one moves a piece; no piece ever travels further than a gesture can take it; the idle loop still stirs on its own. Crossing any link stirs its own section's mark, from the repertoire that fits that mark's state, and a crossing never interrupts where a click always does. Scrolling strains every mark on screen including the pinned one, comes all the way home, leaves a gesture under way untouched, and the page landing at an end lands on every mark. |
@@ -131,6 +131,20 @@ over-specific until you know what they caught:
   movements cost the *gathered* body between nothing and 5%, which is why it
   keeps its smooth repertoire and why this was invisible until the gestures
   came down to fractions of a pixel.
+- **The sticky ground reaches as far as the rows do.** At phone widths the
+  section label sticks and the rows pass directly beneath it, so its opaque
+  ground is the only thing stopping them showing through. The rows are pulled
+  out past the register's measure on either side; the label's ground was not,
+  so for nine pixels between the scroll rail and the label there was nothing
+  covering them, and every row rule that went under the label came out the
+  other side of it — at **97 of 214** scroll positions on a phone, up to 111 of
+  255 off paper. It was not a wrong number but the same number written twice,
+  in two rules, with only one of them changed; it is `--row-bleed` now, and two
+  static assertions keep it that way. The browser side checks the geometry at
+  every size and the rendered strip at one, because geometry that is right and
+  pixels that are wrong is the whole reason that tier exists — and separately
+  that the widened ground has not crept over the scroll rail, which is exactly
+  the sort of thing a fix like this causes.
 - **The scroll drag is on `scale`, not `transform`.** Two things deform the
   same mark: the drag as it is scrolled past, and the small gestures. On the
   same property one would have to fight the other — a gesture cancelled by a

@@ -141,6 +141,132 @@ describe("no page scrolls past its own content", () => {
     }
 });
 
+const PORTFOLIO = PAGES.find(p => p.name === "portfolio");
+
+describe("the sticky section label covers what passes under it", () => {
+    /*  THE BUG THIS IS HERE FOR, which shipped and was reported.
+
+        At phone widths the label sticks and the rows pass directly beneath it,
+        so its opaque ground is the only thing stopping them showing through.
+        The rows are pulled out past the register's measure by --row-bleed on
+        either side; the label's ground was not, so for nine pixels between the
+        scroll rail and the label there was nothing covering them, and every row
+        rule that went under the label came out the other side of it. Measured
+        before the fix at 390px wide: ninety-seven of two hundred and fourteen
+        scroll positions had ink in that strip, up to 111 of 255 off paper.
+
+        Geometry first, because it is cheap and it is the actual invariant, and
+        then the rendered pixels at one size, because geometry that is right and
+        pixels that are wrong is the whole reason this file exists.  */
+
+    test("its ground reaches at least as far as the rows do, at every phone size",
+        async () => {
+            const bad = [];
+            for (const vp of DEVICES.filter(d => d.phone).concat(
+                DEVICES.filter(d => !d.phone))) {
+                const p = await ctx.openPage(PORTFOLIO, vp);
+                try {
+                    const off = await p.evaluate(() => {
+                        const out = [];
+                        const narrow = window.matchMedia("(max-width: 859px)").matches;
+                        if (!narrow) return out;   // the label does not overlap rows here
+                        for (const sec of document.querySelectorAll(".section")) {
+                            const label = sec.querySelector(".section-label");
+                            const row = sec.querySelector(".entry");
+                            if (!label || !row) continue;
+                            const L = label.getBoundingClientRect();
+                            const R = row.getBoundingClientRect();
+                            if (L.left > R.left + 0.5 || L.right < R.right - 0.5) {
+                                out.push(`${L.left.toFixed(1)}..${L.right.toFixed(1)}`
+                                    + ` vs rows ${R.left.toFixed(1)}..${R.right.toFixed(1)}`);
+                            }
+                        }
+                        return out;
+                    });
+                    for (const o of off) bad.push(`${vp.name}: ${o}`);
+                } finally { await p.__close(); }
+            }
+            assert.deepEqual(bad, [],
+                "the sticky ground is narrower than the rows that pass under it, "
+                + "so their rules show beside it as they go by");
+        });
+
+    test("and nothing shows in the strip beside it as the register scrolls",
+        async () => {
+            const phone = DEVICES.find(d => d.phone && d.width <= 380)
+                || DEVICES.find(d => d.phone);
+            const p = await ctx.openPage(PORTFOLIO, phone);
+            try {
+                const dirty = await p.evaluate(async () => {
+                    const shot = () => new Promise(res => res(null));
+                    const out = [];
+                    const end = document.documentElement.scrollHeight;
+                    for (let y = 300; y < Math.min(end - window.innerHeight, 4200);
+                            y += 47) {
+                        window.scrollTo(0, y);
+                        await new Promise(r => requestAnimationFrame(r));
+                        await new Promise(r => requestAnimationFrame(r));
+                        const stuck = [...document.querySelectorAll(".section-label")]
+                            .map(l => ({ l, r: l.getBoundingClientRect() }))
+                            .find(o => o.r.top < 90 && o.r.bottom > 30);
+                        if (!stuck) continue;
+                        const railR = document.querySelector(".scrollrail")
+                            .getBoundingClientRect().right;
+                        // Anything laid out between the rail and the label's
+                        // ground, over the label's own vertical span, is
+                        // something the ground has failed to cover.
+                        for (const row of document.querySelectorAll(".entry")) {
+                            const r = row.getBoundingClientRect();
+                            if (r.bottom <= stuck.r.top || r.top >= stuck.r.bottom) continue;
+                            if (r.left < stuck.r.left - 0.5) {
+                                out.push(`y${y}: a row reaches to ${r.left.toFixed(1)}, `
+                                    + `the ground only to ${stuck.r.left.toFixed(1)}`);
+                            }
+                            if (r.right > stuck.r.right + 0.5) {
+                                out.push(`y${y}: a row reaches to ${r.right.toFixed(1)}, `
+                                    + `the ground only to ${stuck.r.right.toFixed(1)}`);
+                            }
+                        }
+                    }
+                    return [...new Set(out)].slice(0, 8);
+                });
+                assert.deepEqual(dirty, [],
+                    `at ${phone.name}, rows are passing under the sticky label and `
+                    + "sticking out past its ground");
+            } finally { await p.__close(); }
+        });
+
+    test("and the scroll rail is still clear of it", async () => {
+        /*  The ground was widened towards the rail's lane. It stops short of
+            it at every size, and the rail outranks it by z-index in any case --
+            but a white box in front of the green bar is exactly the sort of
+            thing a fix like this causes, so it is measured rather than
+            reasoned about.  */
+        const bad = [];
+        for (const vp of DEVICES.filter(d => d.phone)) {
+            const p = await ctx.openPage(PORTFOLIO, vp);
+            try {
+                const seen = await p.evaluate(() => {
+                    const rail = document.querySelector(".scrollrail");
+                    const label = document.querySelector(".section-label");
+                    const R = rail.getBoundingClientRect();
+                    const L = label.getBoundingClientRect();
+                    return {
+                        clear: +(L.left - R.right).toFixed(2),
+                        railZ: Number(getComputedStyle(rail).zIndex),
+                        labelZ: Number(getComputedStyle(label).zIndex),
+                    };
+                });
+                if (seen.clear < 0 && !(seen.railZ > seen.labelZ)) {
+                    bad.push(`${vp.name}: the label reaches into the rail's lane `
+                        + `by ${(-seen.clear).toFixed(2)}px and does not sit under it`);
+                }
+            } finally { await p.__close(); }
+        }
+        assert.deepEqual(bad, [], "the sticky ground is covering the scroll rail");
+    });
+});
+
 describe("touch targets on phones", () => {
     /*  24px is the WCAG 2.2 AA minimum for a target that is not inline in a
         sentence. The register's entry links ARE inline in prose, and are
