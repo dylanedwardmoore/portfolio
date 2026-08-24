@@ -77,14 +77,13 @@
 
     /* The rail's spring, wound looser. The rail's 0.6 is right for a cant
        tracking a hand, where an overshoot is a wobble; here the overshoot is
-       the point, so 0.42, which carries about a quarter of the strain through
-       square before coming back. On a strain of a pixel and a half that is
-       three tenths of a pixel of compression after a hard stop, and a second
-       pass at a twentieth of that. A settle, not a bounce.
+       the point, so 0.34, which carries a third of the strain through square
+       before coming back. On a strain of four pixels that is over a pixel of
+       compression after a hard stop, and a second pass at a tenth of that.
 
        Anything at or above 1 arrives and stops, and a scroll that stops dead
        is the thing this is here to answer. */
-    var ZETA = 0.42;
+    var ZETA = 0.34;
 
     /* ARREARS ARE RELEASED, NOT DECAYED, and this is the whole difference
        between a recoil and an ease.
@@ -109,26 +108,41 @@
 
     /* HOW MUCH STRAIN, AT MOST: a share of the mark's own height, so the
        thirty-four pixel mark and the twenty-one pixel one stretch by the same
-       proportion rather than the same distance. Twelve per cent of sixteen
-       pixels is under two, and saturating rather than clipped -- soft() has a
-       slope of one at the origin, so a slow scroll is strained in exact
-       proportion and only a fast one starts running out of room. */
-    var CAP_SHARE = 0.12;
+       proportion rather than the same distance.
+
+       Thirty per cent. It was twelve, which measured correctly and read as
+       nothing: a mark is sixteen pixels tall, and twelve per cent of it is
+       under two pixels of travel spread over both edges, at the exact moment
+       the eye is following a page that is moving. There is room for it -- the
+       mark clears its heading by three tenths of a layout unit, which is
+       twelve pixels at the widest and six at the narrowest, against the two
+       and a half this can now add below.
+
+       Saturating rather than clipped: soft() has a slope of one at the origin,
+       so a slow scroll is strained in exact proportion and only a fast one
+       starts running out of room. */
+    var CAP_SHARE = 0.30;
 
     /* K_LAG is in seconds: the fraction of a second of travel that shows up as
-       arrears. A gentle scroll at 800px/s asks for 1.3px and is given 0.8,
-       which is five per cent of the mark. A hard flick at 4000 asks for 6.4 and
-       is given 1.5, which is nine. The whole useful range of a trackpad lands
-       between those two. */
-    var K_LAG = 0.0016;
+       arrears. Where the ordinary range of a trackpad now lands:
+
+           800px/s   asks for 3.4px, given 2.0  -- twelve per cent of the mark
+           1500      asks for 6.3,   given 2.7  -- seventeen
+           3000      asks for 12.6,  given 3.5  -- twenty-two
+           6000      asks for 25.2,  given 4.0  -- twenty-five
+
+       The curve matters more than the ceiling. What was wrong before was not
+       that a hard flick was too small but that an ordinary scroll -- which is
+       what nearly every scroll is -- sat at five per cent and never showed. */
+    var K_LAG = 0.0042;
     /* An impact is allowed more than a haul: landing is the sharpest thing
        that happens to the register and should read as the sharpest. */
-    var K_IMPACT = 0.0008;
+    var K_IMPACT = 0.0018;
     var IMPACT_SHARE = 1.6;
     /* Leaning on the wheel past an end. Per notch, and capped, because a
        trackpad delivers a great many of them. */
-    var K_OVER = 0.004;
-    var OVER_MAX = 0.9;
+    var K_OVER = 0.008;
+    var OVER_MAX = 1.8;
 
     /* A fiftieth of a pixel, which on a sixteen pixel mark is an eighth of a
        per cent. Dropped rather than run out: at a seventy millisecond
