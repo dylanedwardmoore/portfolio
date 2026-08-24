@@ -27,7 +27,7 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { read } from "../lib/paths.js";
-import { parseCss } from "../lib/css.js";
+import { parseCss, splitTop } from "../lib/css.js";
 
 const IDLE = read("assets/js/idle.js");
 const SHEET = read("assets/css/portfolio.css");
@@ -62,6 +62,41 @@ const MOTION_OK = RULES.filter(
     r => !r.at.some(a => /prefers-reduced-motion/.test(a)));
 const MOTION_OFF = RULES.filter(
     r => r.at.some(a => /prefers-reduced-motion/.test(a)));
+
+/**
+ * The top-level functions in a transform, each with its arguments unparsed.
+ *
+ * A regex cannot do this: the values here nest two deep -- calc(var(--px,
+ * 1px) * -1) -- and var() takes a comma inside its own brackets, so both
+ * "find the calls" and "split the arguments" go wrong on the obvious pattern.
+ * This walks the string instead and hands the argument splitting to splitTop,
+ * which already knows not to split inside brackets.
+ */
+function functions(value) {
+    const src = value.replace(/\s+/g, " ").trim();
+    const out = [];
+    let i = 0;
+    while (i < src.length) {
+        if (src[i] === " " || src[i] === ",") { i++; continue; }
+        const head = /^([a-zA-Z-]+)\(/.exec(src.slice(i));
+        if (!head) {
+            const end = src.indexOf(" ", i);
+            out.push({ name: null, raw: src.slice(i, end === -1 ? undefined : end) });
+            if (end === -1) break;
+            i = end;
+            continue;
+        }
+        let depth = 0;
+        let j = i + head[0].length - 1;
+        for (; j < src.length; j++) {
+            if (src[j] === "(") depth++;
+            else if (src[j] === ")" && --depth === 0) break;
+        }
+        out.push({ name: head[1], args: src.slice(i + head[0].length, j) });
+        i = j + 1;
+    }
+    return out;
+}
 
 /** The first time in an `animation` shorthand, in milliseconds. */
 function seconds(value) {
@@ -150,77 +185,115 @@ describe("every gesture idle.js can play", () => {
             "these still run for somebody who asked the site to hold still");
     });
 
-    test("a hairline is only offered what a hairline survives", () => {
-        /*  Several shapes in the register are a pixel and a bit wide, and a
-            bar that narrow is drawn as one or two solid columns of pixels. It
-            stays solid only while its long edges sit on the grid: measured on
-            the register itself, sending a 1.19px piece half a pixel SIDEWAYS
-            costs it half its solid ink, and turning it a degree and a half
-            costs a third and spreads it half again as wide. From a normal
-            distance the piece does not look like it moved, it looks like it
-            went out.
+    test("nothing a piece is asked to do moves it off the pixel grid", () => {
+        /*  THE MEASUREMENT THIS EXISTS FOR. Seven of the register's eighteen
+            pieces are between 1.2 and 2.7 pixels wide, and a piece that narrow
+            is drawn as one or two solid columns of pixels -- solid only while
+            its edges sit on the grid. Measured on the register itself at
+            dpr 2, against the count of pixels a piece puts down at full
+            strength:
 
-            So idle.js draws the piece first and the gesture second, and a thin
-            piece draws only from the ones marked grain -- the ones that travel
-            the long way along it, or only scale it. That marking has to be
-            true of the keyframes as well as of the table, which is what this
-            checks: a gesture offered to a hairline may not turn it, and any
-            travel it does must be written against --ax and --ay.  */
-        const safe = OPEN.filter(g => g.grain && g.scope === "part");
-        assert.ok(safe.length >= 2,
-            `a hairline has only ${safe.length} gesture(s) it can take`);
+                1.19px wide, moved half a pixel sideways      keeps  50%
+                1.19px wide, turned 1.6 degrees               keeps  68%
+                8.98 x 3.19, breathed at 3%                   keeps  75%
+                7.16 x 11.52, shrugged                        keeps  79%
+                any of them, moved a WHOLE device pixel       keeps 100%
 
+            None of the first four reads as a shape moving; they read as a
+            shape going out, which is how they were reported twice. So every
+            open gesture travels in whole multiples of --px and does nothing
+            else -- no rotate, which has no whole-pixel version of itself, and
+            no scale, which changes the width and is the same fault renamed.
+
+            Written as a test rather than a comment because all four faults are
+            one careless keyframe away, and every one of them is valid CSS that
+            animates smoothly and looks like a working feature.  */
+        const pieces = [
+            ...OPEN.filter(g => g.scope === "part").map(g => "wg-" + g.name),
+            "wg-ripple",
+        ];
         const bad = [];
-        for (const g of safe) {
-            const steps = RULES.filter(r => r.keyframes === "wg-" + g.name);
-            assert.ok(steps.length, `wg-${g.name} has no keyframes`);
+        for (const name of pieces) {
+            const steps = RULES.filter(r => r.keyframes === name);
+            assert.ok(steps.length, `${name} has no keyframes`);
             for (const r of steps) {
-                const t = r.decls.transform || "";
-                if (/\brotate\s*\(/.test(t) && !/var\(--turn/.test(t)) {
-                    bad.push(`${g.name} turns the piece it is given`);
-                }
-                // Travel that is not tied to the grain sends the piece
-                // whichever way the keyframe felt like, which for half of them
-                // is straight across their own width.
-                if (/\btranslate[XY]?\s*\(/.test(t) && !/var\(--a[xy]/.test(t)) {
-                    bad.push(`${g.name} travels off the grain: ${t}`);
+                if (!r.decls.transform) continue;
+                const where = `${name} ${r.selector}`;
+                for (const fn of functions(r.decls.transform)) {
+                    if (fn.name === null) {
+                        // A bare keyword. `none` is the only one that means
+                        // anything here, and only the ripple uses it.
+                        if (fn.raw !== "none") bad.push(`${where}: ${fn.raw}`);
+                        continue;
+                    }
+                    // The resting delta the gesture is composed onto.
+                    if (fn.name === "var") {
+                        if (fn.args.trim() !== "--at") {
+                            bad.push(`${where}: reads ${fn.args}`);
+                        }
+                        continue;
+                    }
+                    if (!/^translate[XY]?$/.test(fn.name)) {
+                        bad.push(`${where}: ${fn.name}() is not travel`);
+                        continue;
+                    }
+                    for (const raw of splitTop(fn.args, ",")) {
+                        const v = raw.trim().replace(/\s+/g, " ");
+                        if (!v) continue;
+                        if (/^0(px)?$/.test(v)) continue;
+                        if (/^var\( *--px *(?:, *[^)]*)?\)$/.test(v)) continue;
+                        if (/^calc\( *var\( *--px *(?:, *[^)]*)?\) *\* *-?\d+ *\)$/.test(v)) {
+                            continue;
+                        }
+                        bad.push(`${where}: travels ${v}, which is not a whole pixel`);
+                    }
                 }
             }
         }
         assert.deepEqual([...new Set(bad)], [],
-            "these are offered to pieces too thin to take them");
+            "these move a piece somewhere between two pixels, where a piece "
+            + "1.2px wide loses half of itself");
     });
 
-    test("and every thin piece in the register runs upright", () => {
-        /*  The ripple is the one gesture no piece can decline: it goes on the
-            mark and lifts all of them. It drops its turn for the thin ones --
-            that is what --turn is -- but the lift itself is vertical, which is
-            along the grain only while every thin piece in the register is
-            taller than it is wide. That is true of all seven of them today.
-            Trace a wide, flat hairline into the library and this fails, which
-            is the point: the ripple would then need its lift on --ax/--ay
-            too.  */
-        const h = Number((SHEET.match(
-            /\.section-index\s*\{[^}]*?height:\s*([\d.]+)px/) || [])[1]);
-        assert.ok(h > 0, "the mark's height is no longer declared in px");
+    test("and it holds and jumps rather than sliding between the two", () => {
+        /*  Whole-pixel keyframes are only half of it. Interpolated smoothly,
+            a piece still passes through every fraction between one pixel and
+            the next on its way -- which is the same fault, just briefer. The
+            stepped easing is what keeps it out of that space, so it is not
+            optional and it is not a stylistic choice.  */
+        const notStepped = [];
+        for (const g of OPEN) {
+            const want = g.scope === "mark"
+                ? new RegExp(`\\.section-index\\.wiggle-${g.name}\\b`)
+                : new RegExp(`\\.section-index i\\.wiggle-${g.name}\\b`);
+            for (const r of MOTION_OK) {
+                if (r.keyframes || !want.test(r.selector) || !r.decls.animation) continue;
+                if (!/\bsteps\(/.test(r.decls.animation)) notStepped.push(g.name);
+            }
+        }
+        assert.deepEqual([...new Set(notStepped)], [],
+            "these slide between pixels instead of holding and jumping");
+    });
 
-        const flat = [];
-        for (const m of MARKUP.matchAll(/class="section-index"[^>]*>[\s\S]*?(?=<\/span>\s*<h2)/g)) {
-            const block = m[0];
-            const markW = Number((block.match(/--mark-w:([\d.]+)px/) || [])[1]);
-            if (!markW) continue;
-            for (const part of block.matchAll(/width:([\d.]+)%;height:([\d.]+)%/g)) {
-                const w = (Number(part[1]) / 100) * markW;
-                const ht = (Number(part[2]) / 100) * h;
-                if (Math.min(w, ht) < 3 && w > ht) {
-                    flat.push(`${w.toFixed(2)}x${ht.toFixed(2)}`);
+    test("while the body, which is big enough to, still glides", () => {
+        /*  The mirror of it. A gathered mark is one silhouette sixteen pixels
+            tall and twenty to thirty-four wide, and the worst any of these
+            costs it is five per cent -- so it is free to turn and swell and
+            move by fractions, and it should, because a body that ticks reads
+            as a mechanism. If these ever picked up the pieces' stepped easing
+            the register would lose the difference between the two.  */
+        const stepped = [];
+        for (const g of GATHERED) {
+            for (const r of MOTION_OK) {
+                if (r.keyframes) continue;
+                if (!new RegExp(`\\.section-index\\.wiggle-${g.name}\\b`).test(r.selector)) continue;
+                if (r.decls.animation && /\bsteps\(/.test(r.decls.animation)) {
+                    stepped.push(g.name);
                 }
             }
         }
-        assert.deepEqual(flat, [],
-            "a thin piece in the register is wider than it is tall, so the "
-            + "ripple's vertical lift now goes across its grain and will "
-            + "smear it out");
+        assert.deepEqual([...new Set(stepped)], [],
+            "the body is ticking like a piece");
     });
 
     test("and the ripple's one assumption still holds", () => {

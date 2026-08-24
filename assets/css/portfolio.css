@@ -1547,84 +1547,59 @@
     and a mark that is clicked does the same thing at once. idle.js decides
     which and when; everything the gestures are is here.
 
-    HOW BIG. Smaller than you would guess and smaller than any of these was
-    first drawn. The reference is somebody standing for a photograph who
-    cannot quite hold still: a shoulder dropping, a foot taking the weight
-    back, one of them saying something to the one beside them. Not a gesture
-    performed at you -- an adjustment made while waiting.
+    TWO SCOPES, BECAUSE THERE ARE TWO THINGS TO MOVE, AND THEY MOVE DIFFERENTLY.
 
-    So the numbers are fractions of a pixel. The largest travel in the file is
-    six tenths of one, the largest turn is one and six tenths of a degree, and
-    the largest swell is three per cent of a shape that is sixteen pixels
-    tall. At that size a mark does not appear to move so much as to be
-    unwilling to be still, which is the whole of the effect being aimed at.
+    Gathered, the mark is ONE BODY -- every part the same colour, lying on top
+    of the others, no seam anywhere in it. It is sixteen pixels tall and twenty
+    to thirty-four wide, which is big enough to move by fractions of a pixel
+    without anything happening to it: measured across all six marks, the worst
+    any gathered gesture costs the silhouette is five per cent of the ink it
+    puts down at rest. So the body GLIDES. It breathes, it nods, it settles, it
+    rocks, all of it smooth and all of it under a degree or two.
 
-    AND HOW LONG, which is the same question. Amplitude alone is not what an
-    eye reads -- it reads speed. Half a pixel over a second and a half is
-    invisible; the same half pixel in a third of a second is a thing
-    fidgeting. So when these came down in size they came down in length with
-    them, and the slowest of them is now under a second. A gesture too small
-    for its own duration is not subtle, it is absent.
+    Open, the mark is an ENSEMBLE of pieces, and seven of the eighteen pieces
+    in the register are between 1.2 and 2.7 pixels wide. That changes what
+    movement even means. A piece that narrow is drawn as one or two solid
+    columns of pixels and stays solid only while its edges sit on the pixel
+    grid; slide it a FRACTION of a pixel in any direction and those columns
+    split into three or four faint ones. Measured on the register itself:
 
-    TWO SCOPES, BECAUSE THERE ARE TWO THINGS TO MOVE.
+        a piece 1.19px wide, moved half a pixel sideways   keeps 50% of its ink
+        the same piece, turned 1.6 degrees                 keeps 68%
+        a piece 8.98 x 3.19, breathed at 3%                keeps 75%
+        a piece 7.16 x 11.52, shrugged                     keeps 79%
 
-    Gathered, the mark is one body -- every part the same colour, lying on top
-    of the others, no seam anywhere in it. Moving one part inside that pile is
-    mostly invisible, because the silhouette is what you can see and the part
-    is under it. So the gathered gestures carry their class on the MARK and
-    move the whole group: it nods, it breathes, it settles, it rocks.
+    None of that reads as a shape moving. It reads as a shape going out, which
+    is exactly how it was reported.
 
-    Open, the pieces stand apart where the composition put them and one of them
-    stirring reads as a member of a group noticing something, so those gestures
-    carry their class on a PART. The ripple is the exception that proves it --
-    it goes on the mark and runs through every piece in turn, which is a thing
-    only an ensemble can do.
+    But the same piece moved a WHOLE device pixel keeps 100%, in any direction,
+    because a whole pixel is the one distance that leaves every edge exactly
+    where it found it. So the pieces do not glide. They TICK: every open
+    gesture is a whole number of device pixels, held and jumped, never slid
+    through the fractions in between. --px is that distance, written on the
+    document by idle.js from devicePixelRatio, and steps(1, jump-end) is what
+    keeps the movement out of the space between two of them.
 
-    THE GRAIN OF A PIECE, which is the other thing that decides what a gesture
-    is allowed to do.
+    It is also the right gesture for the thing. These are not small
+    transitions and should not read as any -- the stories glide, and something
+    that glides a fraction of a pixel is a transition that failed. A piece that
+    holds still, ticks a pixel, holds, and ticks back is a piece that cannot
+    quite keep still, which is the whole of what this is for.
 
-    Several of these shapes are a pixel and a bit wide. A bar that narrow is
-    drawn as one or two solid columns of pixels, and it stays solid only while
-    its long edges sit on the pixel grid. Slide it half a pixel SIDEWAYS and
-    those columns split into three or four faint ones: measured on the register
-    itself, a piece 1.19px wide keeps 50% of its solid ink, and a piece 1.30px
-    wide keeps 37%. Turn it a degree and a half and it keeps 68% and spreads
-    half again as wide. Both read the same way from a normal distance -- the
-    shape does not appear to move, it appears to go out.
+    NOTHING TURNS AND NOTHING SWELLS, out here. A rotation has no whole-pixel
+    version of itself -- every angle but zero puts the edges off the grid down
+    the shape's whole length -- and a scale changes the width, which is the
+    same fault by another name. Both belong to the body, which is large enough
+    to take them. Out here there is travel, and there are five rhythms of it.
 
-    The same movements cost a piece six pixels wide between nothing and eight
-    per cent, which is why this was invisible until the gestures came down to
-    fractions of a pixel and the thin pieces had nowhere left to hide.
+    These are all composed on top of a resting transform that is not the same
+    for every target -- a gathered satellite sits at translate(gx, gy)
+    scale(gs), a lead sits at scale(1.24), an open piece and the mark itself
+    sit at none -- so each gesture is written as a DELTA. That is what --at is:
+    the target's own resting transform, read off it by the script and handed to
+    the keyframes so they can start from it and return to it.
 
-    What is free, at any width: travelling the LONG way along the piece, and
-    scaling it. Neither disturbs the two edges that are doing the work. So a
-    piece narrower than three pixels is never turned and never sent across
-    itself -- it is offered only the gestures that run along its grain, and
-    --ax and --ay are that direction, written on it by idle.js from its own
-    proportions.
-
-    --turn is the same rule for the ripple, which is not offered to a piece
-    but runs through all of them at once and so cannot simply decline: the
-    pieces that can be turned are turned, the hairlines are only lifted.
-
-    --wg IS WHAT KEEPS THE TWO SCOPES HONEST. Breathing and the twitch are the
-    only two played at both, and they turn and swell by proportion rather than
-    by distance -- so the same numbers move a whole mark about twice as far as
-    they move a piece of one, the mark being about twice the size. Written
-    once and scaled, rather than written twice: the part rules are the
-    reference at 1, the mark rules ask for 0.6, and the gesture looks the same
-    size in both places. Every other gesture belongs to one scope only and
-    travels in plain pixels, which need no such adjustment.
-
-    These have to survive being layered on top of a resting transform that is
-    not the same for every target -- a gathered satellite sits at translate(gx,
-    gy) scale(gs), a lead sits at scale(1.24), an open part and the mark itself
-    sit at none -- so each gesture is written as a DELTA and composed after
-    whatever the target is already doing. That is what --at is: the target's
-    own resting transform, read off it by the script and handed to the
-    keyframes so they can start from it and return to it.
-
-    !important throughout. A gesture played on a PART has to outrank
+    !important throughout. A gesture played on a PIECE has to outrank
     .section-index.anim i, which sets the animation longhands for the stories
     and ties with these on specificity; the ones played on the mark have no
     such rival and carry it anyway, because a rule that is important in one
@@ -1635,16 +1610,14 @@
     over rather than leaving it to be overwritten: one left on would win
     against the next story and strand a shape half way out of the body.  */
 
-/*  GATHERED: the whole body moves.  */
+/*  GATHERED: the whole body, and it glides.  */
 
 .section-index.wiggle-breathe {
     animation: wg-breathe 1100ms cubic-bezier(0.4, 0, 0.4, 1) both !important;
-    --wg: 0.6;
 }
 
 .section-index.wiggle-twitch {
     animation: wg-twitch 520ms cubic-bezier(0.34, 0, 0.28, 1) both !important;
-    --wg: 0.6;
 }
 
 .section-index.wiggle-bob {
@@ -1662,7 +1635,7 @@
 
     Safe to set because the delta these are composed onto is a translation --
     the mark itself sits at none -- and a translation does not care where the
-    origin is. It would not be safe on a part.  */
+    origin is. It would not be safe on a piece.  */
 .section-index.wiggle-settle {
     animation: wg-settle 600ms cubic-bezier(0.3, 0, 0.22, 1) both !important;
     transform-origin: 50% 100%;
@@ -1673,79 +1646,71 @@
     transform-origin: 50% 100%;
 }
 
-/*  OPEN: one piece of the ensemble moves.  */
+/*  OPEN: one piece of the ensemble, and it ticks.
 
-.section-index i.wiggle-breathe {
-    animation: wg-breathe 1100ms cubic-bezier(0.4, 0, 0.4, 1) both !important;
-    --wg: 1;
-}
-
-.section-index i.wiggle-twitch {
-    animation: wg-twitch 520ms cubic-bezier(0.34, 0, 0.28, 1) both !important;
-    --wg: 1;
-}
+    steps(1, jump-end) on every one of them. It holds each keyframe's value
+    for that keyframe's whole share of the duration and then jumps to the
+    next, so a piece is only ever drawn at a whole number of device pixels
+    from where it started, and never at any of the distances in between.
+    Take the steps() off and every one of these becomes the fault it was
+    written to fix.  */
 
 .section-index i.wiggle-shiver {
-    animation: wg-shiver 480ms linear both !important;
+    animation: wg-shiver 420ms steps(1, jump-end) both !important;
+}
+
+.section-index i.wiggle-jolt {
+    animation: wg-jolt 300ms steps(1, jump-end) both !important;
 }
 
 .section-index i.wiggle-shrug {
-    animation: wg-shrug 700ms cubic-bezier(0.3, 0, 0.25, 1) both !important;
-}
-
-.section-index i.wiggle-drift {
-    animation: wg-drift 950ms cubic-bezier(0.42, 0, 0.38, 1) both !important;
+    animation: wg-shrug 620ms steps(1, jump-end) both !important;
 }
 
 .section-index i.wiggle-slide {
-    animation: wg-slide 950ms cubic-bezier(0.42, 0, 0.38, 1) both !important;
+    animation: wg-slide 900ms steps(1, jump-end) both !important;
 }
 
-.section-index i.wiggle-lean {
-    animation: wg-lean 900ms cubic-bezier(0.36, 0, 0.3, 1) both !important;
+.section-index i.wiggle-drift {
+    animation: wg-drift 1020ms steps(1, jump-end) both !important;
 }
 
 /*  OPEN, ALL OF THEM: the one gesture that needs an ensemble.
 
-    The class goes on the mark and every piece runs the same small lift, each
+    The class goes on the mark and every piece ticks up a pixel in turn, each
     one late by its place in the queue -- the same --i the stories stagger by,
     which is the body first and then the pieces in the order they stand. Not
     a wave crossing the mark from one side to the other, then: the same queue
     the mark comes apart in, which is the order these shapes already move in
     and the only one that would not read as a second, unrelated idea.
 
-    The stagger is most of what this gesture is, so it is short -- eighty
-    milliseconds, about the gap that reads as one thing after another rather
-    than as several things at once.
-
     No --at here, and it is the one gesture that does not need it: this is
-    only ever offered to an open mark, and an open part's resting transform is
+    only ever offered to an open mark, and an open piece's resting transform is
     none. The delay is restated as a longhand because the shorthand above
     resets it, and restated as !important because the shorthand is.  */
 .section-index.wiggle-ripple i {
-    animation: wg-ripple 560ms cubic-bezier(0.34, 0, 0.28, 1) both !important;
-    animation-delay: calc(var(--i, 0) * 80ms) !important;
+    animation: wg-ripple 460ms steps(1, jump-end) both !important;
+    animation-delay: calc(var(--i, 0) * 90ms) !important;
 }
 
 /* A quick look up and back. Fast enough to read as a flinch rather than a
-   move, which is why it works on a body and on a piece alike -- and why it
-   can be this small: nothing else in the file gets to its peak in a seventh
-   of a second. */
+   move, which is why it can be this small: nothing else in the file gets to
+   its peak in a seventh of a second. */
 @keyframes wg-twitch {
     0%, 100% {
         transform: var(--at);
     }
 
     26% {
-        transform: var(--at) rotate(calc(var(--wg, 1) * -1.6deg));
+        transform: var(--at) rotate(-0.96deg);
     }
 
     58% {
-        transform: var(--at) rotate(calc(var(--wg, 1) * 0.8deg));
+        transform: var(--at) rotate(0.48deg);
     }
 
     80% {
-        transform: var(--at) rotate(calc(var(--wg, 1) * -0.25deg));
+        transform: var(--at) rotate(-0.15deg);
     }
 }
 
@@ -1758,15 +1723,11 @@
     }
 
     44% {
-        transform: var(--at) scale(
-            calc(1 + var(--wg, 1) * 0.032),
-            calc(1 - var(--wg, 1) * 0.018));
+        transform: var(--at) scale(1.019, 0.989);
     }
 
     72% {
-        transform: var(--at) scale(
-            calc(1 - var(--wg, 1) * 0.011),
-            calc(1 + var(--wg, 1) * 0.009));
+        transform: var(--at) scale(0.993, 1.005);
     }
 }
 
@@ -1834,141 +1795,124 @@
     }
 }
 
-/* Four beats, fast, tiny. A thing shaking something off, and the only gesture
-   here whose whole character is its speed -- a third of a pixel four times
-   over is nothing at all if it is taken slowly.
+/* THE FIVE RHYTHMS. Every one of them is one device pixel; what makes them
+   different from each other is how long a piece waits before it moves, how
+   long it stays where it went, and how many times it does it. That is the
+   whole vocabulary out here, and it is more than enough -- rhythm is what
+   tells a shudder from a shrug in a living thing too. */
 
-   ALONG THE GRAIN. See THE GRAIN OF A PIECE above: this and the slide are the
-   two gestures a hairline is allowed, and they are allowed because they run
-   the long way along it, where a fraction of a pixel costs nothing. --ax and
-   --ay are that direction, set on the piece by idle.js from its own
-   proportions. */
+/* Four beats, quick, sideways. A thing shaking something off. */
 @keyframes wg-shiver {
-    0%, 100% {
+    0% {
         transform: var(--at);
     }
 
-    18% {
-        transform: var(--at) translate(calc(var(--ax, 1) * 0.32px),
-            calc(var(--ay, 0) * 0.32px));
+    20% {
+        transform: var(--at) translateX(var(--px, 1px));
     }
 
-    38% {
-        transform: var(--at) translate(calc(var(--ax, 1) * -0.26px),
-            calc(var(--ay, 0) * -0.26px));
+    40% {
+        transform: var(--at) translateX(calc(var(--px, 1px) * -1));
     }
 
-    58% {
-        transform: var(--at) translate(calc(var(--ax, 1) * 0.16px),
-            calc(var(--ay, 0) * 0.16px));
+    60% {
+        transform: var(--at) translateX(var(--px, 1px));
     }
 
-    78% {
-        transform: var(--at) translate(calc(var(--ax, 1) * -0.08px),
-            calc(var(--ay, 0) * -0.08px));
+    80%, 100% {
+        transform: var(--at);
     }
 }
 
-/* The drift, for a piece too thin to be allowed one: it goes somewhere and
-   comes back, but only ever the long way along itself. The slow gesture a
-   hairline can have. */
-@keyframes wg-slide {
-    0%, 100% {
+/* One tick out and back, and the shortest thing in the file. A piece
+   catching itself. */
+@keyframes wg-jolt {
+    0% {
         transform: var(--at);
     }
 
-    34% {
-        transform: var(--at) translate(calc(var(--ax, 1) * 0.45px),
-            calc(var(--ay, 0) * 0.45px));
+    16% {
+        transform: var(--at) translate(var(--px, 1px),
+            calc(var(--px, 1px) * -1));
     }
 
-    66% {
-        transform: var(--at) translate(calc(var(--ax, 1) * -0.24px),
-            calc(var(--ay, 0) * -0.24px));
-    }
-
-    88% {
-        transform: var(--at) translate(calc(var(--ax, 1) * 0.08px),
-            calc(var(--ay, 0) * 0.08px));
+    60%, 100% {
+        transform: var(--at);
     }
 }
 
-/* Up, and set back down. Wants somewhere to go, so it is only offered to
-   parts that are standing apart. */
+/* Up, and set back down past where it started. The only one that goes both
+   ways on the same axis, which is what makes it read as weight. */
 @keyframes wg-shrug {
-    0%, 100% {
+    0% {
         transform: var(--at);
     }
 
-    30% {
-        transform: var(--at) translateY(-0.6px) rotate(0.6deg);
-    }
-
-    62% {
-        transform: var(--at) translateY(0.18px) scaleY(0.988);
-    }
-
-    84% {
-        transform: var(--at) translateY(-0.1px);
-    }
-}
-
-/* A wander. The only one that moves on both axes at once, and the only one
-   with no beat in it -- it goes somewhere, thinks better of it, and comes
-   back. Needs the space an open mark has and would be invisible without it. */
-@keyframes wg-drift {
-    0%, 100% {
-        transform: var(--at);
-    }
-
-    34% {
-        transform: var(--at) translate(0.38px, -0.28px);
-    }
-
-    66% {
-        transform: var(--at) translate(-0.2px, 0.16px);
-    }
-
-    88% {
-        transform: var(--at) translate(0.06px, -0.04px);
-    }
-}
-
-/* Over, held, and back. The only one with a pause in it, and the widest turn
-   in the file -- it is offered only to a piece, and a piece is small enough
-   that a degree of it is barely a tenth of a pixel at the corner. */
-@keyframes wg-lean {
-    0%, 100% {
-        transform: var(--at);
-    }
-
-    24% {
-        transform: var(--at) rotate(1.4deg);
+    20% {
+        transform: var(--at) translateY(calc(var(--px, 1px) * -1));
     }
 
     56% {
-        transform: var(--at) rotate(1.6deg);
+        transform: var(--at) translateY(var(--px, 1px));
     }
 
-    86% {
-        transform: var(--at) rotate(-0.3deg);
+    80%, 100% {
+        transform: var(--at);
     }
 }
 
-/* One lift, run along the ensemble a piece at a time. Written against none
+/* Out, a long wait, and back. The calm one: nearly a second, and only two
+   moves in it. What it reads as is a piece that has quietly shifted its
+   weight and, some time later, shifted it back. */
+@keyframes wg-slide {
+    0% {
+        transform: var(--at);
+    }
+
+    26% {
+        transform: var(--at) translateX(var(--px, 1px));
+    }
+
+    68%, 100% {
+        transform: var(--at);
+    }
+}
+
+/* A wander: out one way, across the other, home. The only one that visits
+   three places, and the slowest -- a piece that has thought better of it. */
+@keyframes wg-drift {
+    0% {
+        transform: var(--at);
+    }
+
+    22% {
+        transform: var(--at) translate(var(--px, 1px),
+            calc(var(--px, 1px) * -1));
+    }
+
+    50% {
+        transform: var(--at) translateX(calc(var(--px, 1px) * -1));
+    }
+
+    76%, 100% {
+        transform: var(--at);
+    }
+}
+
+/* One tick up, run along the ensemble a piece at a time. Written against none
    rather than --at because it is only ever offered to an open mark, where
    none is exactly where every piece is sitting. */
 @keyframes wg-ripple {
-    0%, 100% {
+    0% {
         transform: none;
     }
 
-    30% {
-        transform: translateY(-0.5px) rotate(calc(var(--turn, 1) * 0.55deg));
+    28% {
+        transform: translateY(calc(var(--px, 1px) * -1));
     }
 
-    64% {
-        transform: translateY(0.14px) rotate(calc(var(--turn, 1) * -0.16deg));
+    66%, 100% {
+        transform: none;
     }
 }
 
@@ -1980,13 +1924,11 @@
     .section-index.wiggle-settle,
     .section-index.wiggle-rock,
     .section-index.wiggle-ripple i,
-    .section-index i.wiggle-breathe,
-    .section-index i.wiggle-twitch,
     .section-index i.wiggle-shiver,
+    .section-index i.wiggle-jolt,
     .section-index i.wiggle-shrug,
-    .section-index i.wiggle-drift,
     .section-index i.wiggle-slide,
-    .section-index i.wiggle-lean {
+    .section-index i.wiggle-drift {
         animation: none !important;
     }
 }

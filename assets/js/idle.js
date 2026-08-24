@@ -25,6 +25,14 @@
     exception, the ripple, which runs through all of them in turn and is the
     one gesture that needs an ensemble to mean anything.
 
+    AND THE TWO MOVE DIFFERENTLY. The body glides; the pieces tick. That is
+    not a stylistic choice, it is what the pieces are: seven of the eighteen in
+    the register are between 1.2 and 2.7 pixels wide, and a shape that narrow
+    keeps all of its ink when it moves a WHOLE device pixel and half of it when
+    it moves a fraction of one. So a piece moves one pixel, holds, and moves
+    back, and never occupies any of the distances in between. The stylesheet
+    has the measurements.
+
     WHAT IT WILL NOT DO, which is most of the design:
 
       * two at once on the same mark. One shape moving reads as a thing
@@ -76,18 +84,17 @@
         what it moves: "mark" puts the class on the whole group, "part" on one
         piece of it.
 
-        The two lists are not the same gestures with a flag. A body has weight
-        and can nod or settle; a piece standing on its own has room and can
-        lean or drift. Only breathing and the twitch belong to both, because
-        they are the two that read at any size -- and even those are a
-        different gesture in each list, since one moves a body and the other
-        moves a piece of one. The stylesheet's --wg is what keeps those two
-        looking the same size in both places.
+        The two lists share nothing, not even a name. A body has weight and can
+        nod and settle and turn; a piece has none of that and cannot be turned
+        at all without going to pieces, so it travels, and the five ways it can
+        travel differ only in rhythm. Two vocabularies, because there are two
+        different things being moved and only one of them is big enough to be
+        moved smoothly.
 
-        ms is how long the gesture is held, and it is the stylesheet's
-        duration exactly. Nothing here is longer than about a second: these
-        are fidgets rather than gestures, and a movement of half a pixel taken
-        slowly is not subtle, it is invisible.  */
+        ms is how long the gesture is held, and it is the stylesheet's duration
+        exactly. Nothing here is longer than about a second: these are fidgets
+        rather than gestures, and a movement this small taken slowly is not
+        subtle, it is invisible.  */
     var GATHERED = [
         { name: "breathe", ms: 1100, weight: 5, scope: "mark" },
         { name: "twitch", ms: 520, weight: 4, scope: "mark" },
@@ -96,28 +103,26 @@
         { name: "rock", ms: 900, weight: 2, scope: "mark" }
     ];
 
-    /*  grain: true means the gesture is one a HAIRLINE can take -- see THE
-        GRAIN OF A PIECE in the stylesheet. Several of these shapes are a pixel
-        and a bit wide, and a bar that narrow stays solid only while its long
-        edges sit on the pixel grid. Turning it, or sending it sideways by a
-        fraction of a pixel, splits those edges into three or four faint
-        columns: the piece stops looking like it moved and starts looking like
-        it went out. Travelling the long way along it, and scaling it, cost
-        nothing at any width.
+    /*  Out here every gesture is one device pixel, held and jumped. See THE
+        RESTING LIFE in the stylesheet for why: seven of the register's
+        eighteen pieces are between 1.2 and 2.7 pixels wide, and a piece that
+        narrow keeps all of its ink when it moves a whole pixel and half of it
+        when it moves a fraction of one. So what tells these apart is not how
+        far they go -- they all go the same distance -- but how long a piece
+        waits, how long it stays where it went, and how many times it does it.
 
-        So the thin pieces get the three that run along their own grain, and
-        the ripple, which lifts them without turning them.  */
+        Nothing here turns and nothing swells. There is no whole-pixel version
+        of a rotation, and a scale changes the width, which is the same fault
+        under another name. Both belong to the body.  */
     var OPEN = [
-        { name: "breathe", ms: 1100, weight: 5, scope: "part", grain: true },
-        { name: "twitch", ms: 520, weight: 4, scope: "part" },
-        { name: "shiver", ms: 480, weight: 3, scope: "part", grain: true },
-        { name: "shrug", ms: 700, weight: 3, scope: "part" },
-        { name: "drift", ms: 950, weight: 3, scope: "part" },
-        { name: "slide", ms: 950, weight: 3, scope: "part", grain: true },
-        { name: "lean", ms: 900, weight: 2, scope: "part" },
+        { name: "shiver", ms: 420, weight: 4, scope: "part" },
+        { name: "jolt", ms: 300, weight: 4, scope: "part" },
+        { name: "slide", ms: 900, weight: 4, scope: "part" },
+        { name: "shrug", ms: 620, weight: 3, scope: "part" },
+        { name: "drift", ms: 1020, weight: 3, scope: "part" },
         // Runs through every piece in turn, so it lasts the last piece's
         // delay plus its own telling. See --i in the stylesheet.
-        { name: "ripple", ms: 860, weight: 2, scope: "mark", grain: true }
+        { name: "ripple", ms: 790, weight: 2, scope: "mark" }
     ];
 
     function pick(list) {
@@ -145,12 +150,9 @@
         Array.prototype.push.apply(els, mark.querySelectorAll("i"));
         els.forEach(function (el) {
             el.classList.remove("wiggle-breathe", "wiggle-twitch", "wiggle-bob",
-                "wiggle-settle", "wiggle-rock", "wiggle-shiver", "wiggle-shrug",
-                "wiggle-drift", "wiggle-slide", "wiggle-lean", "wiggle-ripple");
+                "wiggle-settle", "wiggle-rock", "wiggle-shiver", "wiggle-jolt",
+                "wiggle-shrug", "wiggle-slide", "wiggle-drift", "wiggle-ripple");
             el.style.removeProperty("--at");
-            el.style.removeProperty("--ax");
-            el.style.removeProperty("--ay");
-            el.style.removeProperty("--turn");
         });
     }
 
@@ -178,51 +180,29 @@
         return r.bottom > 0 && r.top < window.innerHeight;
     }
 
-    /*  HOW WIDE A PIECE IS, AND WHICH WAY IT RUNS.
+    /*  ONE DEVICE PIXEL, AS A LENGTH THE STYLESHEET CAN USE.
 
-        Read off the used width and height rather than the drawn box, because
-        the drawn box has the piece's own resting transform in it -- a gathered
-        satellite is scaled -- and what matters here is how many pixels of the
-        shape there actually are to draw.
-
-        Three pixels is where the measurements turn: at 2.7px wide a sideways
-        half-pixel costs 14% of a piece's solid ink and a turn costs 9%, both
-        of which are nothing. At 1.75px and below it is half the piece.  */
-    function grain(part) {
-        var cs = getComputedStyle(part);
-        var w = parseFloat(cs.width), h = parseFloat(cs.height);
-        var wide = w >= h;
-        return { thin: Math.min(w, h) < 3, ax: wide ? 1 : 0, ay: wide ? 0 : 1 };
+        Every open gesture travels in multiples of this and nothing else, which
+        is what keeps a piece a pixel and a bit wide from turning to mush the
+        moment it moves. Read fresh each time rather than once at startup:
+        devicePixelRatio changes when the window is dragged to another screen
+        and when the browser is zoomed, and a stale value here would put the
+        pieces back on the fractions this exists to avoid.  */
+    function pixel() {
+        document.documentElement.style.setProperty(
+            "--px", (1 / (window.devicePixelRatio || 1)) + "px");
     }
 
     function gesture(mark) {
+        pixel();
+        var open = mark.classList.contains("is-open");
+        var g = pick(open ? OPEN : GATHERED);
         var target = mark;
-        var g;
 
-        if (!mark.classList.contains("is-open")) {
-            // Gathered, there is only the body to move.
-            g = pick(GATHERED);
-        } else {
-            // Open, the piece is drawn FIRST and the gesture second, because
-            // what a piece can be asked to do depends on how wide it is.
+        if (g.scope === "part") {
             var parts = mark.querySelectorAll("i");
-            var part = parts[Math.floor(Math.random() * parts.length)];
-            if (!part) return;
-            var gr = grain(part);
-            g = pick(gr.thin ? OPEN.filter(function (x) { return x.grain; }) : OPEN);
-
-            if (g.scope === "part") {
-                target = part;
-                target.style.setProperty("--ax", gr.ax);
-                target.style.setProperty("--ay", gr.ay);
-            } else {
-                // The ripple runs through every piece at once and so cannot
-                // decline on any one piece's behalf. Each is told whether it
-                // is wide enough to be turned.
-                Array.prototype.forEach.call(parts, function (p) {
-                    p.style.setProperty("--turn", grain(p).thin ? "0" : "1");
-                });
-            }
+            target = parts[Math.floor(Math.random() * parts.length)];
+            if (!target) return;
         }
 
         // The transform the target is already holding, so the gesture can be a
