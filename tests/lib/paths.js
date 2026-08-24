@@ -56,6 +56,7 @@ export const OWN_JS = [
     "assets/js/scrollrail.js",
     "assets/js/hoverfill.js",
     "assets/js/figures.js",
+    "assets/js/drag.js",
     "assets/js/marks.js",
     "assets/js/idle.js",
 ];

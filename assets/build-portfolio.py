@@ -508,7 +508,7 @@ def build():
     return "\n".join(parts)
 
 
-V = "v=20260825c"
+V = "v=20260825d"
 HEAD = """<!doctype html>
 <html lang="en">
 
@@ -591,6 +591,7 @@ TAIL = """    </main>
     <script src="../assets/js/scrollrail.js?{V}"></script>
     <script src="../assets/js/hoverfill.js?{V}"></script>
     <script src="../assets/js/figures.js?{V}"></script>
+    <script src="../assets/js/drag.js?{V}"></script>
     <script src="../assets/js/marks.js?{V}"></script>
     <script src="../assets/js/idle.js?{V}"></script>
 </body>

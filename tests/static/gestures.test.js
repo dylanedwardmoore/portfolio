@@ -350,6 +350,54 @@ describe("every gesture idle.js can play", () => {
             + "them, so taking .anim off at the end of it will move something");
     });
 
+    test("and the drag rides on scale, where the gestures cannot reach it", () => {
+        /*  THE ONE THING THAT MAKES THE TWO COEXIST.
+
+            drag.js strains a mark as it is scrolled past; idle.js plays small
+            gestures on it. Both are deformations of the same element, and if
+            both were written on `transform` one would have to fight the other
+            or wait for it -- a gesture cancelled by a scroll, or a strain that
+            stutters whenever a mark fidgets.
+
+            They do not, because the drag is on `scale`, which is its own
+            property: the browser composes translate, rotate and scale with
+            transform without either side knowing. Measured in the browser, a
+            mark mid-gesture during a hard scroll carries scale 0.986 1.025 and
+            a transform of its own at the same moment, and the gesture's clock
+            advances through it untouched.
+
+            It also keeps --at honest. idle.js reads a target's resting
+            transform off the element to compose a gesture on top of it, and if
+            the strain were in `transform` every gesture begun during a scroll
+            would bake that instant's strain into its own resting pose and hold
+            it for the gesture's whole length.
+
+            So: the drag rule sets scale and never transform, and nothing in
+            the gesture repertoire sets scale. Either half breaks it.  */
+        const dragged = MOTION_OK.filter(
+            r => !r.keyframes && /\.section-index\.is-dragged\b/.test(r.selector));
+        assert.equal(dragged.length, 1,
+            `expected one rule for the drag, found ${dragged.length}`);
+        assert.ok(dragged[0].decls.scale,
+            "the drag rule no longer sets scale");
+        assert.ok(!dragged[0].decls.transform,
+            "the drag rule sets transform, which the gestures are already using");
+
+        const clash = [];
+        for (const g of [...GATHERED, ...OPEN]) {
+            for (const r of RULES) {
+                const isRule = !r.keyframes
+                    && new RegExp(`\\.wiggle-${g.name}\\b`).test(r.selector);
+                const isFrame = r.keyframes === "wg-" + g.name;
+                if ((isRule || isFrame) && r.decls.scale) {
+                    clash.push(`${g.name} sets the scale property`);
+                }
+            }
+        }
+        assert.deepEqual([...new Set(clash)], [],
+            "a gesture is writing the property the drag is carried on");
+    });
+
     test("outlives the timer that clears it", () => {
         /*  idle.js holds a gesture for its declared ms and then puts the mark
             back to rest. Shorter than the animation and the class comes off

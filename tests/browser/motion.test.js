@@ -88,6 +88,21 @@ describe("with prefers-reduced-motion: reduce", () => {
             });
             assert.deepEqual(hovered, [],
                 "crossing a link put a gesture on under reduced motion");
+
+            // And the scroll drag, which is not an animation and so would not
+            // show up in the check every page runs above.
+            await p.evaluate(() => window.scrollBy(0, 900));
+            await p.waitForTimeout(500);
+            await p.evaluate(() => window.scrollBy(0, -700));
+            await p.waitForTimeout(500);
+            const strained = await p.evaluate(() =>
+                [...document.querySelectorAll(".section-index")]
+                    .filter(m => m.classList.contains("is-dragged")
+                        || m.style.getPropertyValue("--drag-y")
+                        || getComputedStyle(m).scale !== "none")
+                    .map(m => m.dataset.mark));
+            assert.deepEqual(strained, [],
+                "scrolling strained the marks under reduced motion");
             const running = await p.evaluate(() =>
                 document.getAnimations().filter(a => a.playState === "running").length);
             assert.equal(running, 0, "a click started something");

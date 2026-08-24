@@ -595,3 +595,205 @@ describe("a mark answers a click", () => {
         } finally { await p.__close(); }
     });
 });
+
+
+describe("the marks are dragged by the scroll", () => {
+    /*  A mark being scrolled past is being carried, and a thing being carried
+        does not hold its shape perfectly. drag.js stretches it a little the
+        way it is going and lets it gather itself back when the scrolling
+        stops. What is worth asserting is not the look of it -- nothing here
+        compares pixels -- but the four things about it that can silently stop
+        being true.  */
+
+    /** Park so one section owns the header and the next mark is still short
+        of it: that one is on screen and free to be strained, this one is
+        pinned and should not be, and a small scroll changes neither. */
+    const park = (p, which) => p.evaluate((which) => {
+        const top = parseFloat(getComputedStyle(document.documentElement)
+            .getPropertyValue("--sticky-top")) || 48;
+        const marks = [...document.querySelectorAll(".section-index")];
+        const sec = marks[which].closest(".section");
+        window.scrollTo(0, window.pageYOffset
+            + sec.getBoundingClientRect().top - top - 200);
+        return null;
+    }, which);
+
+    const strain = (p) => p.evaluate(() => {
+        const top = parseFloat(getComputedStyle(document.documentElement)
+            .getPropertyValue("--sticky-top")) || 48;
+        return [...document.querySelectorAll(".section-index")].map(m => {
+            const r = m.closest(".section").getBoundingClientRect();
+            const box = m.getBoundingClientRect();
+            const y = parseFloat(m.style.getPropertyValue("--drag-y"));
+            return {
+                mark: m.dataset.mark,
+                pinned: r.top <= top && r.bottom > top,
+                onScreen: box.bottom > 0 && box.top < window.innerHeight,
+                strain: Number.isFinite(y) ? Math.abs(y - 1) : 0,
+            };
+        });
+    });
+
+    test("scrolling strains the marks that are moving, and not the pinned one",
+        async () => {
+            /*  Small scrolls, and only about a mark that is pinned for the
+                WHOLE run. A mark strained a moment before it takes the header
+                is still relaxing for a few hundred milliseconds afterwards --
+                correctly, since a spring has memory -- so a snapshot that
+                classifies by where a mark is right now will call that a
+                pinned mark under strain and be wrong about it.  */
+            const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+            try {
+                await park(p, 2);
+                await p.waitForTimeout(2600);
+
+                const first = await strain(p);
+                const pinnedNow = first.filter(s => s.pinned).map(s => s.mark);
+                assert.equal(pinnedNow.length, 1,
+                    `expected exactly one pinned mark, got ${pinnedNow.length}`);
+                const held = pinnedNow[0];
+
+                let moving = 0;
+                let onThePinnedOne = 0;
+                for (let i = 0; i < 20; i++) {
+                    // Small enough that which section owns the header cannot
+                    // change under them, fast enough to be a real scroll:
+                    // thirty pixels in a frame is eighteen hundred a second.
+                    await p.evaluate((d) => window.scrollBy(0, d), i % 2 ? -30 : 32);
+                    await p.waitForTimeout(20);
+                    for (const s of await strain(p)) {
+                        if (s.mark === held) {
+                            assert.ok(s.pinned,
+                                `${held} stopped being pinned mid-run; the scroll `
+                                + "steps are too big for this test to mean anything");
+                            onThePinnedOne = Math.max(onThePinnedOne, s.strain);
+                        } else if (s.onScreen && !s.pinned) {
+                            moving = Math.max(moving, s.strain);
+                        }
+                    }
+                }
+
+                assert.ok(moving > 0.004,
+                    `nothing that was moving got strained (${moving})`);
+                assert.equal(onThePinnedOne, 0,
+                    `${held} was pinned throughout and still picked up `
+                    + `${(onThePinnedOne * 100).toFixed(2)}% of strain -- its label `
+                    + "is stuck at the sticky line, so it is not moving relative "
+                    + "to the screen and has nothing to be in arrears of");
+            } finally { await p.__close(); }
+        });
+
+    test("and it comes all the way home, leaving no transform behind", async () => {
+        /*  The pieces in these compositions are between 1.2 and 2.7px wide and
+            a fractional scale softens them, so a strain left on -- even one
+            far too small to see as a shape -- is a mark quietly out of focus
+            for the rest of the session.  */
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await p.evaluate(() => window.scrollBy(0, 1400));
+            await p.waitForTimeout(2600);
+            const left = await p.evaluate(() =>
+                [...document.querySelectorAll(".section-index")]
+                    .filter(m => m.classList.contains("is-dragged")
+                        || m.style.getPropertyValue("--drag-y")
+                        || getComputedStyle(m).scale !== "none")
+                    .map(m => `${m.dataset.mark}: ${getComputedStyle(m).scale}`));
+            assert.deepEqual(left, [],
+                "a mark is still carrying a strain long after the scroll stopped");
+        } finally { await p.__close(); }
+    });
+
+    test("a gesture under way is neither interrupted nor restarted by it", async () => {
+        /*  The reason the drag is written on `scale` rather than `transform`.
+            Both are deformations of the same element; on the same property one
+            would have to fight the other, and the gestures would be at the
+            mercy of how fast somebody scrolls.  */
+        const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+        try {
+            await park(p, 2);
+            await p.waitForTimeout(2600);
+            const seen = await p.evaluate(async () => {
+                const top = parseFloat(getComputedStyle(document.documentElement)
+                    .getPropertyValue("--sticky-top")) || 48;
+                const mark = [...document.querySelectorAll(".section-index")][2];
+                const sec = mark.closest(".section");
+                if (sec.getBoundingClientRect().top <= top) return { skip: true };
+
+                const running = () => mark.getAnimations({ subtree: true })
+                    .filter(a => a.playState === "running"
+                        && /^wg-/.test(a.animationName))
+                    .map(a => ({ name: a.animationName, t: Math.round(a.currentTime) }));
+                for (let i = 0; i < 40; i++) {
+                    const telling = mark.classList.contains("anim")
+                        && mark.dataset.settled !== "1";
+                    if (!telling && !mark.dataset.stirring && !running().length) break;
+                    await new Promise(r => setTimeout(r, 100));
+                }
+                const was = mark.classList.contains("is-open");
+                mark.click();
+                const started = running();
+                // Small, so nothing opens or closes: a story would cancel the
+                // gesture legitimately and prove nothing.
+                for (let i = 0; i < 6; i++) {
+                    window.scrollBy(0, i % 2 ? -46 : 52);
+                    await new Promise(r => requestAnimationFrame(r));
+                }
+                const during = running();
+                return {
+                    started, during,
+                    strained: Math.abs(
+                        (parseFloat(mark.style.getPropertyValue("--drag-y")) || 1) - 1),
+                    sameState: mark.classList.contains("is-open") === was,
+                };
+            });
+
+            if (seen.skip) { assert.ok(true, "could not park an unpinned mark"); return; }
+            assert.ok(seen.started.length, "the click started no gesture");
+            assert.ok(seen.sameState, "the mark opened or closed; test inconclusive");
+            assert.ok(seen.strained > 0.004,
+                `the scroll strained nothing (${seen.strained})`);
+            assert.ok(seen.during.length
+                && seen.during[0].name === seen.started[0].name
+                && seen.during[0].t > seen.started[0].t,
+                "the gesture was cancelled or restarted by the scroll "
+                + `(${JSON.stringify(seen.started)} -> ${JSON.stringify(seen.during)})`);
+        } finally { await p.__close(); }
+    });
+
+    test("but the page landing at an end is felt by every mark, pinned included",
+        async () => {
+            /*  The one time the pinned mark feels anything: the page arriving
+                at its end is the whole register stopping at once, rather than
+                content sliding past a label that is not moving.  */
+            const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
+            try {
+                await p.waitForTimeout(600);
+                const felt = await p.evaluate(async () => {
+                    const top = parseFloat(getComputedStyle(document.documentElement)
+                        .getPropertyValue("--sticky-top")) || 48;
+                    const marks = [...document.querySelectorAll(".section-index")];
+                    const maxY = document.documentElement.scrollHeight
+                        - window.innerHeight;
+                    window.scrollTo(0, maxY - 1500);
+                    await new Promise(r => requestAnimationFrame(r));
+                    for (let i = 0; i < 6; i++) {
+                        window.scrollBy(0, 320);
+                        await new Promise(r => requestAnimationFrame(r));
+                    }
+                    let pinned = 0;
+                    for (let i = 0; i < 30; i++) {
+                        await new Promise(r => requestAnimationFrame(r));
+                        for (const m of marks) {
+                            const r = m.closest(".section").getBoundingClientRect();
+                            if (!(r.top <= top && r.bottom > top)) continue;
+                            const y = parseFloat(m.style.getPropertyValue("--drag-y"));
+                            if (Number.isFinite(y)) pinned = Math.max(pinned, Math.abs(y - 1));
+                        }
+                    }
+                    return pinned;
+                });
+                assert.ok(felt > 0.004,
+                    `the pinned mark did not feel the page land (${felt})`);
+            } finally { await p.__close(); }
+        });
+});

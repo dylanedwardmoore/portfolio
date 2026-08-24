@@ -289,6 +289,30 @@
     margin-bottom: calc(var(--u) * 0.3);
 }
 
+/*  BEING CARRIED. See THE DRAG in assets/js/drag.js: a mark scrolled past
+    stretches a little the way it is going and gathers itself back when the
+    scrolling stops.
+
+    On `scale` rather than on `transform`, and that is the point of it. The
+    small gestures are animations on `transform`, and a second thing writing
+    `transform` would have to fight them or wait for them; scale is its own
+    property, and the browser composes translate, rotate and scale with
+    transform without either side knowing about the other. So a mark can be
+    strained and mid-gesture at once, no gesture is ever interrupted or timed
+    around a scroll, and --at -- which reads a target's resting transform off
+    the element -- does not see the strain, because the strain is not in
+    `transform`.
+
+    Behind a class rather than declared inert with fallbacks, so that a mark
+    at rest carries no transform at all. An identity scale would be harmless
+    to look at and would still put every mark on the compositor's terms for the
+    whole life of the page, and the pieces in these compositions are between
+    1.2 and 2.7 pixels wide -- thin enough that it is worth having nothing on
+    them at all when nothing is happening.  */
+.section-index.is-dragged {
+    scale: var(--drag-x, 1) var(--drag-y, 1);
+}
+
 /* The index digits are for the document, not the page; the mark is the signal.
    Taken out of sight rather than out of the document -- the register is a
    numbered list and should still read as one. */
