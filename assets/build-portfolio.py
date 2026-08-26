@@ -244,7 +244,7 @@ SECTIONS = [
          "storytelling series was run with my sister Sophia.",
          "tumo.jpg", [
              ("https://www.youtube.com/watch?v=eNy72ObvKXU", "Yerevan course overview"),
-             ("https://tumo.org/en/", "About TUMO"),
+             ("https://tumo.org/", "About TUMO"),
          ]),
         ("", "Curriculum advisor, TUMO Self-Learning Initiative",
          "Over the summer of 2021 I advised on the AI and CS curriculum for a new "
@@ -287,7 +287,7 @@ SECTIONS = [
          "I attended administrative meetings and planned campus-wide events, "
          "including our class formal on a boat and Full Moon on the Quad.",
          "class_president copy.jpg", [
-             ("https://assu.stanford.edu/leadership/class-presidents", "About the role"),
+             ("https://web.archive.org/web/20201110015236/https://assu.stanford.edu/leadership/class-presidents", "About the role"),
          ]),
         ("2012\u201316", "Founding member, Stanford Competitive Running Club",
          "I helped found the club and have been part of the Stanford running "
@@ -404,7 +404,6 @@ SECTIONS = [
          "activities. Final project for CS147 (Introduction to Human-Computer Interaction Design).",
          "rally.jpg", [
              ("https://www.facebook.com/gorallyme/", "Facebook page"),
-             ("https://www.youtube.com/watch?v=yIQWqWPzu5Q", "Promo video"),
          ]),
         ("", "A general game playing agent",
          "My team made a Java prop net GGP player with performance boosts from "
