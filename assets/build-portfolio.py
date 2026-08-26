@@ -161,11 +161,11 @@ SECTIONS = [
              (None, "CareWare: Caregiver Smart Glasses (CHI 2026 submission)"),
          ]),
         ("2025–26", "Companion IQ",
-         "Cofounder and Chief AI Officer of Companion IQ, a startup building AI "
-         "tools for person-centered dementia care. Our first product is a dashboard "
-         "that gives long-term care staff insight into the needs and experiences of "
-         "residents with dementia. We are piloting it at several facilities across "
-         "the country, and have raised $1M in seed funding.",
+         "Founder and Chief AI Officer of Companion IQ, a startup building "
+         "AI-powered companions that provide support and connection for seniors, "
+         "post-surgery patients, and veterans. Our first product was a warm, "
+         "SMS-based companion that drives daily check-in conversations about "
+         "health, activities, memories, and mood.",
          "companion_iq.png", [("https://companioniq.org/", "companioniq.org")]),
     ]),
 
