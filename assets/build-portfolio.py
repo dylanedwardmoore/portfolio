@@ -168,7 +168,7 @@ SECTIONS = [
              (None, "CareWare: Caregiver Smart Glasses (CHI 2026 submission)"),
          ]),
         ("2025–26", "Companion IQ",
-         "Founder and Chief AI Officer of Companion IQ, a startup building "
+         "Cofounder and Chief AI Officer of Companion IQ, a startup building "
          "AI-powered companions that provide support and connection for seniors, "
          "post-surgery patients, and veterans. I led agent user experience design "
          "and development for personalized, longitudinal interactions on "
