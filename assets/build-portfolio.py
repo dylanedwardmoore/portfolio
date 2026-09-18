@@ -150,10 +150,17 @@ def mark_parts(tone):
 SECTIONS = [
     ("Ventures", "sea", "Companies I have helped found and build.", [
         ("2023 – present", "Memcara",
-         "Cofounder and Chief AI Officer of Memcara, building AI-enabled tools for "
-         "caregiving in long-term care facilities. I joined as a researcher in 2023 "
-         "and moved into the cofounder and CAIO role to help the company grow its "
-         "AI offerings.",
+         "Cofounder and Chief AI Officer of Memcara. I joined as a researcher in "
+         "2023 and moved into the cofounder and CAIO role, where I lead agent user "
+         "experience design and the engineering deployment of multimodal AI agents "
+         "that support caregivers in long-term care facilities. These agents "
+         "combine video analysis, EHR data, smart glasses, and chat-based "
+         "just-in-time adaptive interventions (JITAIs). They include CareInsights, "
+         "Family In The Loop, and CareWare, which integrate dementia-specific "
+         "AI-generated insights and clinical context directly into caregiver "
+         "workflows. They are currently deployed across more than a dozen long-term "
+         "care facilities in the northeastern United States and extend the research "
+         "from my PhD thesis into real-world care environments.",
          "memcara.png", [
              ("https://memcara.com/", "memcara.com"),
              ("https://doi.org/10.1145/3770687", "CareInsights (IMWUT 2025)"),
@@ -163,13 +170,32 @@ SECTIONS = [
         ("2025–26", "Companion IQ",
          "Founder and Chief AI Officer of Companion IQ, a startup building "
          "AI-powered companions that provide support and connection for seniors, "
-         "post-surgery patients, and veterans. Our first product was a warm, "
-         "SMS-based companion that drives daily check-in conversations about "
-         "health, activities, memories, and mood.",
-         "companion_iq.png", [("https://companioniq.org/", "companioniq.org")]),
+         "post-surgery patients, and veterans. I led agent user experience design "
+         "and development for personalized, longitudinal interactions on "
+         "myaicompanion.org, our AI companionship and daily check-in platform for "
+         "older adults: a warm, SMS-based companion that drives daily conversations "
+         "about health, activities, memories, and mood. It serves 200+ daily active "
+         "users. We raised over $1M in seed funding and have multiple ongoing "
+         "partnerships and clinical trials, including with the Department of "
+         "Veterans Affairs.",
+         "companion_iq.png", [
+             ("https://companioniq.org/", "companioniq.org"),
+             ("https://myaicompanion.org/", "myaicompanion.org"),
+         ]),
     ]),
 
     ("Research", "dusky", "Peer-reviewed work in human-AI interaction.", [
+        ("2026", "Voices of Users: How Individuals with Serious Mental Illness Perceive Artificial Intelligence Technologies",
+         "An abstract presented at the 2026 Health Care Systems Research Network "
+         "annual conference and published in the Journal of Patient-Centered "
+         "Research and Reviews.",
+         "jpcrr.png", [
+             ("https://institutionalrepository.aah.org/jpcrr/vol13/iss3/7/", "Conference abstracts (JPCRR 13:3)"),
+         ]),
+        ("2026", "Utilizing Artificial Intelligence for Suicide Risk Detection: Differences in Older Adults",
+         "Our paper was published in the Journal of Technology in Behavioral "
+         "Science in 2026.",
+         "jtbs.png", [("https://doi.org/10.1007/s41347-026-00649-9", "doi.org/10.1007/s41347-026-00649-9")]),
         ("2025", "CareInsights: AI-Enabled Infrastructure for Person-Centered Dementia Care",
          "Our paper \"CareInsights: AI-enabled Infrastructure for Person-centered "
          "Dementia Care in Resource-constrained Facilities\" was accepted at IMWUT "
@@ -198,19 +224,22 @@ SECTIONS = [
     ("Industry", "red", "Software engineering before my PhD.", [
         ("2021", "Software Engineer, YouTube",
          "I worked at YouTube, within Google, from March to August 2021, as a "
-         "software engineer on the Paid Digital Goods team. I was part of the "
-         "dozen-person team that built \"Super Thanks\", which lets viewers support "
-         "a creator directly on any video, provided the creator enables it and the "
+         "full-time software engineer on the Paid Digital Goods team, working in "
+         "TypeScript and C++. I was part of the dozen-person team that built the "
+         "\"Super Thanks\" crowdfunding feature, which lets viewers support a "
+         "creator directly on any video, provided the creator enables it and the "
          "video is eligible for monetization.",
          "youtube.jpg", [
              ("https://support.google.com/youtube/answer/10879035?hl=en/", "About Super Thanks"),
          ]),
         ("2018\u201321", "Software Engineer, Lark Health",
-         "I worked at Lark Health from October 2018 to February 2021. For my first "
-         "year I was one of only two mobile developers; by the time I left, the "
-         "company had tripled in headcount and raised a $70 million Series C. Lark "
-         "is the world's largest AI healthcare provider, serving patients who have "
-         "or are at risk of chronic disease through AI nurses.",
+         "I worked at Lark Health from October 2018 to February 2021, helping build "
+         "what was, at the time, the world's largest AI healthcare provider. We "
+         "focused on personalized, holistic AI health coaching for patients at risk "
+         "of chronic disease. When I joined I was one of two mobile engineers with "
+         "full-stack responsibilities; I led the transition of our app to React "
+         "Native and refactored our backend to use microservices. During my time at "
+         "Lark, the company tripled in headcount and raised a $70 million Series C.",
          "lark.jpg", [("https://www.lark.com/", "lark.com")]),
         ("2015\u201316", "Software Engineering Intern, Google",
          "Two internships, on the AdWords (Dart/Angular) and Knowledge Graph (Java/C++) teams.",
