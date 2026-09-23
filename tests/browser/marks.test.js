@@ -247,6 +247,13 @@ describe("a mark answers a click", () => {
         const p = await ctx.openPage(PORTFOLIO, REPRESENTATIVE[3]);
         try {
             await p.evaluate(() => window.scrollTo(0, 0));
+            // Keep both states visible even when the Ventures section grows.
+            const secondMarkBottom = await p.locator(".section-index").nth(1)
+                .evaluate(mark => mark.getBoundingClientRect().bottom);
+            await p.setViewportSize({
+                width: p.viewportSize().width,
+                height: Math.max(p.viewportSize().height, Math.ceil(secondMarkBottom) + 100),
+            });
             await p.waitForTimeout(400);
 
             const drawn = await p.evaluate(() => {

@@ -160,12 +160,24 @@ SECTIONS = [
          "AI-generated insights and clinical context directly into caregiver "
          "workflows. They are currently deployed across more than a dozen long-term "
          "care facilities in the northeastern United States and extend the research "
-         "from my PhD thesis into real-world care environments.",
+         "from my PhD thesis into real-world care environments. I am also leading "
+         "Wildkittens, a separate spinoff venture developing an AI-agent evaluation "
+         "benchmark for long-term care.",
          "memcara.png", [
              ("https://memcara.com/", "memcara.com"),
+             ("https://wildkittens.com/", "Wildkittens — spinoff venture"),
              ("https://doi.org/10.1145/3770687", "CareInsights (IMWUT 2025)"),
              ("https://doi.org/10.1145/3757599", "Family In The Loop (CSCW 2025)"),
              (None, "CareWare: Caregiver Smart Glasses (CHI 2026 submission)"),
+         ]),
+        ("", "Wildkittens",
+         "I am leading Wildkittens, a spinoff venture from Memcara, to develop an "
+         "AI-agent evaluation benchmark for long-term care, similar to OSWorld v2. "
+         "The effort draws on real-world care workflows to build realistic tasks "
+         "and evaluate how well AI agents use evidence and context to support caregivers.",
+         "wildkittens.svg", [
+             ("https://wildkittens.com/", "wildkittens.com"),
+             ("https://arxiv.org/abs/2606.29537", "OSWorld v2 paper"),
          ]),
         ("2025–26", "Companion IQ",
          "Cofounder and Chief AI Officer of Companion IQ, a startup building "
