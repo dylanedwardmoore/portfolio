@@ -177,7 +177,6 @@ SECTIONS = [
          "and evaluate how well AI agents use evidence and context to support caregivers.",
          "wildkittens.svg", [
              ("https://wildkittens.com/", "wildkittens.com"),
-             ("https://arxiv.org/abs/2606.29537", "OSWorld v2 paper"),
          ]),
         ("2025–26", "Companion IQ",
          "Cofounder and Chief AI Officer of Companion IQ, a startup building "
@@ -502,7 +501,13 @@ def render_entry(year, title, blurb, img, links, featured, delay=0):
     out.append('            <h3 class="entry-title">%s</h3>' % esc(title))
     out.append('            <div class="entry-body">')
     if blurb:
-        out.append('                <p class="entry-blurb">%s</p>' % esc(blurb))
+        blurb_html = esc(blurb)
+        if title == "Wildkittens":
+            blurb_html = blurb_html.replace(
+                "OSWorld v2",
+                '<a href="https://arxiv.org/abs/2606.29537" target="_blank" '
+                'rel="noopener">OSWorld v2</a>')
+        out.append('                <p class="entry-blurb">%s</p>' % blurb_html)
     if links:
         out.append('                <ul class="entry-links">')
         for url, label in links:
