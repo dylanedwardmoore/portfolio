@@ -246,7 +246,7 @@ SECTIONS = [
          "I presented an early sketch of a new learnersourcing framework I developed "
          "at Learning @ Scale 2025.",
          "sparc.png", [
-             ("https://drive.google.com/file/d/1TVCfHRdtLEJM3IYrlXAvKvqVbp0DoYXf/view", "Read the paper"),
+             ("https://drive.google.com/file/d/1TVCfHRdtLEJM3IYrlXAvKvqVbp0DoYXf/view", "Workshop paper (Learning @ Scale 2025)"),
          ]),
         ("2024", "Teaching AI in Extracurricular Contexts Through Narrative-Based Learnersourcing",
          "I was first author on the paper \"Teaching artificial intelligence in "
