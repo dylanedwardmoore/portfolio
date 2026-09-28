@@ -166,8 +166,8 @@ SECTIONS = [
          "memcara.png", [
              ("https://memcara.com/", "memcara.com"),
              ("https://wildkittens.com/", "Wildkittens — spinoff venture"),
-             ("https://doi.org/10.1145/3770687", "CareInsights (IMWUT 2025)"),
-             ("https://doi.org/10.1145/3757599", "Family In The Loop (CSCW 2025)"),
+             ("https://doi.org/10.1145/3770687", "doi.org/10.1145/3770687"),
+             ("https://doi.org/10.1145/3757599", "doi.org/10.1145/3757599"),
              (None, "CareWare: Caregiver Smart Glasses (CHI 2026 submission)"),
          ]),
         ("", "Wildkittens",
@@ -204,7 +204,7 @@ SECTIONS = [
          "while emphasizing privacy, personalization, and design grounded in lived "
          "experience, alongside concerns about overreliance.",
          "ai-companion-perspectives.png", [
-             ("https://doi.org/10.1007/s10597-026-01732-4", "Read the paper (Community Mental Health Journal)"),
+             ("https://doi.org/10.1007/s10597-026-01732-4", "doi.org/10.1007/s10597-026-01732-4"),
          ]),
         ("2026", "My AI Companion: Feasibility, Acceptability, and Preliminary Effectiveness",
          "I coauthored this JMIR preprint on a one-month pilot of My AI Companion, "
@@ -215,7 +215,7 @@ SECTIONS = [
          "control group mean it does not establish effectiveness. Posted August "
          "2026; not yet peer reviewed.",
          "companion_iq.png", [
-             ("https://doi.org/10.2196/preprints.109768", "Read the preprint (JMIR Preprints)"),
+             ("https://doi.org/10.2196/preprints.109768", "doi.org/10.2196/preprints.109768"),
          ]),
         ("2026", "Voices of Users: How Individuals with Serious Mental Illness Perceive Artificial Intelligence Technologies",
          "An abstract presented at the 2026 Health Care Systems Research Network "
