@@ -118,7 +118,7 @@ describe("the redirect pages really do redirect", () => {
                 // that the redirect fired is the attempt, not the arrival.
                 await p.waitForTimeout(900);
                 const tried = [...p.__blocked];
-                assert.ok(tried.some(u => /\.pdf$/i.test(u)),
+                assert.ok(tried.some(u => new URL(u).pathname.toLowerCase().endsWith(".pdf")),
                     `${page.name} never tried to load a PDF; the meta refresh and the `
                     + "script that replace the location are both gone");
             } finally { await p.__close(); }

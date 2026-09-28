@@ -47,7 +47,7 @@ export async function makeContext() {
             asserting about. The block is what makes the request fail, so it is
             not counted as a failure -- the test caused it.  */
         const blocked = new Set();
-        await page.route("**/*.pdf", route => {
+        await page.route(url => url.pathname.toLowerCase().endsWith(".pdf"), route => {
             blocked.add(route.request().url());
             return route.abort();
         });
