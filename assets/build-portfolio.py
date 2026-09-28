@@ -195,7 +195,28 @@ SECTIONS = [
          ]),
     ]),
 
-    ("Research", "dusky", "Peer-reviewed work in human-AI interaction.", [
+    ("Research", "dusky", "Publications and ongoing research in human-AI interaction, health, and education.", [
+        ("2026", "Perspectives of People with Serious Mental Illness on Artificial Intelligence-Based Companions",
+         "I coauthored this Community Mental Health Journal paper, published in "
+         "September 2026. Through a secondary analysis of focus groups at three "
+         "supportive housing facilities, we explored how people with serious mental "
+         "illness view AI companions. Participants saw potential for everyday support, "
+         "while emphasizing privacy, personalization, and design grounded in lived "
+         "experience, alongside concerns about overreliance.",
+         "ai-companion-perspectives.png", [
+             ("https://doi.org/10.1007/s10597-026-01732-4", "Read the paper (Community Mental Health Journal)"),
+         ]),
+        ("2026", "My AI Companion: Feasibility, Acceptability, and Preliminary Effectiveness",
+         "I coauthored this JMIR preprint on a one-month pilot of My AI Companion, "
+         "a text- and call-based intervention for adults with serious mental illness "
+         "and chronic medical conditions. Nine people enrolled and seven completed "
+         "follow-up. The study examines engagement, acceptability, and early changes "
+         "in mental health and self-management; its small sample and lack of a "
+         "control group mean it does not establish effectiveness. Posted August "
+         "2026; not yet peer reviewed.",
+         "companion_iq.png", [
+             ("https://doi.org/10.2196/preprints.109768", "Read the preprint (JMIR Preprints)"),
+         ]),
         ("2026", "Voices of Users: How Individuals with Serious Mental Illness Perceive Artificial Intelligence Technologies",
          "An abstract presented at the 2026 Health Care Systems Research Network "
          "annual conference and published in the Journal of Patient-Centered "
@@ -204,8 +225,12 @@ SECTIONS = [
              ("https://institutionalrepository.aah.org/jpcrr/vol13/iss3/7/", "Conference abstracts (JPCRR 13:3)"),
          ]),
         ("2026", "Utilizing Artificial Intelligence for Suicide Risk Detection: Differences in Older Adults",
-         "Our paper was published in the Journal of Technology in Behavioral "
-         "Science in 2026.",
+         "I was an equal-contributing author on this 2026 commentary in the "
+         "Journal of Technology in Behavioral Science. We examine why AI models "
+         "for suicide-risk detection need to account for older adults’ distinct "
+         "experiences and symptoms, and propose age-specific validation, "
+         "narrative context, and participatory design to improve their relevance "
+         "and responsible use.",
          "jtbs.png", [("https://doi.org/10.1007/s41347-026-00649-9", "doi.org/10.1007/s41347-026-00649-9")]),
         ("2025", "CareInsights: AI-Enabled Infrastructure for Person-Centered Dementia Care",
          "Our paper \"CareInsights: AI-enabled Infrastructure for Person-centered "
@@ -542,7 +567,13 @@ def build():
                      '<span class="section-index-n">%02d</span>%s</span>'
                      % (MARK_OF.get(tone, "earlier"), span, markw, idx, body))
         parts.append('            <h2>%s</h2>' % esc(name))
-        parts.append('            <p>%s</p>' % esc(standfirst))
+        standfirst_html = esc(standfirst)
+        if name == "Research":
+            standfirst_html += (
+                ' See my <a class="doclink-inline" style="min-height:24px" '
+                'href="https://scholar.google.com/citations?user=lXMj728AAAAJ&amp;hl=en" '
+                'target="_blank" rel="noopener">Google Scholar profile</a>.')
+        parts.append('            <p>%s</p>' % standfirst_html)
         parts.append('        </div>')
         parts.append('        <div class="section-entries">')
         featured = name in ("Ventures", "Research")
