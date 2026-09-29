@@ -894,6 +894,20 @@ body.landing {
     margin-top: calc(var(--u) * 0.4);
 }
 
+/* Simple Icons brand marks (v11.15.0, CC0): small, monochrome, and kept with
+   their link text. currentColor follows the existing hover and focus styles. */
+.bio .profile-link {
+    white-space: nowrap;
+}
+
+.profile-icon {
+    width: 0.8em;
+    height: 0.8em;
+    margin-inline-end: 0.3em;
+    vertical-align: -0.075em;
+    fill: currentColor;
+}
+
 /* Two copies of the figure exist so each layout can put it where it needs to
    be: the desktop one in its own column, the phone one inside the scroller so
    it travels with the text. Only one is ever displayed. */
