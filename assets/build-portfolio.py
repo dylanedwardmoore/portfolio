@@ -203,7 +203,7 @@ SECTIONS = [
          "illness view AI companions. Participants saw potential for everyday support, "
          "while emphasizing privacy, personalization, and design grounded in lived "
          "experience, alongside concerns about overreliance.",
-         "ai-companion-perspectives.png", [
+         "community-mental-health-journal.jpg", [
              ("https://doi.org/10.1007/s10597-026-01732-4", "doi.org/10.1007/s10597-026-01732-4"),
          ]),
         ("2026", "My AI Companion: Feasibility, Acceptability, and Preliminary Effectiveness",
@@ -521,8 +521,10 @@ def render_entry(year, title, blurb, img, links, featured, delay=0):
            % (" entry--featured" if featured else "", delay)]
     out.append('            <div class="entry-year">%s</div>' % esc(year))
     if img:
-        out.append('            <div class="entry-figure"><img src="%s%s" alt="" loading="lazy"></div>'
-                   % (IMG, img))
+        # Keep the full journal cover within the register's square image space.
+        fit = ' style="object-fit:contain"' if img == "community-mental-health-journal.jpg" else ""
+        out.append('            <div class="entry-figure"><img src="%s%s" alt="" loading="lazy"%s></div>'
+                   % (IMG, img, fit))
     out.append('            <h3 class="entry-title">%s</h3>' % esc(title))
     out.append('            <div class="entry-body">')
     if blurb:
@@ -572,7 +574,12 @@ def build():
             standfirst_html += (
                 ' See my <a class="doclink-inline" style="min-height:24px" '
                 'href="https://scholar.google.com/citations?user=lXMj728AAAAJ&amp;hl=en" '
-                'target="_blank" rel="noopener">Google Scholar profile</a>.')
+                'target="_blank" rel="noopener">'
+                '<svg class="profile-icon" viewBox="0 0 24 24" width="16" height="16" '
+                'aria-hidden="true" focusable="false">'
+                '<path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 '
+                '14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 '
+                '0 14 7 7 0 0 0 0-14z"/></svg>Google Scholar profile</a>.')
         parts.append('            <p>%s</p>' % standfirst_html)
         parts.append('        </div>')
         parts.append('        <div class="section-entries">')
