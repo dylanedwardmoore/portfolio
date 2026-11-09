@@ -1,0 +1,219 @@
+%-------------------------
+% One-Page Resume - Dylan Moore
+% Based on main.tex
+%------------------------
+
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fontawesome5}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+\usepackage{xcolor}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\definecolor{sectionlinecolor}{HTML}{53565A}
+
+% Tighter margins for one page
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.6in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-0.6in}
+\addtolength{\textheight}{1.2in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\linespread{0.94}
+
+% Sections formatting
+\titleformat{\section}{
+  \scshape\raggedright\large\color{sectionlinecolor}
+}{}{0em}{}[\color{sectionlinecolor}\titlerule]
+\titlespacing*{\section}{0pt}{0pt}{3pt}
+
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\dartmouthIcon}{\raisebox{-0.2\height}{\includegraphics[width=0.025\textwidth]{images/dartmouth-2.png}}}
+
+\newcommand{\stanfordIcon}{\raisebox{-0.2\height}{\includegraphics[width=0.022\textwidth]{images/stanford-2.png}}}
+
+\newcommand{\emailIcon}{\raisebox{-0.18\height}{\includegraphics[width=0.018\textwidth]{images/email.png}}}
+\newcommand{\websiteIcon}{\raisebox{-0.18\height}{\includegraphics[width=0.018\textwidth]{images/website.png}}}
+\newcommand{\scholarIcon}{\raisebox{-0.18\height}{\includegraphics[width=0.018\textwidth]{images/Google_Scholar_logo.png}}}
+\definecolor{linkblue}{HTML}{76A7FA}
+\newcommand{\linkGlyph}{{\scriptsize\faLink}}
+\newcommand{\linkIcon}[1][\footnotesize]{\textcolor{linkblue}{{#1\faLink}}}
+\newlength{\thesisindent}
+% Inline citation: linked venue tag pointing at the paper, e.g. \pubref{https://doi.org/...}{IMWUT '25}
+\newcommand{\pubref}[2]{\mbox{\href{#1}{\textcolor{linkblue}{\scriptsize\faLink}\,\textcolor[HTML]{53565A}{\small #2}}}}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\publication}[3]{
+    \hspace{0.15in}
+    \begin{tabular*}{0.97\textwidth}{p{0.14\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+    % label sits in a smashed, ragged-right box so a two-line venue (e.g. "IMWUT 2025 / UBICOMP 2026") stacks beside the entry without stretching or pushing it
+    \smash{\parbox[t]{0.14\textwidth}{\raggedright\textcolor[HTML]{53565A}{#1}}} & \textbf{#2} \\
+    & \small #3
+    \end{tabular*}
+    }
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape {\textcolor[HTML]{2E2D29}{Dylan Moore}}} \\ \vspace{3pt}
+    {\large\itshape\color[HTML]{2E2D29} UX researcher and engineer with research and industry experience in building human-centered AI agents.} \\ \vspace{3pt}
+    {\color[HTML]{53565A}\protect\emailIcon~\href{mailto:dylanedwardmoore@gmail.com}{dylanedwardmoore@gmail.com}  {\textcolor[HTML]{8AB8A7}{$|$}}  \protect\linkIcon~\href{https://www.dylanedwardmoore.com/portfolio}{dylanedwardmoore.com/portfolio}  {\textcolor[HTML]{8AB8A7}{$|$}}  \protect\scholarIcon~\href{https://scholar.google.com/citations?user=lXMj728AAAAJ}{Google Scholar}}
+\end{center}
+\vspace{-3pt}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{Dartmouth College} -- \textbf{PhD} in Engineering (Human-AI Interaction) & \small\color[HTML]{53565A} 2021 -- 2026 \\
+      \small Committee: E.~Murnane*, P.~Bonfert-Taylor, L.~Loeb, J.~Landay \textit{(Stanford)}. \textcolor[HTML]{53565A}{\textit{*Advisor}} & \\
+      \href{https://www.dylanedwardmoore.com/dissertation/}{\parbox[t]{0.80\textwidth}{\small\settowidth{\thesisindent}{\linkGlyph~Dissertation:\ }%
+      \raggedright\textcolor{linkblue}{\linkGlyph}~Dissertation:\ \textit{Designing Narrative-Based AI Assistance for Sensemaking in Collaborative Environments:}\\
+      \hspace*{\thesisindent}\textit{Case Studies in Education and Dementia Care}\strut}} & \\
+      \quad\textbf{MEM} -- Masters in Engineering Management (concurrent with PhD) & \small\color[HTML]{53565A} 2023 -- 2024 \\
+    \end{tabular*}\vspace{-4pt}
+    \vspace{2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{Stanford University} -- \textbf{MS} in Computer Science (HCI focus, GPA 3.8) & \small\color[HTML]{53565A} 2016 -- 2018 \\
+      \quad\textbf{BS} in Computer Science (HCI focus, GPA 3.6). \textcolor[HTML]{53565A}{Advisor: Mehran Sahami} & \small\color[HTML]{53565A} 2012 -- 2016 \\
+    \end{tabular*}\vspace{-5pt}
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Industry}
+\vspace{-2pt}
+
+\publication{2023 -- present}
+{AI Researcher $\rightarrow$ Co-Founder \& CAIO (2026), Memcara  \small(\mbox{\href{https://www.memcara.com/}{memcara.com}})}
+{Led agent UX design and engineering deployment of multimodal AI systems to support caregivers in long-term care facilities, combining video analysis, EHR data, and smart-glasses and chat-based just-in-time adaptive interventions (JITAIs). Developed systems including CareInsights~\pubref{https://doi.org/10.1145/3770687}{IMWUT~'25}, Family in the Loop~\pubref{https://doi.org/10.1145/3757599}{CSCW~'25}, and CareWare, % TODO: add \pubref for CareWare once there is a public citation
+which integrate dementia-specific AI-generated insights and clinical context directly into caregiver workflows. These systems are currently deployed across more than a dozen facilities in the northeastern United States, extending research from my PhD thesis into real-world care environments. I am leading a spinoff effort to develop an AI-agent evaluation benchmark for long-term care, similar to \href{https://arxiv.org/abs/2606.29537}{\linkIcon[\scriptsize]~OSWorld~v2}.}
+\vskip 0.3ex
+
+\publication{2025 -- 2026}
+{Co-Founder \& CAIO, Companion IQ  \small(\mbox{\href{https://companioniq.org/}{companioniq.org}})}
+{Led agent UX design and development of personalized, longitudinal interactions for \mbox{\href{https://myaicompanion.org/}{myaicompanion.org}}, an AI companionship and daily check-in platform for older adults, serving 200+ daily active users. Raised $>$\$1M in seed funding. Ongoing partnerships and clinical trials, including with Veterans Affairs (VA).}
+\vskip 0.3ex
+
+\publication{2021}
+{Software Engineer, YouTube (Google)}
+{Helped implement the ``Super Thanks'' crowdfunding feature as a full-time SWE working in TypeScript and C++ on the Paid Digital Goods Team.}
+\vskip 0.3ex
+
+\publication{2018 -- 2021}
+{Software Engineer, Lark Health  \small(\mbox{\href{https://www.lark.com/}{lark.com}})}
+{Helped build what was then the world's largest AI healthcare provider, focused on personalized, holistic AI health coaching for patients at risk for chronic diseases. One of two full-stack mobile engineers when I joined; led our app's transition to React Native and refactored our backend into microservices. During my time, Lark tripled in headcount and raised a \$70M Series C. \textcolor[HTML]{53565A}{\emph{TypeScript, Python, Node.js}}}
+\vskip 0.3ex
+
+\publication{2011 -- 2016}
+{Engineering Internships: Google (2), PayPal, Makani Power (Google X)}
+{Google: built ad extensions for AdWords and extended a Knowledge Graph data pipeline \textcolor[HTML]{53565A}{\emph{(Dart, Angular, Java, C++)}}. PayPal: designed and built a metrics dashboard for the Core Payments team \textcolor[HTML]{53565A}{\emph{(JavaScript, Python)}}. Makani: helped manufacture self-guided kites for high-altitude wind turbines \textcolor[HTML]{53565A}{\emph{(SolidWorks, CNC)}}.}
+
+%-----------PUBLICATIONS-----------
+\vspace{1pt}
+\section{First Author Publications}
+\vspace{-2pt}
+
+\publication{IMWUT 2025 /\\UBICOMP 2026}
+    {CareInsights: AI-Enabled Infrastructure for Person-Centered Dementia Care}
+    {\textcolor[HTML]{53565A}{\mbox{\href{https://doi.org/10.1145/3770687}{\linkIcon[\scriptsize]~doi.org/10.1145/3770687}}}}
+    \vskip 0.3ex
+
+\publication{JTiBS 2026}
+    {Utilizing Artificial Intelligence for Suicide Risk Detection: Differences in Older Adults}
+    {\textcolor[HTML]{53565A}{Co-first author, \mbox{\href{https://link.springer.com/article/10.1007/s41347-026-00649-9}{\linkIcon[\scriptsize]~doi.org/10.1007/s41347-026-00649-9}}}}
+    \vskip 0.3ex
+
+\publication{CSCW 2025}
+    {Family In The Loop: Enabling Family Involvement and Person-Centered Dementia Care with Collaborative AI Tools}
+    {\textcolor[HTML]{53565A}{\mbox{\href{https://doi.org/10.1145/3757599}{\linkIcon[\scriptsize]~doi.org/10.1145/3757599}}}}
+    \vskip 0.3ex
+
+\publication{L@S 2025}
+    {Collaborative Meaning-Making in Networked Learning Environments}
+    {\textcolor[HTML]{53565A}{\mbox{\href{https://drive.google.com/file/d/1TVCfHRdtLEJM3IYrlXAvKvqVbp0DoYXf/view}{\linkIcon[\scriptsize]~sites.google.com/andrew.cmu.edu/learnersourcing}}}}
+    \vskip 0.3ex
+
+\publication{CHI 2024}
+    {Teaching AI in Extracurricular Contexts Through Narrative-Based Learnersourcing}
+    {\textcolor[HTML]{53565A}{\mbox{\href{https://doi.org/10.1145/3613904.3642198}{\linkIcon[\scriptsize]~doi.org/10.1145/3613904.3642198}}}}
+
+%-----------TEACHING-----------
+\section{Teaching}
+\small
+\hspace{0.15in}
+\textbf{TA at Stanford \& Dartmouth} {\color[HTML]{53565A}(11 quarters): CS221 (AI), CS147 (HCI), CS181 (Ethics), CS109, CS106A/B, ENGM~191, Code in Place.}
+\textbf{Workshop leader at TUMO} {\color[HTML]{53565A}(2019--2022): Designed and taught high school courses on AI and interactive storytelling in Berlin, Beirut, and Yerevan.}
+\textbf{Mentor:} {\color[HTML]{53565A}UC Berkeley Fung Fellowship (2021), Stanford CS + Social Good (2020).}
+
+%-----------AWARDS-----------
+\section{Awards}
+\small
+\hspace{0.15in}
+Rilla NYC Hackathon Winner (2025) $\cdot$
+Dartmouth Digital Health Summit 3rd Place (2023) $\cdot$
+SF Arthouse Short Festival First Place (2022) $\cdot$
+Dartmouth Guarini Alumni Research Award (2022) $\cdot$
+Dartmouth Innovation Fellowship (2021) $\cdot$
+Dartmouth CompX Faculty Grant (2021) $\cdot$
+Armenian Professional Society Scholarship (2021) $\cdot$
+Stanford Teaching Honors (2017) $\cdot$
+Eagle Scout (2012) $\cdot$
+Intel ISEF 3rd Place, Physics \& Astronomy (2011)
+
+\end{document}

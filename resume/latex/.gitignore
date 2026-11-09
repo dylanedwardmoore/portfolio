@@ -1,0 +1,10 @@
+# Local build outputs and historical exports; the public PDF lives one level up.
+*.aux
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+build/
+.claude/

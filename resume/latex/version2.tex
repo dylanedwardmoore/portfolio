@@ -1,0 +1,124 @@
+% Dylan Moore – Radically Redesigned CV
+% -------------------------------------------------------------
+% One‑page, two‑column layout with a colored sidebar
+% Inspired by moderncv but 100% custom and lightweight
+% -------------------------------------------------------------
+
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[left=1.2cm,right=1.2cm,top=1.4cm,bottom=1.4cm]{geometry}
+\usepackage{paracol}          % dual‑column control
+\usepackage{fontawesome5}     % icons
+\usepackage{tikz}             % colored sidebar + separators
+\usepackage{setspace}         % line spacing tweaks
+\usepackage{enumitem}         % compact itemize
+\usepackage{graphicx}         % logos / photos
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{xcolor}
+
+% ---------- Colors ----------
+\definecolor{primary}{HTML}{417865}   % deep teal
+\definecolor{accent}{HTML}{8AB8A7}    % soft mint
+\definecolor{lightbg}{HTML}{F6F9F8}   % very light mint background for sidebar
+
+% ---------- Global settings ----------
+\setlength{\parindent}{0pt}
+\renewcommand{\baselinestretch}{1.1}
+\setlist[itemize]{leftmargin=* , itemsep=2pt}
+
+% ---------- Section title ----------
+\newcommand{\cvsection}[1]{%
+  \vspace{8pt}%
+  {\color{primary}\Large\bfseries #1}\par\smallskip
+  \tikz[baseline]{\draw[accent,thick] (0,0) -- (\linewidth-0.2,0);}\\[4pt]
+}
+
+% ---------- Entry (title – meta – description list) ----------
+\newcommand{\cventry}[4]{% title | organisation | date range | description
+  \textbf{#1}\hfill {\footnotesize #3}\\[-2pt]
+  {\itshape #2}\\[-4pt]
+  #4\\[6pt]
+}
+
+% ---------- Sidebar link with icon ----------
+\newcommand{\sideitem}[3]{% icon | label | link / text
+  {\color{primary}\faIcon{#1}\,}\href{#3}{#2}\\[4pt]
+}
+
+% ---------- Document ----------
+\begin{document}
+
+% === Layout start ===
+\begin{paracol}{2}
+%*****************************************
+% SIDEBAR (column 1)
+%*****************************************
+\switchcolumn[0]*
+\colorbox{lightbg}{\parbox[t]{\linewidth}{%
+\vspace{0.6cm}
+\centering
+% ---------- Name & photo ----------
+{\bfseries\LARGE Dylan E. Moore}\\[4pt]
+\includegraphics[width=0.45\linewidth]{images/dylan_initials_yellow_green.png}\\[0.8cm]
+% ---------- Contact ----------
+\sideitem{envelope}{dylan.e.moore.th@dartmouth.edu}{mailto:dylan.e.moore.th@dartmouth.edu}
+\sideitem{globe}{dylanedwardmoore.com}{https://www.dylanedwardmoore.com}
+% \sideitem{linkedin}{/in/dylanmoore}{https://linkedin.com/in/dylanmoore}
+% \sideitem{github}{/empowerlab}{https://github.com/empowerlab}
+\vspace{0.6cm}
+% ---------- Quick skills ----------
+{\color{primary}\textbf{Expertise}}\\[-2pt]
+\tikz[baseline]{\draw[accent,thick] (0,0) -- (\linewidth-0.2,0);}\\[4pt]
+\begin{itemize}
+  \item Human–AI Interaction
+  \item UX Research & Design
+  \item Full‑stack Dev (TS/Python)
+  \item ML / LLM Prototyping
+  \item Mixed‑Methods Studies
+\end{itemize}
+\vspace{0.6cm}
+% ---------- Awards snapshot ----------
+{\color{primary}\textbf{Honors}}\\[-2pt]
+\tikz[baseline]{\draw[accent,thick] (0,0) -- (\linewidth-0.2,0);}\\[4pt]
+Rilla NYC Hackathon Winner (2025)\\
+Dartmouth Innovation Fellowship (2021)\\
+Outstanding TA Award (2024)\\
+\vspace{1cm}
+}}
+
+\cvsection{Leadership | Teaching}
+\cventry{Course TA (11 quarters)}{Stanford & Dartmouth}{2017 – 2024}{Courses incl. AI, HCI, Ethics}
+% \cventry{Workshop Leader}{TUMO}{2019 – 2022}{}
+%*****************************************
+% MAIN CONTENT (column 2)
+%*****************************************
+\switchcolumn
+
+% ---------- Education ----------
+\cvsection{Education}
+\cventry{PhD in Engineering, \\Human–AI Interaction}{Dartmouth College}{2021 – present}{PhD‑I scholar \\ Advisor: E. Murnane, Defense fall ’25}
+\cventry{MEng Management (MEM)}{Dartmouth College}{2024}{Concurrent with PhD}
+\cventry{MS \& BS in Computer Science\\HCI focus}{Stanford University}{2012 – 2018}{GPA 3.8, 3.6 \\Advisor: M. Sahami}
+
+% ---------- Publications (sample) ----------
+\cvsection{Selected Publications}
+\cventry{Embedded Advocacy}{Frontiers (under review)}{2025}{First author}
+\cventry{CareInsights}{IMWUT (under review)}{2025}{First author}
+\cventry{Family In The Loop}{CSCW (cond. acc.)}{2025}{First author}
+\cventry{Narrative‑based Learnersourcing}{CHI}{2024}{First author}
+
+% ---------- Experience ----------
+\cvsection{Industry Experience}
+\cventry{Lead HAI Designer}{Memcara (startup)}{2023 – present}{AI tools for long‑term care • Part‑time}
+\cventry{Software Engineer}{YouTube / Google}{2021}{Super Thanks crowdfunding • TS & C++}
+\cventry{Full‑stack Engineer}{Lark Health}{2018 – 2021}{React Native migration • Micro‑services}
+
+
+% ---------- Leadership & Teaching ----------
+
+
+\end{paracol}
+
+\end{document}

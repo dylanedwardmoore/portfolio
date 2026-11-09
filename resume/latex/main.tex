@@ -1,0 +1,551 @@
+%-------------------------
+% Resume in Latex
+% Author : Dylan Moore
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+\usepackage{contour}
+\usepackage{xcolor}
+\contourlength{0.4pt}
+
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+% \fancyfoot[C]{\makebox[\textwidth]{\dylanIcon}}
+\fancyfoot{}
+ % Centered footer
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\definecolor{sectionlinecolor}{HTML}{8AB8A7}
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{sectionlinecolor}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\dartmouthIcon}{\raisebox{-0.2\height}{\includegraphics[width=0.030\textwidth]{images/dartmouth-2.png}}}
+
+\definecolor{outlineyellow}{HTML}{DAD7CB}
+\newcommand{\outlinedtext}[1]{\contour{outlineyellow}{#1}}
+
+
+\newcommand{\stanfordIcon}{\raisebox{-0.2\height}{\includegraphics[width=0.0260\textwidth]{images/stanford-2.png}}}
+
+\newcommand{\dylanIcon}{\raisebox{0\height}{\includegraphics[width=0.060\textwidth]{images/dylan_initials_yellow_green.png}}}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\publication}[3]{
+    \hspace{0.15in}
+    \begin{tabular*}{0.97\textwidth}{p{0.2\textwidth}p{0.7\textwidth}}
+    #1 & \textbf{#2} \\
+    & #3
+    \end{tabular*}
+    }
+
+\newcommand{\presentationtopic}[1]{
+    \noindent\hspace{0.15in}
+    \begin{tabular*}{0.9\textwidth}{p{0.2\textwidth}p{0.7\textwidth}}
+       & \textbf{#1}
+    \end{tabular*}
+}
+
+\newcommand{\plocation}[2]{
+    \hspace{0.15in}
+    \begin{tabular*}{0.9\textwidth}{p{0.2\textwidth}p{0.7\textwidth}}
+    #1 & #2 \\
+    \end{tabular*}
+}
+
+% {l@{\hspace{3em}}l}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING----------
+% \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+%   \textbf{\href{http://sourabhbajaj.com/}{\Large Sourabh Bajaj}} & Email : \href{mailto:sourabh@sourabhbajaj.com}{sourabh@sourabhbajaj.com}\\
+%   \href{http://sourabhbajaj.com/}{http://www.sourabhbajaj.com} & Mobile : +1-123-456-7890 \\
+% \end{tabular*}
+
+\begin{center}
+    \textbf{\Huge \scshape {\textcolor[HTML]{417865}{Dylan Moore}}} \\ \vspace{1pt}
+    \href{mailto:dylan.e.moore.th@dartmouth.edu}{dylan.e.moore.th@dartmouth.edu}  {\textcolor[HTML]{8AB8A7}{$|$}}  \url{https://www.dylanedwardmoore.com}
+
+\end{center}
+
+
+%-----------EDUCATION-----------
+\section{Education}
+
+  \resumeSubHeadingListStart
+    \vspace{-2pt}\item
+    \begin{tabular*}{0.95\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \protect\dartmouthIcon~Dartmouth College, NH & \small 2021 - present \\
+      \textit{\textbf{Doctor of Philosophy in Engineering} \small Currently a PhD Candidate} & 2026 defense \\
+      Focus: \textbf{Human-AI Interaction (HAI)} & \\
+      \small Admitted to Dartmouth's PhD Innovation (PhD-I) Program \\
+      \small Committee: Elizabeth Murnane*, Petra Bonfert-Taylor, Lorie Loeb, \& James Landay \textit{(Stanford)}\\
+      \small \textit{*Advisor}\\ \\
+
+      \textit{\textbf{Masters in Engineering Management} \small ``MEM" degree, concurrent with PhD} & completed 2024 \\ \\
+
+
+      \protect\stanfordIcon~Stanford University, CA & \small 2012 - 2018 \\
+      \textit{\textbf{Master of Science in Computer Science} \small (GPA 3.8)} & completed 2018 \\
+      Focus: \textbf{Human-Computer Interaction} & \\
+      \small Advisor: Mehran Sahami & \\ \\
+      \textit{\textbf{Bachelor of Science in Computer Science} \small (GPA 3.6)} & completed 2016 \\
+      Focus: \textbf{Human-Computer Interaction} & \\
+      \small Advisor: Mehran Sahami & \\
+
+    \end{tabular*}\vspace{-7pt}
+    \vskip 1ex
+  \resumeSubHeadingListEnd
+
+
+%-----------PUBLICATIONS-----------
+\section{Publications}
+
+    % \publication
+    %     {Frontiers 2025 \\ \small (under review)}
+    %     {Embedded Advocacy: Designing AI to Support Narrative and Person-Centered Care}
+    %     {First author, \href{https://drive.google.com/file/d/1NapQxX6AUw1JwDLX1JKosQaTMUbL-Txw/view?usp=sharing}{https://tinyurl.com/embedded-advocacy}}
+    %     \vskip 2ex
+
+\publication
+        {JAMA* \small}
+        {AI Won’t Fix Loneliness Until It Understands People: Insights from Ten Years of Digital Health Innovation}
+        {Second author, Pre-release available on request \textit{*Under review}}
+        \vskip 2ex
+
+\publication
+        {JTiBS* \small}
+        {Utilizing Artificial Intelligence for Suicide Risk Detection: Differences in Older Adults}
+        {Second author, Pre-release available on request \textit{*Under review}}
+        \vskip 2ex
+
+
+\publication
+        {CHI 2026* \small}
+        {CareWare: Designing Smart Glasses That Support Person-centered Dementia Care in Long-term Care Facilities}
+        {First author, Pre-release available on request \textit{*Under review}}
+        \vskip 2ex
+
+\publication
+        {CHI 2026* \small}
+        {SPARC: An AI-Centric
+Framework for Scaling Collaborative Meaning Making in
+Networked Learning Environments}
+        {First author, Pre-release available on request \textit{*Under review}}
+        \vskip 2ex
+
+            \publication
+        {IMWUT 2025 \small}
+        {CareInsights: AI-Enabled Infrastructure for Person-Centered Dementia Care in
+Resource-Constrained Facilities}
+        {First author, \href{https://doi.org/10.1145/3770687}{https://doi.org/10.1145/3770687}}
+        \vskip 2ex
+
+            \publication
+        {CSCW 2025
+
+        \small }
+        {Family In The Loop: Enabling Family Involvement and
+Person-Centered Dementia Care at Long-Term Care Facilities
+with Collaborative AI Tools}
+        {First author, \href{https://doi.org/10.1145/3757599}{https://doi.org/10.1145/3757599}}
+        \vskip 2ex
+
+
+\publication
+        {Learning@Scale 2025 \small }
+        {A workshop draft of the 2026 SPARC CHI submission}
+        {First author, \href{https://drive.google.com/file/d/1TVCfHRdtLEJM3IYrlXAvKvqVbp0DoYXf/view}{https://sites.google.com/andrew.cmu.edu/learnersourcing }}
+        \vskip 2ex
+
+
+
+    \publication
+        {CHI 2024}
+        {Teaching artificial intelligence in extracurricular contexts through
+narrative-based learnersourcing}
+        {First author, \href{https://doi.org/10.1145/3613904.3642198}{https://doi.org/10.1145/3613904.3642198}}
+        \vskip 2ex
+
+% \newpage
+
+\section{Industry Experience}
+
+\publication{2025 - present}
+{Co-Founder \& CAIO at Companion IQ  \small(\href{https://myaicompanion.org/}{myaicompanion.org})}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Developing AI companions to support seniors and surgery patients. \\\$1M in angel funding.\\
+    \item \emph{HAI research, AI design and development} &  \\
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2023 - 2025}
+{AI Researcher at Memcara  \small(\href{https://www.memcara.com/}{memcara.com})}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Creating AI-enabled tools for supporting caregiving in long-term care facilities. & \\
+    \item \emph{HAI research, study operations and partnerships, and technical development} &  \\
+\end{tabular*}
+}
+\vskip 2ex
+\publication{2021}
+{Software Engineer at YouTube (Google)}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Paid Digital Goods Team &  \\
+    \item Team implemented the ``Super Thanks'' crowdfunding feature &  \\
+    \item \emph{TypeScript, C++} &  \\
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2021}
+{Designer at AbilityHacks (part time)}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Helped prototype solutions to disability-related challenges & \\
+    \item Volunteer work & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2018 - 2021}
+{Software Engineer at Lark Health}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Mobile Team  &  \\
+    \item Full stack, UX research, and hiring responsibilities  &  \\
+    \item Migrated native codebases to React Native &  \\
+    \item Implemented microservices &  \\
+    \item \emph{TypeScript, functional programming, React Native,} &  \\
+    \item \emph{Node.js, Python, Android, Objective-C} &  \\
+\end{tabular*}
+}
+
+\vskip 2ex
+
+\publication{2016}
+{Software Engineering Intern at Google}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item AdWords Team &  \\
+    \item Designed and implemented Ad Extensions &  \\
+    \item \emph{Dart, Angular}
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2015}
+{Software Engineering Intern at Google}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Knowledge Graph Team &  \\
+    \item Extended Data pipeline for Google OneBox &  \\
+    \item \emph{Java, C++}
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2014}
+{Software Engineering Intern at PayPal}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+\item Core Payments Team &  \\
+    \item Designed and implemented metrics dashboard &  \\
+    \item \emph{JavaScript, Python}
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2011}
+{Shop Intern at Makani Power (Google X)}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Helped manufacture high altitude wind turbines and self-guided kites &  \\
+    \item \emph{Solidworks, CNC mills, Waterjet}
+\end{tabular*}
+}
+\vskip 2ex
+
+
+\newpage
+
+%-----------TEACHING SKILLS-----------
+\section{Teaching and mentorship}
+\publication{2022}
+{Teaching Assistant at Dartmouth}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item ENGM 191: \emph{Product design and development}
+\end{tabular*}
+}
+\vskip 2ex
+
+
+\presentationtopic{Workshop leader at TUMO
+(designed and taught high school courses)}
+
+\plocation{2022}{Building educational games for teaching AI (Berlin and Yerevan)}
+
+\plocation{2020}{Interactive storytelling with chatbots
+storytelling and chatbots (remote)}
+
+\plocation{2019}{AI topics: minimax, neural networks, and style transfer (Beirut and Yerevan)}
+\vskip 2ex
+
+\publication{2021}
+{U.C. Berkeley Fung Fellowship for Entrepreneurship and Innovation Program Mentor}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Formed a partnership with AbilityHacks & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2020}
+{Mentor with Stanford CS + Social Good}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Formed a partnership with Lark Health & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2021}
+{Curriculum Planning Advisor to TUMO's Self-Learning Initiative}
+\vskip
+
+\publication{2017}
+{Teaching Assistant at Stanford}
+{
+\textbf{Courses taught (Ten quarters in total):} \newline
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Code in Place: \emph{A public offering of CS106A during COVID-19} & \\
+    \item CS181: \emph{Computers, Ethics, and Public Policy} & \\
+    \item CS147: \emph{Introduction to Human Computer Interaction Design} & \\
+    \item CS221: \emph{(Graduate Level) Artificial Intelligence} & \\
+    \item CS109: \emph{Probability for Computer Scientists} & \\
+    \item CS106B: \emph{Programming Abstraction} & \\
+    \item CS106A: \emph{Programming Methodology} & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+
+\section{Other Research Involvement}
+\publication{2025}
+{Presented at \href{https://doi.org/10.1145/3757599}{CSCW}}{}
+
+\publication{2025}
+{Presented at \href{https://www.musictherapy.ca/conference-2025/}{CAMT}}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+\item Presented findings on research related to AI and music therapy
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2024}
+{Presented at  \href{https://doi.org/10.1145/3613904.3642198}{CHI}}{}
+
+
+\publication{2018}
+{Researcher at Stanford self driving cars UX}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Under Dr. Elizabeth Murnane  & \\
+    \item Designed in-car environments that spark creativity and delight & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+
+\publication{2017}
+{Researcher at Stanford Smart Primer project}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Under Professor James Landay  & \\
+    \item Made Storytelling-based education technology  & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2013}
+{Researcher at Stanford archaeology fieldwork in Peru}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Helped excavate a 2,500+ year old temple in Chavín de Huántar  & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2017}
+{Researcher at Stanford anthropology fieldwork in Ecuador}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Interviewed members of Quechua and Waorani tribes  & \\
+    \item Explored impacts, scalability, and sustainability of ecotourism & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+
+\publication{2012}
+{Researcher at the 100L Water Project (Stanford Change Labs)}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Helped design a rain catchment system for deployment in rural India  & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+%-----------Awards-----------
+\section{Leadership}
+
+\publication{2012 - 2018}
+{Co-Founder \& Member of the Stanford Competitive Running Club}
+\vskip
+
+\publication{2015}
+{Class President at Stanford}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Elected by student body to create campus wide events and manage class funds  & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+\publication{2014}
+{Business Association of Stanford Entrepreneurial Students E-Challenge Coordinator}
+{
+\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \item Planned a startup competition with \$150k in prizes & \\
+\end{tabular*}
+}
+\vskip 2ex
+
+%-----------Awards-----------
+\section{Awards and Honors}
+
+\publication{2025}{Rilla NYC Hackathon Winner}{}
+
+\publication
+        {2020-2023 \small}
+        {First Place Award Winner from the San Francisco Arthouse Short Festival}
+        {Additional filmmaking awards from the Canadian \& International Short Film Fest,
+Hard Faith Fest, Florida Shorts, Oakland Film Festival, and Gulf Coast Film and Video
+Festival.}
+        \vskip 2ex
+
+\publication{2023}{Dartmouth Digital Health Summit Third Place Award}{}
+
+\publication{2022}{Dartmouth Guarini School Alumni Research Award}{}
+
+\publication{2021}{Dartmouth CompX Faculty Grant}{}
+
+\publication{2021}{Dartmouth Innovation Fellowship}{}
+
+\publication{2021}{Armenian Professional Society Scholarship Award}{}
+
+\publication{2017}{Stanford University Teaching Honors Award}{}
+
+\publication{2012}{Eagle Scout}{}
+
+\publication{2011}{Third Place in Physics and Astronomy, Intel International Science and Engineering Fair}{}
+
+%-------------------------------------------
+
+\end{document}
